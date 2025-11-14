@@ -1,0 +1,4 @@
+# Local files
+*.o
+generate_linalg
+.zed/
