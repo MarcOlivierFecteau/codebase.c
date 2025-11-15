@@ -1,6 +1,7 @@
 #ifndef LINALG_H
 #define LINALG_H
 
+#include "math.h"
 #include <assert.h>
 #include <math.h>
 #include <stdarg.h>
@@ -54,24 +55,6 @@ LINALG_DEF float vec2f_mag(vec2f_t v) { return sqrtf(vec2f_mag_squared(v)); }
 LINALG_DEF vec2f_t vec2f_unit(vec2f_t v) {
     float mag = vec2f_mag(v);
     return vec2f_div(v, vec2f_splat(mag));
-}
-
-#define lerp(X) _Generic((X), float: lerpf, double: lerpd)(X)
-
-LINALG_DEF float lerpf(float a, float b, float t) { return a + (b - a) * t; }
-
-LINALG_DEF float minf(float a, float b) { return a < b ? a : b; }
-
-LINALG_DEF float maxf(float a, float b) { return a > b ? a : b; }
-
-LINALG_DEF float clampf(float x, float min, float max) {
-    assert(min <= max && "Invalid range.");
-    if (x < min) {
-        x = min;
-    } else if (x > max) {
-        x = max;
-    }
-    return x;
 }
 
 #endif // LINALG_H
