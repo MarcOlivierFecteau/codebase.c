@@ -210,9 +210,17 @@ void generate_vec_operation(FILE *restrict stream, size_t dim, type_s type,
     fprintf(stream, "LINALG_DEF %s %s(", vec_type, vec_fn);
     fprintf(stream, "%s a, %s b) {\n", type_definitions[type].keyword,
             type_definitions[type].keyword);
-    for (size_t component = 0; component < dim; ++component) {
-        fprintf(stream, INDENT "a.e[%zu] %s b.e[%zu];\n", component,
-                op_definitions[op].keyword, component);
+    if (dim <= 4) {
+        for (size_t component = 0; component < dim; ++component) {
+            fprintf(stream, INDENT "a.%c %s b.%c;\n",
+                    vec_math_components[component], op_definitions[op].keyword,
+                    vec_math_components[component]);
+        }
+    } else {
+        for (size_t component = 0; component < dim; ++component) {
+            fprintf(stream, INDENT "a.e[%zu] %s b.e[%zu];\n", component,
+                    op_definitions[op].keyword, component);
+        }
     }
     fprintf(stream, INDENT "return a;\n");
     fprintf(stream, "}\n");
