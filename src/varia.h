@@ -21,7 +21,7 @@ VARIA_DEF void *varia_temp_alloc(size_t requested) {
     if (varia_temp_size + size > VARIA_TEMP_CAPACITY) {
         return NULL;
     }
-    void *result = &varia_temp_stack[size];
+    void *result = &varia_temp_stack[varia_temp_size];
     varia_temp_size += size;
     return result;
 }

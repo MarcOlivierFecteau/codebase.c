@@ -102,14 +102,9 @@ void generate_vec_definition(FILE *restrict stream, size_t dim, type_s type) {
 }
 
 void generate_vec_constructor(FILE *restrict stream, size_t dim, type_s type) {
-    // TODO: `vec_type_name` and `vec_constructor_name` are inlined, causing
-    //       unnecessary duplication in the temporary allocator, but when
-    //       they are called at the beginning of the function, `vec_type_name`'s
-    //       value in overwritten by `vec_constructor` because the strings are
-    //       not correctly duplicated. Using `strcpy` (with `malloc`) probably
-    //       would resolve the issue, but I don't want to depend on `string.h`.
-    fprintf(stream, "%s %s(", vec_type_name(dim, type),
-            vec_constructor_name(dim, type));
+    const char *vec_type = vec_type_name(dim, type);
+    const char *vec_constructor = vec_constructor_name(dim, type);
+    fprintf(stream, "%s %s(", vec_type, vec_constructor);
     for (size_t component = 0; component < dim; ++component) {
         if (component > 0) {
             fprintf(stream, ", ");
@@ -118,7 +113,7 @@ void generate_vec_constructor(FILE *restrict stream, size_t dim, type_s type) {
                 vec_math_components[component]);
     }
     fprintf(stream, ") {\n");
-    fprintf(stream, INDENT "%s v = {", vec_type_name(dim, type));
+    fprintf(stream, INDENT "%s v = {", vec_type);
     for (size_t component = 0; component < dim; ++component) {
         if (component > 0) {
             fprintf(stream, ", ");
