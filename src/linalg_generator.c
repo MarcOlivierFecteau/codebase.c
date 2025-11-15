@@ -77,6 +77,23 @@ static const op_definition_s op_definitions[NUM_OPS] = {
     [OP_MOD] = {.name = "mod", .keyword = "%="},
 };
 
+typedef enum {
+    VARIADIC_OP_SUM = 0,
+    NUM_VARIADIC_OPS,
+} variadic_op_s;
+
+typedef struct {
+    const char *name;
+    const char *op;
+} variadic_op_definition_s;
+
+static_assert(NUM_VARIADIC_OPS == 1,
+              "Number of variadic operations has changed.");
+static const variadic_op_definition_s
+    variadic_op_definitions[NUM_VARIADIC_OPS] = {
+        [VARIADIC_OP_SUM] = {.name = "sum", .op = "add"},
+};
+
 const char *vec_type_name(size_t dim, type_s type) {
     return varia_temp_sprintf("vec%zu%s_t", dim, type_definitions[type].suffix);
 }
@@ -96,6 +113,7 @@ void generate_head(FILE *restrict stream) {
     EMPTY_LINE(stream);
     fprintf(stream, "#include \"typedefs.h\"\n");
     fprintf(stream, "#include <math.h>\n");
+    fprintf(stream, "#include <stdarg.h>\n");
     EMPTY_LINE(stream);
     fprintf(stream, "#if !defined(__STDDEF_H)\n");
     fprintf(stream, "typedef unsigned long size_t;\n");
@@ -201,6 +219,26 @@ void generate_vec_operation(FILE *restrict stream, size_t dim, type_s type,
     EMPTY_LINE(stream);
 }
 
+void generate_variadic_operation(FILE *restrict stream, size_t dim, type_s type,
+                                 variadic_op_s op) {
+    const char *vec_type = vec_type_name(dim, type);
+    const char *result_name = variadic_op_definitions[op].name;
+    const char *vec_fn = vec_fn_name(dim, type, result_name);
+    fprintf(stream, "LINALG_DEF %s %s(size_t n, ...) {\n", vec_type, vec_fn);
+    fprintf(stream, INDENT "va_list args;\n");
+    fprintf(stream, INDENT "va_start(args, n);\n");
+    fprintf(stream, INDENT "%s %s = {0};\n", vec_type, result_name);
+    fprintf(stream, INDENT "for (size_t i = 0; i < n; ++i) {\n");
+    fprintf(stream, INDENT INDENT "%s v = va_args(args, %s);\n", vec_type,
+            vec_type);
+    fprintf(stream, INDENT INDENT "%s = %s(%s, v);\n", result_name, vec_fn,
+            result_name);
+    fprintf(stream, INDENT "}\n");
+    fprintf(stream, INDENT "return %s;\n", result_name);
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
 int main() {
     generate_head(stdout);
     for (size_t dim = VEC_MIN_SIZE; dim <= VEC_MAX_SIZE; ++dim) {
@@ -223,6 +261,7 @@ int main() {
             for (size_t op = 0; op < NUM_OPS; ++op) {
                 generate_vec_operation(stdout, dim, type, op);
             }
+            generate_variadic_operation(stdout, dim, type, VARIADIC_OP_SUM);
         }
     }
 
