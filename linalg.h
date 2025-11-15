@@ -31,6 +31,9 @@ LINALG_DEF vec2f_t vec2f_add(vec2f_t a, vec2f_t b) {
     return a;
 }
 
+LINALG_DEF vec2f_t vec2f_div(vec2f_t a, vec2f_t b);
+LINALG_DEF vec2f_t vec2f_splat(float x);
+
 LINALG_DEF vec2f_t vec2f_sum(size_t n, ...) {
     va_list args;
     va_start(args, n);
@@ -43,21 +46,14 @@ LINALG_DEF vec2f_t vec2f_sum(size_t n, ...) {
 }
 
 LINALG_DEF float vec2f_mag_squared(vec2f_t v) {
-    float mag_squared = 0.0f;
-    for (size_t component; component < 2; ++component) {
-        mag_squared += v.e[component] * v.e[component];
-    }
-    return mag_squared;
+    return v.x * v.x + v.y * v.y;
 }
 
 LINALG_DEF float vec2f_mag(vec2f_t v) { return sqrtf(vec2f_mag_squared(v)); }
 
 LINALG_DEF vec2f_t vec2f_unit(vec2f_t v) {
     float mag = vec2f_mag(v);
-    for (size_t component = 0; component < 2; ++component) {
-        v.e[component] /= mag;
-    }
-    return v;
+    return vec2f_div(v, vec2f_splat(mag));
 }
 
 #define lerp(X) _Generic((X), float: lerpf, double: lerpd)(X)
