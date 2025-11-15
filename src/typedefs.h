@@ -1,7 +1,7 @@
 #ifndef TYPEDEFS_H
 #define TYPEDEFS_H
 
-#if (defined(__STDC_VERSION__) && __STDC_VERSION__ < 202000) &&               \
+#if (defined(__STDC_VERSION__) && __STDC_VERSION__ < 202000) &&                \
     !defined(__STDBOOL_H)
 typedef _Bool bool;
 #define true 1
