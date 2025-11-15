@@ -1,4 +1,6 @@
+#ifdef USE_TYPEDEFS
 #include "typedefs.h"
+#endif // USE_TYPEDEFS
 #include "varia.h"
 #include <assert.h>
 #include <stdarg.h>
@@ -27,6 +29,18 @@ typedef struct {
 } type_definition_s;
 
 static_assert(NUM_TYPES == 2, "Number of types has changed.");
+#ifdef USE_TYPEDEFS
+static type_definition_s type_definitions[NUM_TYPES] = {
+    [FLOAT_T] = {.keyword = "f32",
+                 .suffix = "f",
+                 .fmt = "f",
+                 .zero_literal = "0.0f"},
+    USE_TYPEDEFS[DOUBLE_T] = {.keyword = "f64",
+                              .suffix = "d",
+                              .fmt = "lf",
+                              .zero_literal = "0.0"},
+};
+#else
 static type_definition_s type_definitions[NUM_TYPES] = {
     [FLOAT_T] = {.keyword = "float",
                  .suffix = "f",
@@ -37,6 +51,7 @@ static type_definition_s type_definitions[NUM_TYPES] = {
                   .fmt = "lf",
                   .zero_literal = "0.0"},
 };
+#endif // USE_TYPEDEFS
 
 typedef enum {
     OP_ADD = 0,
