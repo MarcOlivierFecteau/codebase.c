@@ -161,6 +161,30 @@ void generate_vec_constructor(FILE *restrict stream, size_t dim, type_s type) {
     fprintf(stream, "\n");
 }
 
+void generate_vec_scalar_constructor(FILE *restrict stream, size_t dim,
+                                     type_s type) {
+    const char *vec_type = vec_type_name(dim, type);
+    const char *vec_splat_name = vec_fn_name(dim, type, "splat");
+    fprintf(stream, "%s %s(%s x) {\n", vec_type, vec_splat_name,
+            type_definitions[type].keyword);
+    fprintf(stream, INDENT "%s v = {{", vec_type);
+    for (size_t component = 0; component < dim; ++component) {
+        if (component > 0) {
+            fprintf(stream, ", ");
+        }
+        fprintf(stream, "x");
+    }
+    fprintf(stream, "}};\n");
+    fprintf(stream, INDENT "return v;\n");
+    fprintf(stream, "};\n");
+    fprintf(stream, "\n");
+
+    // LINALG_DEF vec2f_t vec2f_splat(float x) {
+    //     vec2f_t v = {{x, x}};
+    //     return v;
+    // }
+}
+
 void generate_vec_operation(FILE *restrict stream, size_t dim, type_s type,
                             op_s op) {
     const char *vec_type = vec_type_name(dim, type);
@@ -190,6 +214,7 @@ int main() {
     for (size_t dim = VEC_MIN_SIZE; dim <= num_constructor_dims; ++dim) {
         for (size_t type = 0; type < NUM_TYPES; ++type) {
             generate_vec_constructor(stdout, dim, type);
+            generate_vec_scalar_constructor(stdout, dim, type);
         }
     }
 
