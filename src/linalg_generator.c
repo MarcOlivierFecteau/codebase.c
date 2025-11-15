@@ -245,16 +245,16 @@ void generate_vec_constructor(FILE *restrict stream, size_t dim, type_s type) {
                 vec_math_components[component]);
     }
     fprintf(stream, ") {\n");
-    fprintf(stream, INDENT "%s v = {", vec_type);
+    fprintf(stream, INDENT "%s v = {{", vec_type);
     for (size_t component = 0; component < dim; ++component) {
         if (component > 0) {
             fprintf(stream, ", ");
         }
         fprintf(stream, "%c", vec_math_components[component]);
     }
-    fprintf(stream, "};\n");
+    fprintf(stream, "}};\n");
     fprintf(stream, INDENT "return v;\n");
-    fprintf(stream, "};\n");
+    fprintf(stream, "}\n");
     fprintf(stream, "\n");
 }
 
@@ -273,7 +273,7 @@ void generate_vec_scalar_constructor(FILE *restrict stream, size_t dim,
     }
     fprintf(stream, "}};\n");
     fprintf(stream, INDENT "return v;\n");
-    fprintf(stream, "};\n");
+    fprintf(stream, "}\n");
     fprintf(stream, "\n");
 }
 
@@ -336,7 +336,7 @@ void generate_vec_variadic_operation(FILE *restrict stream, size_t dim,
     fprintf(stream, INDENT "va_start(args, n);\n");
     fprintf(stream, INDENT "%s %s = {0};\n", vec_type, result_name);
     fprintf(stream, INDENT "for (size_t i = 0; i < n; ++i) {\n");
-    fprintf(stream, INDENT INDENT "%s v = va_args(args, %s);\n", vec_type,
+    fprintf(stream, INDENT INDENT "%s v = va_arg(args, %s);\n", vec_type,
             vec_type);
     fprintf(stream, INDENT INDENT "%s = %s(%s, v);\n", result_name, vec_op,
             result_name);
