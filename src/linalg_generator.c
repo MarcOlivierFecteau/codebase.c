@@ -222,8 +222,8 @@ void generate_vec_operation(FILE *restrict stream, size_t dim, type_s type,
     EMPTY_LINE(stream);
 }
 
-void generate_variadic_operation(FILE *restrict stream, size_t dim, type_s type,
-                                 variadic_op_s op) {
+void generate_vec_variadic_operation(FILE *restrict stream, size_t dim,
+                                     type_s type, variadic_op_s op) {
     const char *vec_type = vec_type_name(dim, type);
     const char *result_name = variadic_op_definitions[op].name;
     const char *vec_fn = vec_fn_name(dim, type, variadic_op_definitions[op].op);
@@ -264,7 +264,7 @@ int main() {
             for (size_t op = 0; op < NUM_OPS; ++op) {
                 generate_vec_operation(stdout, dim, type, op);
             }
-            generate_variadic_operation(stdout, dim, type, VARIADIC_OP_SUM);
+            generate_vec_variadic_operation(stdout, dim, type, VARIADIC_OP_SUM);
         }
     }
 
