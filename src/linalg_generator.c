@@ -231,7 +231,7 @@ void generate_variadic_operation(FILE *restrict stream, size_t dim, type_s type,
                                  variadic_op_s op) {
     const char *vec_type = vec_type_name(dim, type);
     const char *result_name = variadic_op_definitions[op].name;
-    const char *vec_fn = vec_fn_name(dim, type, result_name);
+    const char *vec_fn = vec_fn_name(dim, type, variadic_op_definitions[op].op);
     fprintf(stream, "LINALG_DEF %s %s(size_t n, ...) {\n", vec_type, vec_fn);
     fprintf(stream, INDENT "va_list args;\n");
     fprintf(stream, INDENT "va_start(args, n);\n");
