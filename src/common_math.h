@@ -2,8 +2,8 @@
  * SHOULD be in <math.h>, but are not for some reason).
  */
 
-#ifndef MATH_H
-#define MATH_H
+#ifndef COMMON_MATH_H
+#define COMMON_MATH_H
 
 #include <assert.h>
 
@@ -70,4 +70,4 @@ MATH_DEF double clampd(double x, double min, double max) {
 }
 MATH_DEF double lerpd(double a, double b, double t) { return a + (b - a) * t; }
 
-#endif // MATH_H
+#endif // COMMON_MATH_H

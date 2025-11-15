@@ -1,7 +1,6 @@
 #ifndef LINALG_H
 #define LINALG_H
 
-#include "math.h"
 #include <assert.h>
 #include <math.h>
 #include <stdarg.h>

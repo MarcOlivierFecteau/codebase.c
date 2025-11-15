@@ -190,7 +190,7 @@ void generate_head(FILE *restrict stream) {
     fprintf(stream, "#ifdef USE_TYPEDEFS\n");
     fprintf(stream, "#include \"typedefs.h\"\n");
     fprintf(stream, "#endif // USE_TYPEDEFS\n");
-    fprintf(stream, "#include \"math.h\"\n");
+    fprintf(stream, "#include \"common_math.h\"\n");
     fprintf(stream, "#include <math.h>\n");
     fprintf(stream, "#include <stdarg.h>\n");
     EMPTY_LINE(stream);
