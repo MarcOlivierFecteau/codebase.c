@@ -11,6 +11,7 @@
 static_assert(VEC_MIN_SIZE <= VEC_MAX_SIZE, "Empty set of vector sizes.");
 
 #define INDENT "    "
+#define EMPTY_LINE(stream) fprintf(stream, "\n")
 
 static const char *vec_math_components = "xyzw";
 static const char *vec_color_components = "rgba";
@@ -87,6 +88,23 @@ const char *vec_fn_name(size_t dim, type_s type, const char *fn_name) {
                               fn_name);
 }
 
+void generate_head(FILE *restrict stream) {
+    fprintf(stream, "#ifndef LINALG_H\n");
+    fprintf(stream, "#define LINALG_H\n");
+    EMPTY_LINE(stream);
+    fprintf(stream, "#include \"typedefs.h\"\n");
+    fprintf(stream, "#include <math.h>\n");
+    EMPTY_LINE(stream);
+    fprintf(stream, "#if !defined(__STDDEF_H)\n");
+    fprintf(stream, "typedef unsigned long size_t;\n");
+    fprintf(stream, "#endif // __STDDEF_H\n");
+    EMPTY_LINE(stream);
+    fprintf(stream, "#ifndef LINALG_DEF\n");
+    fprintf(stream, "#define LINALG_DEF static inline\n");
+    fprintf(stream, "#endif // LINALG_DEF\n");
+    EMPTY_LINE(stream);
+}
+
 void generate_vec_definition(FILE *restrict stream, size_t dim, type_s type) {
     fprintf(stream, "typedef union {\n");
     if (dim <= 4) {
@@ -147,6 +165,7 @@ void generate_vec_function(FILE *restrict stream, size_t dim, type_s type,
                            bool applies_to);
 
 int main() {
+    generate_head(stdout);
     for (size_t dim = VEC_MIN_SIZE; dim <= VEC_MAX_SIZE; ++dim) {
         for (size_t type = 0; type < NUM_TYPES; ++type) {
             generate_vec_definition(stdout, dim, type);
