@@ -1,3 +1,9 @@
+/* Script for procedurally generating the `linalg.h` library.
+ *
+ * This script is heavily inspired by Alexey Kutepov's project:
+ * https://github.com/tsoding/la. Most of the credit goes to him.
+ */
+
 #ifdef USE_TYPEDEFS
 #include "typedefs.h"
 #endif // USE_TYPEDEFS
