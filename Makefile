@@ -7,7 +7,7 @@ linalg: linalg.h
 	$(CC) $(CFLAGS) -c linalg.h -o linalg.o
 
 generate_linalg:
-	./generate_linalg
+	./generate_linalg > linalg.h
 
 linalg_generator: src/linalg_generator.c
 	$(CC) $(CFLAGS) src/linalg_generator.c -o generate_linalg
