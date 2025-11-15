@@ -38,10 +38,10 @@ static type_definition_s type_definitions[NUM_TYPES] = {
                  .suffix = "f",
                  .fmt = "f",
                  .zero_literal = "0.0f"},
-    USE_TYPEDEFS[DOUBLE_T] = {.keyword = "f64",
-                              .suffix = "d",
-                              .fmt = "lf",
-                              .zero_literal = "0.0"},
+    [DOUBLE_T] = {.keyword = "f64",
+                  .suffix = "d",
+                  .fmt = "lf",
+                  .zero_literal = "0.0"},
 };
 #else
 static type_definition_s type_definitions[NUM_TYPES] = {
@@ -230,7 +230,7 @@ void generate_vec_definition(FILE *restrict stream, size_t dim, type_s type) {
     }
     fprintf(stream, INDENT "%s e[%zu];\n", type_definitions[type].keyword, dim);
     fprintf(stream, "} vec%zu%s_t;\n", dim, type_definitions[type].suffix);
-    fprintf(stream, "\n");
+    EMPTY_LINE(stream);
 }
 
 void generate_vec_constructor(FILE *restrict stream, size_t dim, type_s type) {
