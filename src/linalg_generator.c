@@ -159,10 +159,21 @@ void generate_vec_constructor(FILE *restrict stream, size_t dim, type_s type) {
     fprintf(stream, "\n");
 }
 
-void generate_vec_operation(FILE *restrict stream, size_t dim, type_s type);
-
-void generate_vec_function(FILE *restrict stream, size_t dim, type_s type,
-                           bool applies_to);
+void generate_vec_operation(FILE *restrict stream, size_t dim, type_s type,
+                            op_s op) {
+    const char *vec_type = vec_type_name(dim, type);
+    const char *vec_fn = vec_fn_name(dim, type, op_definitions[op].name);
+    fprintf(stream, "LINALG_DEF %s %s(", vec_type, vec_fn);
+    fprintf(stream, "%s a, %s b) {\n", type_definitions[type].keyword,
+            type_definitions[type].keyword);
+    for (size_t component = 0; component < dim; ++component) {
+        fprintf(stream, INDENT "a.e[%zu] %s b.e[%zu];\n", component,
+                op_definitions[op].keyword, component);
+    }
+    fprintf(stream, INDENT "return a;\n");
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
 
 int main() {
     generate_head(stdout);
@@ -180,6 +191,18 @@ int main() {
         }
     }
 
-    printf("Bytes of temp stack used: %zu\n", varia_temp_size);
+    for (size_t dim = VEC_MIN_SIZE; dim <= num_constructor_dims; ++dim) {
+        for (size_t type = 0; type < NUM_TYPES; ++type) {
+            for (size_t op = 0; op < NUM_OPS; ++op) {
+                generate_vec_operation(stdout, dim, type, op);
+            }
+        }
+    }
+
+    fprintf(stdout, "#endif // LINALG_H\n");
+
+    fprintf(stderr, "Bytes of temp stack used: %zu / %zu (%.4f%%)\n",
+            varia_temp_size, (size_t)VARIA_TEMP_CAPACITY,
+            100 * (float)varia_temp_size / (float)VARIA_TEMP_CAPACITY);
     return 0;
 }
