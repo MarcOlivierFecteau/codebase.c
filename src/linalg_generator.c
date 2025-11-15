@@ -59,6 +59,7 @@ typedef enum {
     OP_SUB,
     OP_MUL,
     OP_DIV,
+    OP_MOD,
     NUM_OPS,
 } op_s;
 
@@ -67,12 +68,13 @@ typedef struct {
     const char *keyword;
 } op_definition_s;
 
-static_assert(NUM_OPS == 4, "Number of operations has changed.");
+static_assert(NUM_OPS == 5, "Number of operations has changed.");
 static const op_definition_s op_definitions[NUM_OPS] = {
     [OP_ADD] = {.name = "add", .keyword = "+="},
     [OP_SUB] = {.name = "sub", .keyword = "-="},
     [OP_MUL] = {.name = "mul", .keyword = "*="},
     [OP_DIV] = {.name = "div", .keyword = "/="},
+    [OP_MOD] = {.name = "mod", .keyword = "%="},
 };
 
 const char *vec_type_name(size_t dim, type_s type) {
