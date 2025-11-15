@@ -225,7 +225,9 @@ void generate_vec_variadic_operation(FILE *restrict stream, size_t dim,
                                      type_s type, variadic_op_s op) {
     const char *vec_type = vec_type_name(dim, type);
     const char *result_name = variadic_op_definitions[op].name;
-    const char *vec_fn = vec_fn_name(dim, type, variadic_op_definitions[op].op);
+    const char *vec_fn =
+        vec_fn_name(dim, type, variadic_op_definitions[op].name);
+    const char *vec_op = vec_fn_name(dim, type, variadic_op_definitions[op].op);
     fprintf(stream, "LINALG_DEF %s %s(size_t n, ...) {\n", vec_type, vec_fn);
     fprintf(stream, INDENT "va_list args;\n");
     fprintf(stream, INDENT "va_start(args, n);\n");
@@ -233,7 +235,7 @@ void generate_vec_variadic_operation(FILE *restrict stream, size_t dim,
     fprintf(stream, INDENT "for (size_t i = 0; i < n; ++i) {\n");
     fprintf(stream, INDENT INDENT "%s v = va_args(args, %s);\n", vec_type,
             vec_type);
-    fprintf(stream, INDENT INDENT "%s = %s(%s, v);\n", result_name, vec_fn,
+    fprintf(stream, INDENT INDENT "%s = %s(%s, v);\n", result_name, vec_op,
             result_name);
     fprintf(stream, INDENT "}\n");
     fprintf(stream, INDENT "return %s;\n", result_name);
