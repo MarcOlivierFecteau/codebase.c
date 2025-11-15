@@ -203,8 +203,7 @@ void generate_vec_operation(FILE *restrict stream, size_t dim, type_s type,
     const char *vec_type = vec_type_name(dim, type);
     const char *vec_fn = vec_fn_name(dim, type, op_definitions[op].name);
     fprintf(stream, "LINALG_DEF %s %s(", vec_type, vec_fn);
-    fprintf(stream, "%s a, %s b) {\n", type_definitions[type].keyword,
-            type_definitions[type].keyword);
+    fprintf(stream, "%s a, %s b) {\n", vec_type, vec_type);
     if (dim <= 4) {
         for (size_t component = 0; component < dim; ++component) {
             fprintf(stream, INDENT "a.%c %s b.%c;\n",
