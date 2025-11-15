@@ -16,6 +16,8 @@ static_assert(VEC_MIN_SIZE <= VEC_MAX_SIZE, "Empty set of vector sizes.");
 static const char *vec_math_components = "xyzw";
 static const char *vec_color_components = "rgba";
 
+#define array_len(xs) (sizeof(xs) / sizeof(xs[0]))
+
 typedef enum {
     FLOAT_T = 0,
     DOUBLE_T,
@@ -94,6 +96,80 @@ static const variadic_op_definition_s
         [VARIADIC_OP_SUM] = {.name = "sum", .op = "add"},
 };
 
+#define FN_MAX_ARITY 4
+
+typedef struct {
+    const char *name;
+    // NOTE: NULL means unsupported type.
+    const char *generic_selection[NUM_TYPES];
+    size_t arity;
+    char *params[FN_MAX_ARITY];
+} fn_definition_s;
+
+static_assert(NUM_TYPES == 2, "Number of types has changed.");
+static const fn_definition_s fn_definitions[] = {
+    {
+        .name = "min",
+        .generic_selection =
+            {
+                [FLOAT_T] = "minf",
+                [DOUBLE_T] = "mind",
+            },
+        .arity = 2,
+        .params = {"a", "b"},
+    },
+    {
+        .name = "max",
+        .generic_selection =
+            {
+                [FLOAT_T] = "maxf",
+                [DOUBLE_T] = "maxd",
+            },
+        .arity = 2,
+        .params = {"a", "b"},
+    },
+    {
+        .name = "floor",
+        .generic_selection =
+            {
+                [FLOAT_T] = "floorf",
+                [DOUBLE_T] = "floor",
+            },
+        .arity = 1,
+        .params = {"v"},
+    },
+    {
+        .name = "ceil",
+        .generic_selection =
+            {
+                [FLOAT_T] = "ceilf",
+                [DOUBLE_T] = "ceil",
+            },
+        .arity = 1,
+        .params = {"v"},
+    },
+    {
+        .name = "clamp",
+        .generic_selection =
+            {
+                [FLOAT_T] = "clampf",
+                [DOUBLE_T] = "clampd",
+            },
+        .arity = 3,
+        .params = {"v", "min", "max"},
+    },
+    {
+        .name = "lerp",
+        .generic_selection =
+            {
+                [FLOAT_T] = "lerpf",
+                [DOUBLE_T] = "lerpd",
+            },
+        .arity = 3,
+        .params = {"a", "b", "t"},
+    },
+};
+
 const char *vec_type_name(size_t dim, type_s type) {
     return varia_temp_sprintf("vec%zu%s_t", dim, type_definitions[type].suffix);
 }
@@ -111,7 +187,10 @@ void generate_head(FILE *restrict stream) {
     fprintf(stream, "#ifndef LINALG_H\n");
     fprintf(stream, "#define LINALG_H\n");
     EMPTY_LINE(stream);
+    fprintf(stream, "#ifdef USE_TYPEDEFS\n");
     fprintf(stream, "#include \"typedefs.h\"\n");
+    fprintf(stream, "#endif // USE_TYPEDEFS\n");
+    fprintf(stream, "#include \"math.h\"\n");
     fprintf(stream, "#include <math.h>\n");
     fprintf(stream, "#include <stdarg.h>\n");
     EMPTY_LINE(stream);
@@ -267,6 +346,56 @@ void generate_vec_variadic_operation(FILE *restrict stream, size_t dim,
     EMPTY_LINE(stream);
 }
 
+void generate_vec_function(FILE *restrict stream, size_t dim, type_s type,
+                           size_t fn_index) {
+    fn_definition_s fn = fn_definitions[fn_index];
+    if (fn.generic_selection[type] == NULL) {
+        return;
+    }
+    assert(fn.arity > 0);
+    const char *vec_type = vec_type_name(dim, type);
+    const char *vec_fn = vec_fn_name(dim, type, fn.name);
+    const char *type_keyword = type_definitions[type].keyword;
+    const char *fn_name = fn.generic_selection[type];
+    fprintf(stream, "LINALG_DEF %s %s(", vec_type, vec_fn);
+    for (size_t param = 0; param < fn.arity; ++param) {
+        if (param > 0) {
+            fprintf(stream, ", ");
+        }
+        fprintf(stream, "%s %s", vec_type, fn.params[param]);
+    }
+    fprintf(stream, ") {\n");
+    if (dim <= 4) {
+        for (size_t component = 0; component < dim; ++component) {
+            const char element = vec_math_components[component];
+            fprintf(stream, INDENT "%s.%c = %s(", fn.params[0], element,
+                    fn_name);
+            for (size_t param = 0; param < fn.arity; ++param) {
+                if (param > 0) {
+                    fprintf(stream, ", ");
+                }
+                fprintf(stream, "%s.%c", fn.params[param], element);
+            }
+            fprintf(stream, ");\n");
+        }
+    } else {
+        for (size_t component = 0; component < dim; ++component) {
+            fprintf(stream, INDENT "%s.e[%zu] = %s(", fn.params[0], component,
+                    fn_name);
+            for (size_t param = 0; param < fn.arity; ++param) {
+                if (param > 0) {
+                    fprintf(stream, ", ");
+                }
+                fprintf(stream, "%s.e[%zu]", fn.params[param], component);
+            }
+            fprintf(stream, ");\n");
+        }
+    }
+    fprintf(stream, INDENT "return %s;\n", fn.params[0]);
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
 int main() {
     generate_head(stdout);
     for (size_t dim = VEC_MIN_SIZE; dim <= VEC_MAX_SIZE; ++dim) {
@@ -284,10 +413,13 @@ int main() {
         }
     }
 
-    for (size_t dim = VEC_MIN_SIZE; dim <= num_constructor_dims; ++dim) {
+    for (size_t dim = VEC_MIN_SIZE; dim <= VEC_MAX_SIZE; ++dim) {
         for (size_t type = 0; type < NUM_TYPES; ++type) {
             for (size_t op = 0; op < NUM_OPS; ++op) {
                 generate_vec_operation(stdout, dim, type, op);
+            }
+            for (size_t fn = 0; fn < array_len(fn_definitions); ++fn) {
+                generate_vec_function(stdout, dim, type, fn);
             }
             generate_vec_variadic_operation(stdout, dim, type, VARIADIC_OP_SUM);
         }
