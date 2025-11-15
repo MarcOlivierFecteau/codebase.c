@@ -4,7 +4,7 @@
 #ifdef USE_TYPEDEFS
 #include "typedefs.h"
 #endif // USE_TYPEDEFS
-#include "common_math.h"
+#include "src/common_math.h"
 #include <math.h>
 #include <stdarg.h>
 
