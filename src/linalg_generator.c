@@ -196,11 +196,6 @@ void generate_vec_scalar_constructor(FILE *restrict stream, size_t dim,
     fprintf(stream, INDENT "return v;\n");
     fprintf(stream, "};\n");
     fprintf(stream, "\n");
-
-    // LINALG_DEF vec2f_t vec2f_splat(float x) {
-    //     vec2f_t v = {{x, x}};
-    //     return v;
-    // }
 }
 
 void generate_vec_operation(FILE *restrict stream, size_t dim, type_s type,
