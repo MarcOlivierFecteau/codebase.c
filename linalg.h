@@ -362,6 +362,12 @@ LINALG_DEF vec2f_t vec2f_direction(vec2f_t a, vec2f_t b) {
     return vec2f_unit(delta);
 }
 
+LINALG_DEF float vec2f_angle_between(vec2f_t a, vec2f_t b) {
+    vec2f_t a_unit = vec2f_unit(a);
+    vec2f_t b_unit = vec2f_unit(b);
+    return acosf(vec2f_dot(a_unit, b_unit));
+}
+
 LINALG_DEF vec2d_t vec2d_add(vec2d_t a, vec2d_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -478,6 +484,12 @@ LINALG_DEF vec2d_t vec2d_reflect(vec2d_t v, vec2d_t n) {
 LINALG_DEF vec2d_t vec2d_direction(vec2d_t a, vec2d_t b) {
     vec2d_t delta = vec2d_sub(b, a);
     return vec2d_unit(delta);
+}
+
+LINALG_DEF double vec2d_angle_between(vec2d_t a, vec2d_t b) {
+    vec2d_t a_unit = vec2d_unit(a);
+    vec2d_t b_unit = vec2d_unit(b);
+    return acos(vec2d_dot(a_unit, b_unit));
 }
 
 LINALG_DEF vec2i_t vec2i_add(vec2i_t a, vec2i_t b) {
@@ -768,6 +780,12 @@ LINALG_DEF vec3f_t vec3f_direction(vec3f_t a, vec3f_t b) {
     return vec3f_unit(delta);
 }
 
+LINALG_DEF float vec3f_angle_between(vec3f_t a, vec3f_t b) {
+    vec3f_t a_unit = vec3f_unit(a);
+    vec3f_t b_unit = vec3f_unit(b);
+    return acosf(vec3f_dot(a_unit, b_unit));
+}
+
 LINALG_DEF vec3d_t vec3d_add(vec3d_t a, vec3d_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -902,6 +920,12 @@ LINALG_DEF vec3d_t vec3d_reflect(vec3d_t v, vec3d_t n) {
 LINALG_DEF vec3d_t vec3d_direction(vec3d_t a, vec3d_t b) {
     vec3d_t delta = vec3d_sub(b, a);
     return vec3d_unit(delta);
+}
+
+LINALG_DEF double vec3d_angle_between(vec3d_t a, vec3d_t b) {
+    vec3d_t a_unit = vec3d_unit(a);
+    vec3d_t b_unit = vec3d_unit(b);
+    return acos(vec3d_dot(a_unit, b_unit));
 }
 
 LINALG_DEF vec3i_t vec3i_add(vec3i_t a, vec3i_t b) {
