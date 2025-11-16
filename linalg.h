@@ -345,6 +345,14 @@ LINALG_DEF _Bool vec2f_eq(vec2f_t a, vec2f_t b, float epsilon) {
     return 1;
 }
 
+LINALG_DEF vec2f_t vec2f_reflect(vec2f_t v, vec2f_t n) {
+    vec2f_t result = n;
+    result = vec2f_mul(result, vec2f_splat(vec2f_dot(v, n)));
+    result = vec2f_mul(result, vec2f_splat(2));
+    result = vec2f_sub(v, result);
+    return result;
+}
+
 LINALG_DEF vec2d_t vec2d_add(vec2d_t a, vec2d_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -446,6 +454,14 @@ LINALG_DEF _Bool vec2d_eq(vec2d_t a, vec2d_t b, double epsilon) {
     return 1;
 }
 
+LINALG_DEF vec2d_t vec2d_reflect(vec2d_t v, vec2d_t n) {
+    vec2d_t result = n;
+    result = vec2d_mul(result, vec2d_splat(vec2d_dot(v, n)));
+    result = vec2d_mul(result, vec2d_splat(2));
+    result = vec2d_sub(v, result);
+    return result;
+}
+
 LINALG_DEF vec2i_t vec2i_add(vec2i_t a, vec2i_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -508,6 +524,14 @@ LINALG_DEF vec2i_t vec2i_sum(size_t n, ...) {
 LINALG_DEF int vec2i_dot(vec2i_t a, vec2i_t b) { return a.x * b.x + a.y * b.y; }
 
 LINALG_DEF int vec2i_mag_squared(vec2i_t v) { return vec2i_dot(v, v); }
+
+LINALG_DEF vec2i_t vec2i_reflect(vec2i_t v, vec2i_t n) {
+    vec2i_t result = n;
+    result = vec2i_mul(result, vec2i_splat(vec2i_dot(v, n)));
+    result = vec2i_mul(result, vec2i_splat(2));
+    result = vec2i_sub(v, result);
+    return result;
+}
 
 LINALG_DEF vec2u_t vec2u_add(vec2u_t a, vec2u_t b) {
     a.x += b.x;
@@ -573,6 +597,14 @@ LINALG_DEF unsigned int vec2u_dot(vec2u_t a, vec2u_t b) {
 }
 
 LINALG_DEF unsigned int vec2u_mag_squared(vec2u_t v) { return vec2u_dot(v, v); }
+
+LINALG_DEF vec2u_t vec2u_reflect(vec2u_t v, vec2u_t n) {
+    vec2u_t result = n;
+    result = vec2u_mul(result, vec2u_splat(vec2u_dot(v, n)));
+    result = vec2u_mul(result, vec2u_splat(2));
+    result = vec2u_sub(v, result);
+    return result;
+}
 
 LINALG_DEF vec3f_t vec3f_add(vec3f_t a, vec3f_t b) {
     a.x += b.x;
@@ -687,6 +719,14 @@ LINALG_DEF _Bool vec3f_eq(vec3f_t a, vec3f_t b, float epsilon) {
         return 0;
     }
     return 1;
+}
+
+LINALG_DEF vec3f_t vec3f_reflect(vec3f_t v, vec3f_t n) {
+    vec3f_t result = n;
+    result = vec3f_mul(result, vec3f_splat(vec3f_dot(v, n)));
+    result = vec3f_mul(result, vec3f_splat(2));
+    result = vec3f_sub(v, result);
+    return result;
 }
 
 LINALG_DEF vec3d_t vec3d_add(vec3d_t a, vec3d_t b) {
@@ -804,6 +844,14 @@ LINALG_DEF _Bool vec3d_eq(vec3d_t a, vec3d_t b, double epsilon) {
     return 1;
 }
 
+LINALG_DEF vec3d_t vec3d_reflect(vec3d_t v, vec3d_t n) {
+    vec3d_t result = n;
+    result = vec3d_mul(result, vec3d_splat(vec3d_dot(v, n)));
+    result = vec3d_mul(result, vec3d_splat(2));
+    result = vec3d_sub(v, result);
+    return result;
+}
+
 LINALG_DEF vec3i_t vec3i_add(vec3i_t a, vec3i_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -877,6 +925,14 @@ LINALG_DEF int vec3i_dot(vec3i_t a, vec3i_t b) {
 
 LINALG_DEF int vec3i_mag_squared(vec3i_t v) { return vec3i_dot(v, v); }
 
+LINALG_DEF vec3i_t vec3i_reflect(vec3i_t v, vec3i_t n) {
+    vec3i_t result = n;
+    result = vec3i_mul(result, vec3i_splat(vec3i_dot(v, n)));
+    result = vec3i_mul(result, vec3i_splat(2));
+    result = vec3i_sub(v, result);
+    return result;
+}
+
 LINALG_DEF vec3u_t vec3u_add(vec3u_t a, vec3u_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -949,6 +1005,14 @@ LINALG_DEF unsigned int vec3u_dot(vec3u_t a, vec3u_t b) {
 }
 
 LINALG_DEF unsigned int vec3u_mag_squared(vec3u_t v) { return vec3u_dot(v, v); }
+
+LINALG_DEF vec3u_t vec3u_reflect(vec3u_t v, vec3u_t n) {
+    vec3u_t result = n;
+    result = vec3u_mul(result, vec3u_splat(vec3u_dot(v, n)));
+    result = vec3u_mul(result, vec3u_splat(2));
+    result = vec3u_sub(v, result);
+    return result;
+}
 
 LINALG_DEF vec4f_t vec4f_add(vec4f_t a, vec4f_t b) {
     a.x += b.x;
@@ -1077,6 +1141,14 @@ LINALG_DEF _Bool vec4f_eq(vec4f_t a, vec4f_t b, float epsilon) {
         return 0;
     }
     return 1;
+}
+
+LINALG_DEF vec4f_t vec4f_reflect(vec4f_t v, vec4f_t n) {
+    vec4f_t result = n;
+    result = vec4f_mul(result, vec4f_splat(vec4f_dot(v, n)));
+    result = vec4f_mul(result, vec4f_splat(2));
+    result = vec4f_sub(v, result);
+    return result;
 }
 
 LINALG_DEF vec4d_t vec4d_add(vec4d_t a, vec4d_t b) {
@@ -1208,6 +1280,14 @@ LINALG_DEF _Bool vec4d_eq(vec4d_t a, vec4d_t b, double epsilon) {
     return 1;
 }
 
+LINALG_DEF vec4d_t vec4d_reflect(vec4d_t v, vec4d_t n) {
+    vec4d_t result = n;
+    result = vec4d_mul(result, vec4d_splat(vec4d_dot(v, n)));
+    result = vec4d_mul(result, vec4d_splat(2));
+    result = vec4d_sub(v, result);
+    return result;
+}
+
 LINALG_DEF vec4i_t vec4i_add(vec4i_t a, vec4i_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -1289,6 +1369,14 @@ LINALG_DEF int vec4i_dot(vec4i_t a, vec4i_t b) {
 
 LINALG_DEF int vec4i_mag_squared(vec4i_t v) { return vec4i_dot(v, v); }
 
+LINALG_DEF vec4i_t vec4i_reflect(vec4i_t v, vec4i_t n) {
+    vec4i_t result = n;
+    result = vec4i_mul(result, vec4i_splat(vec4i_dot(v, n)));
+    result = vec4i_mul(result, vec4i_splat(2));
+    result = vec4i_sub(v, result);
+    return result;
+}
+
 LINALG_DEF vec4u_t vec4u_add(vec4u_t a, vec4u_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -1369,5 +1457,13 @@ LINALG_DEF unsigned int vec4u_dot(vec4u_t a, vec4u_t b) {
 }
 
 LINALG_DEF unsigned int vec4u_mag_squared(vec4u_t v) { return vec4u_dot(v, v); }
+
+LINALG_DEF vec4u_t vec4u_reflect(vec4u_t v, vec4u_t n) {
+    vec4u_t result = n;
+    result = vec4u_mul(result, vec4u_splat(vec4u_dot(v, n)));
+    result = vec4u_mul(result, vec4u_splat(2));
+    result = vec4u_sub(v, result);
+    return result;
+}
 
 #endif // LINALG_H

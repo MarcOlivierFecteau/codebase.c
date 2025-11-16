@@ -542,6 +542,23 @@ void generate_vec_eq(FILE *restrict stream, size_t dim, type_s type) {
     EMPTY_LINE(stream);
 }
 
+void generate_vec_reflect(FILE *restrict stream, size_t dim, type_s type) {
+    const char *vec_type = vec_type_name(dim, type);
+    const char *vec_fn = vec_fn_name(dim, type, "reflect");
+    const char *vec_prefix = vec_prefix_name(dim, type);
+    fprintf(stream, "LINALG_DEF %s %s(%s v, %s n) {\n", vec_type, vec_fn,
+            vec_type, vec_type);
+    fprintf(stream, INDENT "%s result = n;\n", vec_type);
+    fprintf(stream, INDENT "result = %s_mul(result, %s_splat(%s_dot(v, n)));\n",
+            vec_prefix, vec_prefix, vec_prefix);
+    fprintf(stream, INDENT "result = %s_mul(result, %s_splat(2));\n",
+            vec_prefix, vec_prefix);
+    fprintf(stream, INDENT "result = %s_sub(v, result);\n", vec_prefix);
+    fprintf(stream, INDENT "return result;\n");
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
 int main() {
     generate_head(stdout);
     for (size_t dim = VEC_MIN_SIZE; dim <= VEC_MAX_SIZE; ++dim) {
@@ -574,6 +591,7 @@ int main() {
             generate_vec_mag(stdout, dim, type);
             generate_vec_unit(stdout, dim, type);
             generate_vec_eq(stdout, dim, type);
+            generate_vec_reflect(stdout, dim, type);
         }
     }
 
