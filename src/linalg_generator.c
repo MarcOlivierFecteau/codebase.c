@@ -574,6 +574,29 @@ void generate_vec_direction(FILE *restrict stream, size_t dim, type_s type) {
     EMPTY_LINE(stream);
 }
 
+void generate_vec_cross(FILE *restrict stream, size_t dim, type_s type) {
+    if (!(dim == 2 || dim == 3)) {
+        return;
+    }
+    const char *vec_type = vec_type_name(dim, type);
+    const char *vec_fn = vec_fn_name(dim, type, "cross");
+    const char *return_type =
+        dim == 2 ? type_definitions[type].keyword : vec_type;
+    fprintf(stream, "LINALG_DEF %s %s(%s a, %s b) {\n", return_type, vec_fn,
+            vec_type, vec_type);
+    if (dim == 2) {
+        fprintf(stream, INDENT "return a.x * b.y - a.y * b.x;\n");
+    } else {
+        fprintf(stream, INDENT "%s result = {0};\n", vec_type);
+        fprintf(stream, INDENT "result.x = a.y * b.z - a.z * b.y;\n");
+        fprintf(stream, INDENT "result.y = a.z * b.x - a.z * b.x;\n");
+        fprintf(stream, INDENT "result.z = a.x * b.y - a.y * b.x;\n");
+        fprintf(stream, INDENT "return result;\n");
+    }
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
 int main() {
     generate_head(stdout);
     for (size_t dim = VEC_MIN_SIZE; dim <= VEC_MAX_SIZE; ++dim) {
@@ -602,6 +625,7 @@ int main() {
             }
             generate_vec_variadic_operation(stdout, dim, type, VARIADIC_OP_SUM);
             generate_vec_dot(stdout, dim, type);
+            generate_vec_cross(stdout, dim, type);
             generate_vec_mag_squared(stdout, dim, type);
             generate_vec_mag(stdout, dim, type);
             generate_vec_unit(stdout, dim, type);

@@ -325,6 +325,10 @@ LINALG_DEF float vec2f_dot(vec2f_t a, vec2f_t b) {
     return a.x * b.x + a.y * b.y;
 }
 
+LINALG_DEF float vec2f_cross(vec2f_t a, vec2f_t b) {
+    return a.x * b.y - a.y * b.x;
+}
+
 LINALG_DEF float vec2f_mag_squared(vec2f_t v) { return vec2f_dot(v, v); }
 
 LINALG_DEF float vec2f_mag(vec2f_t v) { return sqrtf(vec2f_mag_squared(v)); }
@@ -439,6 +443,10 @@ LINALG_DEF double vec2d_dot(vec2d_t a, vec2d_t b) {
     return a.x * b.x + a.y * b.y;
 }
 
+LINALG_DEF double vec2d_cross(vec2d_t a, vec2d_t b) {
+    return a.x * b.y - a.y * b.x;
+}
+
 LINALG_DEF double vec2d_mag_squared(vec2d_t v) { return vec2d_dot(v, v); }
 
 LINALG_DEF double vec2d_mag(vec2d_t v) { return sqrt(vec2d_mag_squared(v)); }
@@ -533,6 +541,10 @@ LINALG_DEF vec2i_t vec2i_sum(size_t n, ...) {
 
 LINALG_DEF int vec2i_dot(vec2i_t a, vec2i_t b) { return a.x * b.x + a.y * b.y; }
 
+LINALG_DEF int vec2i_cross(vec2i_t a, vec2i_t b) {
+    return a.x * b.y - a.y * b.x;
+}
+
 LINALG_DEF int vec2i_mag_squared(vec2i_t v) { return vec2i_dot(v, v); }
 
 LINALG_DEF vec2i_t vec2i_reflect(vec2i_t v, vec2i_t n) {
@@ -604,6 +616,10 @@ LINALG_DEF vec2u_t vec2u_sum(size_t n, ...) {
 
 LINALG_DEF unsigned int vec2u_dot(vec2u_t a, vec2u_t b) {
     return a.x * b.x + a.y * b.y;
+}
+
+LINALG_DEF unsigned int vec2u_cross(vec2u_t a, vec2u_t b) {
+    return a.x * b.y - a.y * b.x;
 }
 
 LINALG_DEF unsigned int vec2u_mag_squared(vec2u_t v) { return vec2u_dot(v, v); }
@@ -706,6 +722,14 @@ LINALG_DEF vec3f_t vec3f_sum(size_t n, ...) {
 
 LINALG_DEF float vec3f_dot(vec3f_t a, vec3f_t b) {
     return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+LINALG_DEF vec3f_t vec3f_cross(vec3f_t a, vec3f_t b) {
+    vec3f_t result = {0};
+    result.x = a.y * b.z - a.z * b.y;
+    result.y = a.z * b.x - a.z * b.x;
+    result.z = a.x * b.y - a.y * b.x;
+    return result;
 }
 
 LINALG_DEF float vec3f_mag_squared(vec3f_t v) { return vec3f_dot(v, v); }
@@ -836,6 +860,14 @@ LINALG_DEF double vec3d_dot(vec3d_t a, vec3d_t b) {
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
+LINALG_DEF vec3d_t vec3d_cross(vec3d_t a, vec3d_t b) {
+    vec3d_t result = {0};
+    result.x = a.y * b.z - a.z * b.y;
+    result.y = a.z * b.x - a.z * b.x;
+    result.z = a.x * b.y - a.y * b.x;
+    return result;
+}
+
 LINALG_DEF double vec3d_mag_squared(vec3d_t v) { return vec3d_dot(v, v); }
 
 LINALG_DEF double vec3d_mag(vec3d_t v) { return sqrt(vec3d_mag_squared(v)); }
@@ -943,6 +975,14 @@ LINALG_DEF int vec3i_dot(vec3i_t a, vec3i_t b) {
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
+LINALG_DEF vec3i_t vec3i_cross(vec3i_t a, vec3i_t b) {
+    vec3i_t result = {0};
+    result.x = a.y * b.z - a.z * b.y;
+    result.y = a.z * b.x - a.z * b.x;
+    result.z = a.x * b.y - a.y * b.x;
+    return result;
+}
+
 LINALG_DEF int vec3i_mag_squared(vec3i_t v) { return vec3i_dot(v, v); }
 
 LINALG_DEF vec3i_t vec3i_reflect(vec3i_t v, vec3i_t n) {
@@ -1022,6 +1062,14 @@ LINALG_DEF vec3u_t vec3u_sum(size_t n, ...) {
 
 LINALG_DEF unsigned int vec3u_dot(vec3u_t a, vec3u_t b) {
     return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+LINALG_DEF vec3u_t vec3u_cross(vec3u_t a, vec3u_t b) {
+    vec3u_t result = {0};
+    result.x = a.y * b.z - a.z * b.y;
+    result.y = a.z * b.x - a.z * b.x;
+    result.z = a.x * b.y - a.y * b.x;
+    return result;
 }
 
 LINALG_DEF unsigned int vec3u_mag_squared(vec3u_t v) { return vec3u_dot(v, v); }
