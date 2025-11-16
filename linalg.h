@@ -353,6 +353,11 @@ LINALG_DEF vec2f_t vec2f_reflect(vec2f_t v, vec2f_t n) {
     return result;
 }
 
+LINALG_DEF vec2f_t vec2f_direction(vec2f_t a, vec2f_t b) {
+    vec2f_t delta = vec2f_sub(b, a);
+    return vec2f_unit(delta);
+}
+
 LINALG_DEF vec2d_t vec2d_add(vec2d_t a, vec2d_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -460,6 +465,11 @@ LINALG_DEF vec2d_t vec2d_reflect(vec2d_t v, vec2d_t n) {
     result = vec2d_mul(result, vec2d_splat(2));
     result = vec2d_sub(v, result);
     return result;
+}
+
+LINALG_DEF vec2d_t vec2d_direction(vec2d_t a, vec2d_t b) {
+    vec2d_t delta = vec2d_sub(b, a);
+    return vec2d_unit(delta);
 }
 
 LINALG_DEF vec2i_t vec2i_add(vec2i_t a, vec2i_t b) {
@@ -729,6 +739,11 @@ LINALG_DEF vec3f_t vec3f_reflect(vec3f_t v, vec3f_t n) {
     return result;
 }
 
+LINALG_DEF vec3f_t vec3f_direction(vec3f_t a, vec3f_t b) {
+    vec3f_t delta = vec3f_sub(b, a);
+    return vec3f_unit(delta);
+}
+
 LINALG_DEF vec3d_t vec3d_add(vec3d_t a, vec3d_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -850,6 +865,11 @@ LINALG_DEF vec3d_t vec3d_reflect(vec3d_t v, vec3d_t n) {
     result = vec3d_mul(result, vec3d_splat(2));
     result = vec3d_sub(v, result);
     return result;
+}
+
+LINALG_DEF vec3d_t vec3d_direction(vec3d_t a, vec3d_t b) {
+    vec3d_t delta = vec3d_sub(b, a);
+    return vec3d_unit(delta);
 }
 
 LINALG_DEF vec3i_t vec3i_add(vec3i_t a, vec3i_t b) {
@@ -1151,6 +1171,11 @@ LINALG_DEF vec4f_t vec4f_reflect(vec4f_t v, vec4f_t n) {
     return result;
 }
 
+LINALG_DEF vec4f_t vec4f_direction(vec4f_t a, vec4f_t b) {
+    vec4f_t delta = vec4f_sub(b, a);
+    return vec4f_unit(delta);
+}
+
 LINALG_DEF vec4d_t vec4d_add(vec4d_t a, vec4d_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -1286,6 +1311,11 @@ LINALG_DEF vec4d_t vec4d_reflect(vec4d_t v, vec4d_t n) {
     result = vec4d_mul(result, vec4d_splat(2));
     result = vec4d_sub(v, result);
     return result;
+}
+
+LINALG_DEF vec4d_t vec4d_direction(vec4d_t a, vec4d_t b) {
+    vec4d_t delta = vec4d_sub(b, a);
+    return vec4d_unit(delta);
 }
 
 LINALG_DEF vec4i_t vec4i_add(vec4i_t a, vec4i_t b) {

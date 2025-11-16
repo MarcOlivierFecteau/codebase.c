@@ -477,7 +477,7 @@ void generate_vec_mag_squared(FILE *restrict stream, size_t dim, type_s type) {
 
 void generate_vec_mag(FILE *restrict stream, size_t dim, type_s type) {
     if (!(type == FLOAT_T || type == DOUBLE_T)) {
-        return; // sqrt operator does not support integer values.
+        return; // sqrt function does not support integer values.
     }
     const char *vec_type = vec_type_name(dim, type);
     const char *vec_fn = vec_fn_name(dim, type, "mag");
@@ -493,7 +493,7 @@ void generate_vec_mag(FILE *restrict stream, size_t dim, type_s type) {
 
 void generate_vec_unit(FILE *restrict stream, size_t dim, type_s type) {
     if (!(type == FLOAT_T || type == DOUBLE_T)) {
-        return; // sqrt operator does not support integer values.
+        return; // sqrt function does not support integer values.
     }
     const char *vec_type = vec_type_name(dim, type);
     const char *vec_fn = vec_fn_name(dim, type, "unit");
@@ -559,6 +559,21 @@ void generate_vec_reflect(FILE *restrict stream, size_t dim, type_s type) {
     EMPTY_LINE(stream);
 }
 
+void generate_vec_direction(FILE *restrict stream, size_t dim, type_s type) {
+    if (!(type == FLOAT_T || type == DOUBLE_T)) {
+        return; // sqrt function does not support integer values.
+    }
+    const char *vec_type = vec_type_name(dim, type);
+    const char *vec_fn = vec_fn_name(dim, type, "direction");
+    const char *vec_prefix = vec_prefix_name(dim, type);
+    fprintf(stream, "LINALG_DEF %s %s(%s a, %s b) {\n", vec_type, vec_fn,
+            vec_type, vec_type);
+    fprintf(stream, INDENT "%s delta = %s_sub(b, a);\n", vec_type, vec_prefix);
+    fprintf(stream, INDENT "return %s_unit(delta);\n", vec_prefix);
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
 int main() {
     generate_head(stdout);
     for (size_t dim = VEC_MIN_SIZE; dim <= VEC_MAX_SIZE; ++dim) {
@@ -592,6 +607,7 @@ int main() {
             generate_vec_unit(stdout, dim, type);
             generate_vec_eq(stdout, dim, type);
             generate_vec_reflect(stdout, dim, type);
+            generate_vec_direction(stdout, dim, type);
         }
     }
 
