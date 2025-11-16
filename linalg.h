@@ -25,7 +25,7 @@ typedef union {
         float _11, _12;
         float _21, _22;
     };
-    float m[2][2];
+    float M[2][2];
     float e[2 * 2];
     vec2f_t v[2];
 } mat2f_t;
@@ -42,7 +42,7 @@ typedef union {
         double _11, _12;
         double _21, _22;
     };
-    double m[2][2];
+    double M[2][2];
     double e[2 * 2];
     vec2d_t v[2];
 } mat2d_t;
@@ -59,7 +59,7 @@ typedef union {
         int _11, _12;
         int _21, _22;
     };
-    int m[2][2];
+    int M[2][2];
     int e[2 * 2];
     vec2i_t v[2];
 } mat2i_t;
@@ -76,7 +76,7 @@ typedef union {
         unsigned int _11, _12;
         unsigned int _21, _22;
     };
-    unsigned int m[2][2];
+    unsigned int M[2][2];
     unsigned int e[2 * 2];
     vec2u_t v[2];
 } mat2u_t;
@@ -97,7 +97,7 @@ typedef union {
         float _21, _22, _23;
         float _31, _32, _33;
     };
-    float m[3][3];
+    float M[3][3];
     float e[3 * 3];
     vec3f_t v[3];
 } mat3f_t;
@@ -118,7 +118,7 @@ typedef union {
         double _21, _22, _23;
         double _31, _32, _33;
     };
-    double m[3][3];
+    double M[3][3];
     double e[3 * 3];
     vec3d_t v[3];
 } mat3d_t;
@@ -139,7 +139,7 @@ typedef union {
         int _21, _22, _23;
         int _31, _32, _33;
     };
-    int m[3][3];
+    int M[3][3];
     int e[3 * 3];
     vec3i_t v[3];
 } mat3i_t;
@@ -160,7 +160,7 @@ typedef union {
         unsigned int _21, _22, _23;
         unsigned int _31, _32, _33;
     };
-    unsigned int m[3][3];
+    unsigned int M[3][3];
     unsigned int e[3 * 3];
     vec3u_t v[3];
 } mat3u_t;
@@ -182,7 +182,7 @@ typedef union {
         float _31, _32, _33, _34;
         float _41, _42, _43, _44;
     };
-    float m[4][4];
+    float M[4][4];
     float e[4 * 4];
     vec4f_t v[4];
 } mat4f_t;
@@ -204,7 +204,7 @@ typedef union {
         double _31, _32, _33, _34;
         double _41, _42, _43, _44;
     };
-    double m[4][4];
+    double M[4][4];
     double e[4 * 4];
     vec4d_t v[4];
 } mat4d_t;
@@ -226,7 +226,7 @@ typedef union {
         int _31, _32, _33, _34;
         int _41, _42, _43, _44;
     };
-    int m[4][4];
+    int M[4][4];
     int e[4 * 4];
     vec4i_t v[4];
 } mat4i_t;
@@ -248,7 +248,7 @@ typedef union {
         unsigned int _31, _32, _33, _34;
         unsigned int _41, _42, _43, _44;
     };
-    unsigned int m[4][4];
+    unsigned int M[4][4];
     unsigned int e[4 * 4];
     vec4u_t v[4];
 } mat4u_t;
@@ -263,6 +263,18 @@ vec2f_t vec2f_splat(float x) {
     return v;
 }
 
+LINALG_DEF mat2f_t mat2f_zero(void) {
+    mat2f_t M = {0};
+    return M;
+}
+
+LINALG_DEF mat2f_t mat2f_I(void) {
+    mat2f_t M = {0};
+    M._11 = 1;
+    M._22 = 1;
+    return M;
+}
+
 vec2d_t vec2d(double x, double y) {
     vec2d_t v = {{x, y}};
     return v;
@@ -271,6 +283,18 @@ vec2d_t vec2d(double x, double y) {
 vec2d_t vec2d_splat(double x) {
     vec2d_t v = {{x, x}};
     return v;
+}
+
+LINALG_DEF mat2d_t mat2d_zero(void) {
+    mat2d_t M = {0};
+    return M;
+}
+
+LINALG_DEF mat2d_t mat2d_I(void) {
+    mat2d_t M = {0};
+    M._11 = 1;
+    M._22 = 1;
+    return M;
 }
 
 vec2i_t vec2i(int x, int y) {
@@ -283,6 +307,18 @@ vec2i_t vec2i_splat(int x) {
     return v;
 }
 
+LINALG_DEF mat2i_t mat2i_zero(void) {
+    mat2i_t M = {0};
+    return M;
+}
+
+LINALG_DEF mat2i_t mat2i_I(void) {
+    mat2i_t M = {0};
+    M._11 = 1;
+    M._22 = 1;
+    return M;
+}
+
 vec2u_t vec2u(unsigned int x, unsigned int y) {
     vec2u_t v = {{x, y}};
     return v;
@@ -291,6 +327,18 @@ vec2u_t vec2u(unsigned int x, unsigned int y) {
 vec2u_t vec2u_splat(unsigned int x) {
     vec2u_t v = {{x, x}};
     return v;
+}
+
+LINALG_DEF mat2u_t mat2u_zero(void) {
+    mat2u_t M = {0};
+    return M;
+}
+
+LINALG_DEF mat2u_t mat2u_I(void) {
+    mat2u_t M = {0};
+    M._11 = 1;
+    M._22 = 1;
+    return M;
 }
 
 vec3f_t vec3f(float x, float y, float z) {
@@ -303,6 +351,19 @@ vec3f_t vec3f_splat(float x) {
     return v;
 }
 
+LINALG_DEF mat3f_t mat3f_zero(void) {
+    mat3f_t M = {0};
+    return M;
+}
+
+LINALG_DEF mat3f_t mat3f_I(void) {
+    mat3f_t M = {0};
+    M._11 = 1;
+    M._22 = 1;
+    M._33 = 1;
+    return M;
+}
+
 vec3d_t vec3d(double x, double y, double z) {
     vec3d_t v = {{x, y, z}};
     return v;
@@ -311,6 +372,19 @@ vec3d_t vec3d(double x, double y, double z) {
 vec3d_t vec3d_splat(double x) {
     vec3d_t v = {{x, x, x}};
     return v;
+}
+
+LINALG_DEF mat3d_t mat3d_zero(void) {
+    mat3d_t M = {0};
+    return M;
+}
+
+LINALG_DEF mat3d_t mat3d_I(void) {
+    mat3d_t M = {0};
+    M._11 = 1;
+    M._22 = 1;
+    M._33 = 1;
+    return M;
 }
 
 vec3i_t vec3i(int x, int y, int z) {
@@ -323,6 +397,19 @@ vec3i_t vec3i_splat(int x) {
     return v;
 }
 
+LINALG_DEF mat3i_t mat3i_zero(void) {
+    mat3i_t M = {0};
+    return M;
+}
+
+LINALG_DEF mat3i_t mat3i_I(void) {
+    mat3i_t M = {0};
+    M._11 = 1;
+    M._22 = 1;
+    M._33 = 1;
+    return M;
+}
+
 vec3u_t vec3u(unsigned int x, unsigned int y, unsigned int z) {
     vec3u_t v = {{x, y, z}};
     return v;
@@ -331,6 +418,19 @@ vec3u_t vec3u(unsigned int x, unsigned int y, unsigned int z) {
 vec3u_t vec3u_splat(unsigned int x) {
     vec3u_t v = {{x, x, x}};
     return v;
+}
+
+LINALG_DEF mat3u_t mat3u_zero(void) {
+    mat3u_t M = {0};
+    return M;
+}
+
+LINALG_DEF mat3u_t mat3u_I(void) {
+    mat3u_t M = {0};
+    M._11 = 1;
+    M._22 = 1;
+    M._33 = 1;
+    return M;
 }
 
 vec4f_t vec4f(float x, float y, float z, float w) {
@@ -343,6 +443,20 @@ vec4f_t vec4f_splat(float x) {
     return v;
 }
 
+LINALG_DEF mat4f_t mat4f_zero(void) {
+    mat4f_t M = {0};
+    return M;
+}
+
+LINALG_DEF mat4f_t mat4f_I(void) {
+    mat4f_t M = {0};
+    M._11 = 1;
+    M._22 = 1;
+    M._33 = 1;
+    M._44 = 1;
+    return M;
+}
+
 vec4d_t vec4d(double x, double y, double z, double w) {
     vec4d_t v = {{x, y, z, w}};
     return v;
@@ -351,6 +465,20 @@ vec4d_t vec4d(double x, double y, double z, double w) {
 vec4d_t vec4d_splat(double x) {
     vec4d_t v = {{x, x, x, x}};
     return v;
+}
+
+LINALG_DEF mat4d_t mat4d_zero(void) {
+    mat4d_t M = {0};
+    return M;
+}
+
+LINALG_DEF mat4d_t mat4d_I(void) {
+    mat4d_t M = {0};
+    M._11 = 1;
+    M._22 = 1;
+    M._33 = 1;
+    M._44 = 1;
+    return M;
 }
 
 vec4i_t vec4i(int x, int y, int z, int w) {
@@ -363,6 +491,20 @@ vec4i_t vec4i_splat(int x) {
     return v;
 }
 
+LINALG_DEF mat4i_t mat4i_zero(void) {
+    mat4i_t M = {0};
+    return M;
+}
+
+LINALG_DEF mat4i_t mat4i_I(void) {
+    mat4i_t M = {0};
+    M._11 = 1;
+    M._22 = 1;
+    M._33 = 1;
+    M._44 = 1;
+    return M;
+}
+
 vec4u_t vec4u(unsigned int x, unsigned int y, unsigned int z, unsigned int w) {
     vec4u_t v = {{x, y, z, w}};
     return v;
@@ -371,6 +513,20 @@ vec4u_t vec4u(unsigned int x, unsigned int y, unsigned int z, unsigned int w) {
 vec4u_t vec4u_splat(unsigned int x) {
     vec4u_t v = {{x, x, x, x}};
     return v;
+}
+
+LINALG_DEF mat4u_t mat4u_zero(void) {
+    mat4u_t M = {0};
+    return M;
+}
+
+LINALG_DEF mat4u_t mat4u_I(void) {
+    mat4u_t M = {0};
+    M._11 = 1;
+    M._22 = 1;
+    M._33 = 1;
+    M._44 = 1;
+    return M;
 }
 
 LINALG_DEF vec2f_t vec2f_add(vec2f_t a, vec2f_t b) {
@@ -497,6 +653,22 @@ LINALG_DEF float vec2f_angle_between(vec2f_t a, vec2f_t b) {
     return acosf(vec2f_dot(a_unit, b_unit));
 }
 
+LINALG_DEF mat2f_t mat2f_mul(mat2f_t A, mat2f_t B) {
+    mat2f_t result;
+    result._11 = A._11 * B._11 + A._12 * B._21;
+    result._12 = A._11 * B._12 + A._12 * B._22;
+    result._21 = A._21 * B._11 + A._22 * B._21;
+    result._22 = A._21 * B._12 + A._22 * B._22;
+    return result;
+}
+
+LINALG_DEF vec2f_t mat2f_mul_vec(mat2f_t M, vec2f_t v) {
+    vec2f_t result;
+    result.x = vec2f_dot(M.v[0], v);
+    result.y = vec2f_dot(M.v[1], v);
+    return result;
+}
+
 LINALG_DEF vec2d_t vec2d_add(vec2d_t a, vec2d_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -621,6 +793,22 @@ LINALG_DEF double vec2d_angle_between(vec2d_t a, vec2d_t b) {
     return acos(vec2d_dot(a_unit, b_unit));
 }
 
+LINALG_DEF mat2d_t mat2d_mul(mat2d_t A, mat2d_t B) {
+    mat2d_t result;
+    result._11 = A._11 * B._11 + A._12 * B._21;
+    result._12 = A._11 * B._12 + A._12 * B._22;
+    result._21 = A._21 * B._11 + A._22 * B._21;
+    result._22 = A._21 * B._12 + A._22 * B._22;
+    return result;
+}
+
+LINALG_DEF vec2d_t mat2d_mul_vec(mat2d_t M, vec2d_t v) {
+    vec2d_t result;
+    result.x = vec2d_dot(M.v[0], v);
+    result.y = vec2d_dot(M.v[1], v);
+    return result;
+}
+
 LINALG_DEF vec2i_t vec2i_add(vec2i_t a, vec2i_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -693,6 +881,22 @@ LINALG_DEF vec2i_t vec2i_reflect(vec2i_t v, vec2i_t n) {
     result = vec2i_mul(result, vec2i_splat(vec2i_dot(v, n)));
     result = vec2i_mul(result, vec2i_splat(2));
     result = vec2i_sub(v, result);
+    return result;
+}
+
+LINALG_DEF mat2i_t mat2i_mul(mat2i_t A, mat2i_t B) {
+    mat2i_t result;
+    result._11 = A._11 * B._11 + A._12 * B._21;
+    result._12 = A._11 * B._12 + A._12 * B._22;
+    result._21 = A._21 * B._11 + A._22 * B._21;
+    result._22 = A._21 * B._12 + A._22 * B._22;
+    return result;
+}
+
+LINALG_DEF vec2i_t mat2i_mul_vec(mat2i_t M, vec2i_t v) {
+    vec2i_t result;
+    result.x = vec2i_dot(M.v[0], v);
+    result.y = vec2i_dot(M.v[1], v);
     return result;
 }
 
@@ -770,6 +974,22 @@ LINALG_DEF vec2u_t vec2u_reflect(vec2u_t v, vec2u_t n) {
     result = vec2u_mul(result, vec2u_splat(vec2u_dot(v, n)));
     result = vec2u_mul(result, vec2u_splat(2));
     result = vec2u_sub(v, result);
+    return result;
+}
+
+LINALG_DEF mat2u_t mat2u_mul(mat2u_t A, mat2u_t B) {
+    mat2u_t result;
+    result._11 = A._11 * B._11 + A._12 * B._21;
+    result._12 = A._11 * B._12 + A._12 * B._22;
+    result._21 = A._21 * B._11 + A._22 * B._21;
+    result._22 = A._21 * B._12 + A._22 * B._22;
+    return result;
+}
+
+LINALG_DEF vec2u_t mat2u_mul_vec(mat2u_t M, vec2u_t v) {
+    vec2u_t result;
+    result.x = vec2u_dot(M.v[0], v);
+    result.y = vec2u_dot(M.v[1], v);
     return result;
 }
 
@@ -915,6 +1135,28 @@ LINALG_DEF float vec3f_angle_between(vec3f_t a, vec3f_t b) {
     return acosf(vec3f_dot(a_unit, b_unit));
 }
 
+LINALG_DEF mat3f_t mat3f_mul(mat3f_t A, mat3f_t B) {
+    mat3f_t result;
+    result._11 = A._11 * B._11 + A._12 * B._21 + A._13 * B._31;
+    result._12 = A._11 * B._12 + A._12 * B._22 + A._13 * B._32;
+    result._13 = A._11 * B._13 + A._12 * B._23 + A._13 * B._33;
+    result._21 = A._21 * B._11 + A._22 * B._21 + A._23 * B._31;
+    result._22 = A._21 * B._12 + A._22 * B._22 + A._23 * B._32;
+    result._23 = A._21 * B._13 + A._22 * B._23 + A._23 * B._33;
+    result._31 = A._31 * B._11 + A._32 * B._21 + A._33 * B._31;
+    result._32 = A._31 * B._12 + A._32 * B._22 + A._33 * B._32;
+    result._33 = A._31 * B._13 + A._32 * B._23 + A._33 * B._33;
+    return result;
+}
+
+LINALG_DEF vec3f_t mat3f_mul_vec(mat3f_t M, vec3f_t v) {
+    vec3f_t result;
+    result.x = vec3f_dot(M.v[0], v);
+    result.y = vec3f_dot(M.v[1], v);
+    result.z = vec3f_dot(M.v[2], v);
+    return result;
+}
+
 LINALG_DEF vec3d_t vec3d_add(vec3d_t a, vec3d_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -1057,6 +1299,28 @@ LINALG_DEF double vec3d_angle_between(vec3d_t a, vec3d_t b) {
     return acos(vec3d_dot(a_unit, b_unit));
 }
 
+LINALG_DEF mat3d_t mat3d_mul(mat3d_t A, mat3d_t B) {
+    mat3d_t result;
+    result._11 = A._11 * B._11 + A._12 * B._21 + A._13 * B._31;
+    result._12 = A._11 * B._12 + A._12 * B._22 + A._13 * B._32;
+    result._13 = A._11 * B._13 + A._12 * B._23 + A._13 * B._33;
+    result._21 = A._21 * B._11 + A._22 * B._21 + A._23 * B._31;
+    result._22 = A._21 * B._12 + A._22 * B._22 + A._23 * B._32;
+    result._23 = A._21 * B._13 + A._22 * B._23 + A._23 * B._33;
+    result._31 = A._31 * B._11 + A._32 * B._21 + A._33 * B._31;
+    result._32 = A._31 * B._12 + A._32 * B._22 + A._33 * B._32;
+    result._33 = A._31 * B._13 + A._32 * B._23 + A._33 * B._33;
+    return result;
+}
+
+LINALG_DEF vec3d_t mat3d_mul_vec(mat3d_t M, vec3d_t v) {
+    vec3d_t result;
+    result.x = vec3d_dot(M.v[0], v);
+    result.y = vec3d_dot(M.v[1], v);
+    result.z = vec3d_dot(M.v[2], v);
+    return result;
+}
+
 LINALG_DEF vec3i_t vec3i_add(vec3i_t a, vec3i_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -1146,6 +1410,28 @@ LINALG_DEF vec3i_t vec3i_reflect(vec3i_t v, vec3i_t n) {
     return result;
 }
 
+LINALG_DEF mat3i_t mat3i_mul(mat3i_t A, mat3i_t B) {
+    mat3i_t result;
+    result._11 = A._11 * B._11 + A._12 * B._21 + A._13 * B._31;
+    result._12 = A._11 * B._12 + A._12 * B._22 + A._13 * B._32;
+    result._13 = A._11 * B._13 + A._12 * B._23 + A._13 * B._33;
+    result._21 = A._21 * B._11 + A._22 * B._21 + A._23 * B._31;
+    result._22 = A._21 * B._12 + A._22 * B._22 + A._23 * B._32;
+    result._23 = A._21 * B._13 + A._22 * B._23 + A._23 * B._33;
+    result._31 = A._31 * B._11 + A._32 * B._21 + A._33 * B._31;
+    result._32 = A._31 * B._12 + A._32 * B._22 + A._33 * B._32;
+    result._33 = A._31 * B._13 + A._32 * B._23 + A._33 * B._33;
+    return result;
+}
+
+LINALG_DEF vec3i_t mat3i_mul_vec(mat3i_t M, vec3i_t v) {
+    vec3i_t result;
+    result.x = vec3i_dot(M.v[0], v);
+    result.y = vec3i_dot(M.v[1], v);
+    result.z = vec3i_dot(M.v[2], v);
+    return result;
+}
+
 LINALG_DEF vec3u_t vec3u_add(vec3u_t a, vec3u_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -1232,6 +1518,28 @@ LINALG_DEF vec3u_t vec3u_reflect(vec3u_t v, vec3u_t n) {
     result = vec3u_mul(result, vec3u_splat(vec3u_dot(v, n)));
     result = vec3u_mul(result, vec3u_splat(2));
     result = vec3u_sub(v, result);
+    return result;
+}
+
+LINALG_DEF mat3u_t mat3u_mul(mat3u_t A, mat3u_t B) {
+    mat3u_t result;
+    result._11 = A._11 * B._11 + A._12 * B._21 + A._13 * B._31;
+    result._12 = A._11 * B._12 + A._12 * B._22 + A._13 * B._32;
+    result._13 = A._11 * B._13 + A._12 * B._23 + A._13 * B._33;
+    result._21 = A._21 * B._11 + A._22 * B._21 + A._23 * B._31;
+    result._22 = A._21 * B._12 + A._22 * B._22 + A._23 * B._32;
+    result._23 = A._21 * B._13 + A._22 * B._23 + A._23 * B._33;
+    result._31 = A._31 * B._11 + A._32 * B._21 + A._33 * B._31;
+    result._32 = A._31 * B._12 + A._32 * B._22 + A._33 * B._32;
+    result._33 = A._31 * B._13 + A._32 * B._23 + A._33 * B._33;
+    return result;
+}
+
+LINALG_DEF vec3u_t mat3u_mul_vec(mat3u_t M, vec3u_t v) {
+    vec3u_t result;
+    result.x = vec3u_dot(M.v[0], v);
+    result.y = vec3u_dot(M.v[1], v);
+    result.z = vec3u_dot(M.v[2], v);
     return result;
 }
 
@@ -1377,6 +1685,36 @@ LINALG_DEF vec4f_t vec4f_direction(vec4f_t a, vec4f_t b) {
     return vec4f_unit(delta);
 }
 
+LINALG_DEF mat4f_t mat4f_mul(mat4f_t A, mat4f_t B) {
+    mat4f_t result;
+    result._11 = A._11 * B._11 + A._12 * B._21 + A._13 * B._31 + A._14 * B._41;
+    result._12 = A._11 * B._12 + A._12 * B._22 + A._13 * B._32 + A._14 * B._42;
+    result._13 = A._11 * B._13 + A._12 * B._23 + A._13 * B._33 + A._14 * B._43;
+    result._14 = A._11 * B._14 + A._12 * B._24 + A._13 * B._34 + A._14 * B._44;
+    result._21 = A._21 * B._11 + A._22 * B._21 + A._23 * B._31 + A._24 * B._41;
+    result._22 = A._21 * B._12 + A._22 * B._22 + A._23 * B._32 + A._24 * B._42;
+    result._23 = A._21 * B._13 + A._22 * B._23 + A._23 * B._33 + A._24 * B._43;
+    result._24 = A._21 * B._14 + A._22 * B._24 + A._23 * B._34 + A._24 * B._44;
+    result._31 = A._31 * B._11 + A._32 * B._21 + A._33 * B._31 + A._34 * B._41;
+    result._32 = A._31 * B._12 + A._32 * B._22 + A._33 * B._32 + A._34 * B._42;
+    result._33 = A._31 * B._13 + A._32 * B._23 + A._33 * B._33 + A._34 * B._43;
+    result._34 = A._31 * B._14 + A._32 * B._24 + A._33 * B._34 + A._34 * B._44;
+    result._41 = A._41 * B._11 + A._42 * B._21 + A._43 * B._31 + A._44 * B._41;
+    result._42 = A._41 * B._12 + A._42 * B._22 + A._43 * B._32 + A._44 * B._42;
+    result._43 = A._41 * B._13 + A._42 * B._23 + A._43 * B._33 + A._44 * B._43;
+    result._44 = A._41 * B._14 + A._42 * B._24 + A._43 * B._34 + A._44 * B._44;
+    return result;
+}
+
+LINALG_DEF vec4f_t mat4f_mul_vec(mat4f_t M, vec4f_t v) {
+    vec4f_t result;
+    result.x = vec4f_dot(M.v[0], v);
+    result.y = vec4f_dot(M.v[1], v);
+    result.z = vec4f_dot(M.v[2], v);
+    result.w = vec4f_dot(M.v[3], v);
+    return result;
+}
+
 LINALG_DEF vec4d_t vec4d_add(vec4d_t a, vec4d_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -1519,6 +1857,36 @@ LINALG_DEF vec4d_t vec4d_direction(vec4d_t a, vec4d_t b) {
     return vec4d_unit(delta);
 }
 
+LINALG_DEF mat4d_t mat4d_mul(mat4d_t A, mat4d_t B) {
+    mat4d_t result;
+    result._11 = A._11 * B._11 + A._12 * B._21 + A._13 * B._31 + A._14 * B._41;
+    result._12 = A._11 * B._12 + A._12 * B._22 + A._13 * B._32 + A._14 * B._42;
+    result._13 = A._11 * B._13 + A._12 * B._23 + A._13 * B._33 + A._14 * B._43;
+    result._14 = A._11 * B._14 + A._12 * B._24 + A._13 * B._34 + A._14 * B._44;
+    result._21 = A._21 * B._11 + A._22 * B._21 + A._23 * B._31 + A._24 * B._41;
+    result._22 = A._21 * B._12 + A._22 * B._22 + A._23 * B._32 + A._24 * B._42;
+    result._23 = A._21 * B._13 + A._22 * B._23 + A._23 * B._33 + A._24 * B._43;
+    result._24 = A._21 * B._14 + A._22 * B._24 + A._23 * B._34 + A._24 * B._44;
+    result._31 = A._31 * B._11 + A._32 * B._21 + A._33 * B._31 + A._34 * B._41;
+    result._32 = A._31 * B._12 + A._32 * B._22 + A._33 * B._32 + A._34 * B._42;
+    result._33 = A._31 * B._13 + A._32 * B._23 + A._33 * B._33 + A._34 * B._43;
+    result._34 = A._31 * B._14 + A._32 * B._24 + A._33 * B._34 + A._34 * B._44;
+    result._41 = A._41 * B._11 + A._42 * B._21 + A._43 * B._31 + A._44 * B._41;
+    result._42 = A._41 * B._12 + A._42 * B._22 + A._43 * B._32 + A._44 * B._42;
+    result._43 = A._41 * B._13 + A._42 * B._23 + A._43 * B._33 + A._44 * B._43;
+    result._44 = A._41 * B._14 + A._42 * B._24 + A._43 * B._34 + A._44 * B._44;
+    return result;
+}
+
+LINALG_DEF vec4d_t mat4d_mul_vec(mat4d_t M, vec4d_t v) {
+    vec4d_t result;
+    result.x = vec4d_dot(M.v[0], v);
+    result.y = vec4d_dot(M.v[1], v);
+    result.z = vec4d_dot(M.v[2], v);
+    result.w = vec4d_dot(M.v[3], v);
+    return result;
+}
+
 LINALG_DEF vec4i_t vec4i_add(vec4i_t a, vec4i_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -1608,6 +1976,36 @@ LINALG_DEF vec4i_t vec4i_reflect(vec4i_t v, vec4i_t n) {
     return result;
 }
 
+LINALG_DEF mat4i_t mat4i_mul(mat4i_t A, mat4i_t B) {
+    mat4i_t result;
+    result._11 = A._11 * B._11 + A._12 * B._21 + A._13 * B._31 + A._14 * B._41;
+    result._12 = A._11 * B._12 + A._12 * B._22 + A._13 * B._32 + A._14 * B._42;
+    result._13 = A._11 * B._13 + A._12 * B._23 + A._13 * B._33 + A._14 * B._43;
+    result._14 = A._11 * B._14 + A._12 * B._24 + A._13 * B._34 + A._14 * B._44;
+    result._21 = A._21 * B._11 + A._22 * B._21 + A._23 * B._31 + A._24 * B._41;
+    result._22 = A._21 * B._12 + A._22 * B._22 + A._23 * B._32 + A._24 * B._42;
+    result._23 = A._21 * B._13 + A._22 * B._23 + A._23 * B._33 + A._24 * B._43;
+    result._24 = A._21 * B._14 + A._22 * B._24 + A._23 * B._34 + A._24 * B._44;
+    result._31 = A._31 * B._11 + A._32 * B._21 + A._33 * B._31 + A._34 * B._41;
+    result._32 = A._31 * B._12 + A._32 * B._22 + A._33 * B._32 + A._34 * B._42;
+    result._33 = A._31 * B._13 + A._32 * B._23 + A._33 * B._33 + A._34 * B._43;
+    result._34 = A._31 * B._14 + A._32 * B._24 + A._33 * B._34 + A._34 * B._44;
+    result._41 = A._41 * B._11 + A._42 * B._21 + A._43 * B._31 + A._44 * B._41;
+    result._42 = A._41 * B._12 + A._42 * B._22 + A._43 * B._32 + A._44 * B._42;
+    result._43 = A._41 * B._13 + A._42 * B._23 + A._43 * B._33 + A._44 * B._43;
+    result._44 = A._41 * B._14 + A._42 * B._24 + A._43 * B._34 + A._44 * B._44;
+    return result;
+}
+
+LINALG_DEF vec4i_t mat4i_mul_vec(mat4i_t M, vec4i_t v) {
+    vec4i_t result;
+    result.x = vec4i_dot(M.v[0], v);
+    result.y = vec4i_dot(M.v[1], v);
+    result.z = vec4i_dot(M.v[2], v);
+    result.w = vec4i_dot(M.v[3], v);
+    return result;
+}
+
 LINALG_DEF vec4u_t vec4u_add(vec4u_t a, vec4u_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -1694,6 +2092,36 @@ LINALG_DEF vec4u_t vec4u_reflect(vec4u_t v, vec4u_t n) {
     result = vec4u_mul(result, vec4u_splat(vec4u_dot(v, n)));
     result = vec4u_mul(result, vec4u_splat(2));
     result = vec4u_sub(v, result);
+    return result;
+}
+
+LINALG_DEF mat4u_t mat4u_mul(mat4u_t A, mat4u_t B) {
+    mat4u_t result;
+    result._11 = A._11 * B._11 + A._12 * B._21 + A._13 * B._31 + A._14 * B._41;
+    result._12 = A._11 * B._12 + A._12 * B._22 + A._13 * B._32 + A._14 * B._42;
+    result._13 = A._11 * B._13 + A._12 * B._23 + A._13 * B._33 + A._14 * B._43;
+    result._14 = A._11 * B._14 + A._12 * B._24 + A._13 * B._34 + A._14 * B._44;
+    result._21 = A._21 * B._11 + A._22 * B._21 + A._23 * B._31 + A._24 * B._41;
+    result._22 = A._21 * B._12 + A._22 * B._22 + A._23 * B._32 + A._24 * B._42;
+    result._23 = A._21 * B._13 + A._22 * B._23 + A._23 * B._33 + A._24 * B._43;
+    result._24 = A._21 * B._14 + A._22 * B._24 + A._23 * B._34 + A._24 * B._44;
+    result._31 = A._31 * B._11 + A._32 * B._21 + A._33 * B._31 + A._34 * B._41;
+    result._32 = A._31 * B._12 + A._32 * B._22 + A._33 * B._32 + A._34 * B._42;
+    result._33 = A._31 * B._13 + A._32 * B._23 + A._33 * B._33 + A._34 * B._43;
+    result._34 = A._31 * B._14 + A._32 * B._24 + A._33 * B._34 + A._34 * B._44;
+    result._41 = A._41 * B._11 + A._42 * B._21 + A._43 * B._31 + A._44 * B._41;
+    result._42 = A._41 * B._12 + A._42 * B._22 + A._43 * B._32 + A._44 * B._42;
+    result._43 = A._41 * B._13 + A._42 * B._23 + A._43 * B._33 + A._44 * B._43;
+    result._44 = A._41 * B._14 + A._42 * B._24 + A._43 * B._34 + A._44 * B._44;
+    return result;
+}
+
+LINALG_DEF vec4u_t mat4u_mul_vec(mat4u_t M, vec4u_t v) {
+    vec4u_t result;
+    result.x = vec4u_dot(M.v[0], v);
+    result.y = vec4u_dot(M.v[1], v);
+    result.z = vec4u_dot(M.v[2], v);
+    result.w = vec4u_dot(M.v[3], v);
     return result;
 }
 

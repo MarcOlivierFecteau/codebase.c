@@ -217,6 +217,10 @@ const char *vec_fn_name(size_t dim, type_s type, const char *fn_name) {
                               fn_name);
 }
 
+const char *mat_prefix_name(size_t dim, type_s type) {
+    return varia_temp_sprintf("mat%zu%s", dim, type_definitions[type].suffix);
+}
+
 void generate_head(FILE *restrict stream) {
     fprintf(stream, "#ifndef LINALG_H\n");
     fprintf(stream, "#define LINALG_H\n");
@@ -635,10 +639,79 @@ void generate_mat_definition(FILE *restrict stream, size_t dim, type_s type) {
         fprintf(stream, ";\n");
     }
     fprintf(stream, INDENT "};\n");
-    fprintf(stream, INDENT "%s m[%zu][%zu];\n", type_keyword, dim, dim);
+    fprintf(stream, INDENT "%s M[%zu][%zu];\n", type_keyword, dim, dim);
     fprintf(stream, INDENT "%s e[%zu * %zu];\n", type_keyword, dim, dim);
     fprintf(stream, INDENT "%s v[%zu];\n", vec_type_name(dim, type), dim);
     fprintf(stream, "} mat%zu%s_t;\n", dim, type_definitions[type].suffix);
+    EMPTY_LINE(stream);
+}
+
+void generate_mat_zero_constructor(FILE *stream, size_t dim, type_s type) {
+    const char *type_suffix = type_definitions[type].suffix;
+    fprintf(stream, "LINALG_DEF mat%zu%s_t mat%zu%s_zero(void) {\n", dim,
+            type_suffix, dim, type_suffix);
+    fprintf(stream, INDENT "mat%zu%s_t M = {0};\n", dim, type_suffix);
+    fprintf(stream, INDENT "return M;\n");
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
+void generate_mat_identity_constructor(FILE *restrict stream, size_t dim,
+                                       type_s type) {
+    const char *type_suffix = type_definitions[type].suffix;
+    fprintf(stream, "LINALG_DEF mat%zu%s_t mat%zu%s_I(void) {\n", dim,
+            type_suffix, dim, type_suffix);
+    fprintf(stream, INDENT "mat%zu%s_t M = {0};\n", dim, type_suffix);
+    for (size_t i = 0; i < dim; ++i) {
+        fprintf(stream, INDENT "M._%zu%zu = 1;\n", i + 1, i + 1);
+    }
+    fprintf(stream, INDENT "return M;\n");
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
+void generate_mat_mul(FILE *restrict stream, size_t dim, type_s type) {
+    const char *mat_prefix = mat_prefix_name(dim, type);
+    fprintf(stream, "LINALG_DEF %s_t %s_mul(%s_t A, %s_t B) {\n", mat_prefix,
+            mat_prefix, mat_prefix, mat_prefix);
+    fprintf(stream, INDENT "%s_t result;\n", mat_prefix);
+    for (size_t i = 0; i < dim; ++i) {
+        for (size_t j = 0; j < dim; ++j) {
+            fprintf(stream, INDENT "result._%zu%zu = ", i + 1, j + 1);
+            for (size_t k = 0; k < dim; ++k) {
+                if (k > 0) {
+                    fprintf(stream, " + ");
+                }
+                fprintf(stream, "A._%zu%zu * B._%zu%zu", i + 1, k + 1, k + 1,
+                        j + 1);
+            }
+            fprintf(stream, ";\n");
+        }
+    }
+    fprintf(stream, INDENT "return result;\n");
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
+void generate_mat_mul_by_vec(FILE *restrict stream, size_t dim, type_s type) {
+    const char *mat_prefix = mat_prefix_name(dim, type);
+    const char *vec_prefix = vec_prefix_name(dim, type);
+    fprintf(stream, "LINALG_DEF %s_t %s_mul_vec(%s_t M, %s_t v) {\n",
+            vec_prefix, mat_prefix, mat_prefix, vec_prefix);
+    fprintf(stream, INDENT "%s_t result;\n", vec_prefix);
+    if (dim <= 4) {
+        for (size_t component = 0; component < dim; ++component) {
+            fprintf(stream, INDENT "result.%c = %s_dot(M.v[%zu], v);\n",
+                    vec_math_components[component], vec_prefix, component);
+        }
+    } else {
+        for (size_t component = 0; component < dim; ++component) {
+            fprintf(stream, INDENT "result.e[%zu] = %s_dot(M.v[%zu], v);\n",
+                    component, vec_prefix, component);
+        }
+    }
+    fprintf(stream, INDENT "return result;\n");
+    fprintf(stream, "}\n");
     EMPTY_LINE(stream);
 }
 
@@ -651,13 +724,20 @@ int main() {
         }
     }
 
-    // Constructors with math syntax only support up to 4 components
+    // NOTES:
+    // - Constructors with math syntax only support up to 4 components;
+    // - For matrices, I think higher dimension constructors add an unnecessary
+    //   amount of bloat in the library.
     size_t max_supported_constructor_dim = VEC_MAX_SIZE < 4 ? VEC_MAX_SIZE : 4;
     for (size_t dim = VEC_MIN_SIZE; dim <= max_supported_constructor_dim;
          ++dim) {
         for (size_t type = 0; type < NUM_TYPES; ++type) {
             generate_vec_constructor(stdout, dim, type);
             generate_vec_scalar_constructor(stdout, dim, type);
+            // NOTE: there are no matrix constructor generated, because the
+            // number of possible ways to specify the parameters is too high.
+            generate_mat_zero_constructor(stdout, dim, type);
+            generate_mat_identity_constructor(stdout, dim, type);
         }
     }
 
@@ -679,6 +759,8 @@ int main() {
             generate_vec_reflect(stdout, dim, type);
             generate_vec_direction(stdout, dim, type);
             generate_vec_angle_between(stdout, dim, type);
+            generate_mat_mul(stdout, dim, type);
+            generate_mat_mul_by_vec(stdout, dim, type);
         }
     }
 
