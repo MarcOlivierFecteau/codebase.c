@@ -7,7 +7,7 @@ auto-format: linalg
 	clang-format -i linalg.h --style="file"
 
 linalg: linalg.h
-	$(CC) $(CFLAGS) -c linalg.h -o linalg.o
+	$(CC) $(CFLAGS) -DUSE_TYPEDEFS -c linalg.h -o linalg.o
 
 generate_linalg:
 	./generate_linalg > linalg.h

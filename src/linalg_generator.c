@@ -503,6 +503,43 @@ void generate_vec_unit(FILE *restrict stream, size_t dim, type_s type) {
             vec_prefix, vec_prefix, vec_prefix);
     fprintf(stream, "}\n");
     EMPTY_LINE(stream);
+    // alias "norm"
+    const char *vec_norm_fn = vec_fn_name(dim, type, "norm");
+    fprintf(stream, "LINALG_DEF %s %s(%s v) {\n", vec_type, vec_norm_fn,
+            vec_type);
+    fprintf(stream, INDENT "return %s(v);\n", vec_fn);
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
+void generate_vec_eq(FILE *restrict stream, size_t dim, type_s type) {
+    if (!(type == FLOAT_T || type == DOUBLE_T)) {
+        return; // TODO: implement abs for signed integer types.
+    }
+    const char *vec_type = vec_type_name(dim, type);
+    const char *vec_fn = vec_fn_name(dim, type, "eq");
+    const char *type_keyword = type_definitions[type].keyword;
+    const char *abs_op = type == FLOAT_T ? "fabsf" : "fabs";
+    fprintf(stream, "LINALG_DEF _Bool %s(%s a, %s b, %s epsilon) {\n", vec_fn,
+            vec_type, vec_type, type_keyword);
+    if (dim <= 4) {
+        for (size_t component = 0; component < dim; ++component) {
+            char element = vec_math_components[component];
+            fprintf(stream,
+                    INDENT "if (%s(b.%c - a.%c) > epsilon) { return 0; }\n",
+                    abs_op, element, element);
+        }
+    } else {
+        for (size_t component = 0; component < dim; ++component) {
+            fprintf(stream,
+                    INDENT
+                    "if (%s(b.e[%zu] - a.e[%zu]) > epsilon) { return 0; }\n",
+                    abs_op, component, component);
+        }
+    }
+    fprintf(stream, INDENT "return 1;\n");
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
 }
 
 int main() {
@@ -514,8 +551,9 @@ int main() {
     }
 
     // Constructors with math syntax only support up to 4 components
-    size_t num_constructor_dims = VEC_MAX_SIZE < 4 ? VEC_MAX_SIZE : 4;
-    for (size_t dim = VEC_MIN_SIZE; dim <= num_constructor_dims; ++dim) {
+    size_t max_supported_constructor_dim = VEC_MAX_SIZE < 4 ? VEC_MAX_SIZE : 4;
+    for (size_t dim = VEC_MIN_SIZE; dim <= max_supported_constructor_dim;
+         ++dim) {
         for (size_t type = 0; type < NUM_TYPES; ++type) {
             generate_vec_constructor(stdout, dim, type);
             generate_vec_scalar_constructor(stdout, dim, type);
@@ -535,6 +573,7 @@ int main() {
             generate_vec_mag_squared(stdout, dim, type);
             generate_vec_mag(stdout, dim, type);
             generate_vec_unit(stdout, dim, type);
+            generate_vec_eq(stdout, dim, type);
         }
     }
 
