@@ -32,6 +32,20 @@ typedef union {
 
 typedef union {
     struct {
+        int x, y;
+    };
+    int e[2];
+} vec2i_t;
+
+typedef union {
+    struct {
+        unsigned int x, y;
+    };
+    unsigned int e[2];
+} vec2u_t;
+
+typedef union {
+    struct {
         float x, y, z;
     };
     struct {
@@ -49,6 +63,26 @@ typedef union {
     };
     double e[3];
 } vec3d_t;
+
+typedef union {
+    struct {
+        int x, y, z;
+    };
+    struct {
+        int r, g, b;
+    };
+    int e[3];
+} vec3i_t;
+
+typedef union {
+    struct {
+        unsigned int x, y, z;
+    };
+    struct {
+        unsigned int r, g, b;
+    };
+    unsigned int e[3];
+} vec3u_t;
 
 typedef union {
     struct {
@@ -70,6 +104,26 @@ typedef union {
     double e[4];
 } vec4d_t;
 
+typedef union {
+    struct {
+        int x, y, z, w;
+    };
+    struct {
+        int r, g, b, a;
+    };
+    int e[4];
+} vec4i_t;
+
+typedef union {
+    struct {
+        unsigned int x, y, z, w;
+    };
+    struct {
+        unsigned int r, g, b, a;
+    };
+    unsigned int e[4];
+} vec4u_t;
+
 vec2f_t vec2f(float x, float y) {
     vec2f_t v = {{x, y}};
     return v;
@@ -87,6 +141,26 @@ vec2d_t vec2d(double x, double y) {
 
 vec2d_t vec2d_splat(double x) {
     vec2d_t v = {{x, x}};
+    return v;
+}
+
+vec2i_t vec2i(int x, int y) {
+    vec2i_t v = {{x, y}};
+    return v;
+}
+
+vec2i_t vec2i_splat(int x) {
+    vec2i_t v = {{x, x}};
+    return v;
+}
+
+vec2u_t vec2u(unsigned int x, unsigned int y) {
+    vec2u_t v = {{x, y}};
+    return v;
+}
+
+vec2u_t vec2u_splat(unsigned int x) {
+    vec2u_t v = {{x, x}};
     return v;
 }
 
@@ -110,6 +184,26 @@ vec3d_t vec3d_splat(double x) {
     return v;
 }
 
+vec3i_t vec3i(int x, int y, int z) {
+    vec3i_t v = {{x, y, z}};
+    return v;
+}
+
+vec3i_t vec3i_splat(int x) {
+    vec3i_t v = {{x, x, x}};
+    return v;
+}
+
+vec3u_t vec3u(unsigned int x, unsigned int y, unsigned int z) {
+    vec3u_t v = {{x, y, z}};
+    return v;
+}
+
+vec3u_t vec3u_splat(unsigned int x) {
+    vec3u_t v = {{x, x, x}};
+    return v;
+}
+
 vec4f_t vec4f(float x, float y, float z, float w) {
     vec4f_t v = {{x, y, z, w}};
     return v;
@@ -127,6 +221,26 @@ vec4d_t vec4d(double x, double y, double z, double w) {
 
 vec4d_t vec4d_splat(double x) {
     vec4d_t v = {{x, x, x, x}};
+    return v;
+}
+
+vec4i_t vec4i(int x, int y, int z, int w) {
+    vec4i_t v = {{x, y, z, w}};
+    return v;
+}
+
+vec4i_t vec4i_splat(int x) {
+    vec4i_t v = {{x, x, x, x}};
+    return v;
+}
+
+vec4u_t vec4u(unsigned int x, unsigned int y, unsigned int z, unsigned int w) {
+    vec4u_t v = {{x, y, z, w}};
+    return v;
+}
+
+vec4u_t vec4u_splat(unsigned int x) {
+    vec4u_t v = {{x, x, x, x}};
     return v;
 }
 
@@ -219,6 +333,18 @@ LINALG_DEF vec2f_t vec2f_unit(vec2f_t v) {
     return vec2f_div(v, vec2f_splat(vec2f_mag(v)));
 }
 
+LINALG_DEF vec2f_t vec2f_norm(vec2f_t v) { return vec2f_unit(v); }
+
+LINALG_DEF _Bool vec2f_eq(vec2f_t a, vec2f_t b, float epsilon) {
+    if (fabsf(b.x - a.x) > epsilon) {
+        return 0;
+    }
+    if (fabsf(b.y - a.y) > epsilon) {
+        return 0;
+    }
+    return 1;
+}
+
 LINALG_DEF vec2d_t vec2d_add(vec2d_t a, vec2d_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -307,6 +433,146 @@ LINALG_DEF double vec2d_mag(vec2d_t v) { return sqrt(vec2d_mag_squared(v)); }
 LINALG_DEF vec2d_t vec2d_unit(vec2d_t v) {
     return vec2d_div(v, vec2d_splat(vec2d_mag(v)));
 }
+
+LINALG_DEF vec2d_t vec2d_norm(vec2d_t v) { return vec2d_unit(v); }
+
+LINALG_DEF _Bool vec2d_eq(vec2d_t a, vec2d_t b, double epsilon) {
+    if (fabs(b.x - a.x) > epsilon) {
+        return 0;
+    }
+    if (fabs(b.y - a.y) > epsilon) {
+        return 0;
+    }
+    return 1;
+}
+
+LINALG_DEF vec2i_t vec2i_add(vec2i_t a, vec2i_t b) {
+    a.x += b.x;
+    a.y += b.y;
+    return a;
+}
+
+LINALG_DEF vec2i_t vec2i_sub(vec2i_t a, vec2i_t b) {
+    a.x -= b.x;
+    a.y -= b.y;
+    return a;
+}
+
+LINALG_DEF vec2i_t vec2i_mul(vec2i_t a, vec2i_t b) {
+    a.x *= b.x;
+    a.y *= b.y;
+    return a;
+}
+
+LINALG_DEF vec2i_t vec2i_div(vec2i_t a, vec2i_t b) {
+    a.x /= b.x;
+    a.y /= b.y;
+    return a;
+}
+
+LINALG_DEF vec2i_t vec2i_mod(vec2i_t a, vec2i_t b) {
+    a.x %= b.x;
+    a.y %= b.y;
+    return a;
+}
+
+LINALG_DEF vec2i_t vec2i_min(vec2i_t a, vec2i_t b) {
+    a.x = mini(a.x, b.x);
+    a.y = mini(a.y, b.y);
+    return a;
+}
+
+LINALG_DEF vec2i_t vec2i_max(vec2i_t a, vec2i_t b) {
+    a.x = maxi(a.x, b.x);
+    a.y = maxi(a.y, b.y);
+    return a;
+}
+
+LINALG_DEF vec2i_t vec2i_clamp(vec2i_t v, vec2i_t min, vec2i_t max) {
+    v.x = clampi(v.x, min.x, max.x);
+    v.y = clampi(v.y, min.y, max.y);
+    return v;
+}
+
+LINALG_DEF vec2i_t vec2i_sum(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    vec2i_t sum = {0};
+    for (size_t i = 0; i < n; ++i) {
+        vec2i_t v = va_arg(args, vec2i_t);
+        sum = vec2i_add(sum, v);
+    }
+    return sum;
+}
+
+LINALG_DEF int vec2i_dot(vec2i_t a, vec2i_t b) { return a.x * b.x + a.y * b.y; }
+
+LINALG_DEF int vec2i_mag_squared(vec2i_t v) { return vec2i_dot(v, v); }
+
+LINALG_DEF vec2u_t vec2u_add(vec2u_t a, vec2u_t b) {
+    a.x += b.x;
+    a.y += b.y;
+    return a;
+}
+
+LINALG_DEF vec2u_t vec2u_sub(vec2u_t a, vec2u_t b) {
+    a.x -= b.x;
+    a.y -= b.y;
+    return a;
+}
+
+LINALG_DEF vec2u_t vec2u_mul(vec2u_t a, vec2u_t b) {
+    a.x *= b.x;
+    a.y *= b.y;
+    return a;
+}
+
+LINALG_DEF vec2u_t vec2u_div(vec2u_t a, vec2u_t b) {
+    a.x /= b.x;
+    a.y /= b.y;
+    return a;
+}
+
+LINALG_DEF vec2u_t vec2u_mod(vec2u_t a, vec2u_t b) {
+    a.x %= b.x;
+    a.y %= b.y;
+    return a;
+}
+
+LINALG_DEF vec2u_t vec2u_min(vec2u_t a, vec2u_t b) {
+    a.x = minu(a.x, b.x);
+    a.y = minu(a.y, b.y);
+    return a;
+}
+
+LINALG_DEF vec2u_t vec2u_max(vec2u_t a, vec2u_t b) {
+    a.x = maxu(a.x, b.x);
+    a.y = maxu(a.y, b.y);
+    return a;
+}
+
+LINALG_DEF vec2u_t vec2u_clamp(vec2u_t v, vec2u_t min, vec2u_t max) {
+    v.x = clampu(v.x, min.x, max.x);
+    v.y = clampu(v.y, min.y, max.y);
+    return v;
+}
+
+LINALG_DEF vec2u_t vec2u_sum(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    vec2u_t sum = {0};
+    for (size_t i = 0; i < n; ++i) {
+        vec2u_t v = va_arg(args, vec2u_t);
+        sum = vec2u_add(sum, v);
+    }
+    return sum;
+}
+
+LINALG_DEF unsigned int vec2u_dot(vec2u_t a, vec2u_t b) {
+    return a.x * b.x + a.y * b.y;
+}
+
+LINALG_DEF unsigned int vec2u_mag_squared(vec2u_t v) { return vec2u_dot(v, v); }
 
 LINALG_DEF vec3f_t vec3f_add(vec3f_t a, vec3f_t b) {
     a.x += b.x;
@@ -408,6 +674,21 @@ LINALG_DEF vec3f_t vec3f_unit(vec3f_t v) {
     return vec3f_div(v, vec3f_splat(vec3f_mag(v)));
 }
 
+LINALG_DEF vec3f_t vec3f_norm(vec3f_t v) { return vec3f_unit(v); }
+
+LINALG_DEF _Bool vec3f_eq(vec3f_t a, vec3f_t b, float epsilon) {
+    if (fabsf(b.x - a.x) > epsilon) {
+        return 0;
+    }
+    if (fabsf(b.y - a.y) > epsilon) {
+        return 0;
+    }
+    if (fabsf(b.z - a.z) > epsilon) {
+        return 0;
+    }
+    return 1;
+}
+
 LINALG_DEF vec3d_t vec3d_add(vec3d_t a, vec3d_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -507,6 +788,167 @@ LINALG_DEF double vec3d_mag(vec3d_t v) { return sqrt(vec3d_mag_squared(v)); }
 LINALG_DEF vec3d_t vec3d_unit(vec3d_t v) {
     return vec3d_div(v, vec3d_splat(vec3d_mag(v)));
 }
+
+LINALG_DEF vec3d_t vec3d_norm(vec3d_t v) { return vec3d_unit(v); }
+
+LINALG_DEF _Bool vec3d_eq(vec3d_t a, vec3d_t b, double epsilon) {
+    if (fabs(b.x - a.x) > epsilon) {
+        return 0;
+    }
+    if (fabs(b.y - a.y) > epsilon) {
+        return 0;
+    }
+    if (fabs(b.z - a.z) > epsilon) {
+        return 0;
+    }
+    return 1;
+}
+
+LINALG_DEF vec3i_t vec3i_add(vec3i_t a, vec3i_t b) {
+    a.x += b.x;
+    a.y += b.y;
+    a.z += b.z;
+    return a;
+}
+
+LINALG_DEF vec3i_t vec3i_sub(vec3i_t a, vec3i_t b) {
+    a.x -= b.x;
+    a.y -= b.y;
+    a.z -= b.z;
+    return a;
+}
+
+LINALG_DEF vec3i_t vec3i_mul(vec3i_t a, vec3i_t b) {
+    a.x *= b.x;
+    a.y *= b.y;
+    a.z *= b.z;
+    return a;
+}
+
+LINALG_DEF vec3i_t vec3i_div(vec3i_t a, vec3i_t b) {
+    a.x /= b.x;
+    a.y /= b.y;
+    a.z /= b.z;
+    return a;
+}
+
+LINALG_DEF vec3i_t vec3i_mod(vec3i_t a, vec3i_t b) {
+    a.x %= b.x;
+    a.y %= b.y;
+    a.z %= b.z;
+    return a;
+}
+
+LINALG_DEF vec3i_t vec3i_min(vec3i_t a, vec3i_t b) {
+    a.x = mini(a.x, b.x);
+    a.y = mini(a.y, b.y);
+    a.z = mini(a.z, b.z);
+    return a;
+}
+
+LINALG_DEF vec3i_t vec3i_max(vec3i_t a, vec3i_t b) {
+    a.x = maxi(a.x, b.x);
+    a.y = maxi(a.y, b.y);
+    a.z = maxi(a.z, b.z);
+    return a;
+}
+
+LINALG_DEF vec3i_t vec3i_clamp(vec3i_t v, vec3i_t min, vec3i_t max) {
+    v.x = clampi(v.x, min.x, max.x);
+    v.y = clampi(v.y, min.y, max.y);
+    v.z = clampi(v.z, min.z, max.z);
+    return v;
+}
+
+LINALG_DEF vec3i_t vec3i_sum(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    vec3i_t sum = {0};
+    for (size_t i = 0; i < n; ++i) {
+        vec3i_t v = va_arg(args, vec3i_t);
+        sum = vec3i_add(sum, v);
+    }
+    return sum;
+}
+
+LINALG_DEF int vec3i_dot(vec3i_t a, vec3i_t b) {
+    return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+LINALG_DEF int vec3i_mag_squared(vec3i_t v) { return vec3i_dot(v, v); }
+
+LINALG_DEF vec3u_t vec3u_add(vec3u_t a, vec3u_t b) {
+    a.x += b.x;
+    a.y += b.y;
+    a.z += b.z;
+    return a;
+}
+
+LINALG_DEF vec3u_t vec3u_sub(vec3u_t a, vec3u_t b) {
+    a.x -= b.x;
+    a.y -= b.y;
+    a.z -= b.z;
+    return a;
+}
+
+LINALG_DEF vec3u_t vec3u_mul(vec3u_t a, vec3u_t b) {
+    a.x *= b.x;
+    a.y *= b.y;
+    a.z *= b.z;
+    return a;
+}
+
+LINALG_DEF vec3u_t vec3u_div(vec3u_t a, vec3u_t b) {
+    a.x /= b.x;
+    a.y /= b.y;
+    a.z /= b.z;
+    return a;
+}
+
+LINALG_DEF vec3u_t vec3u_mod(vec3u_t a, vec3u_t b) {
+    a.x %= b.x;
+    a.y %= b.y;
+    a.z %= b.z;
+    return a;
+}
+
+LINALG_DEF vec3u_t vec3u_min(vec3u_t a, vec3u_t b) {
+    a.x = minu(a.x, b.x);
+    a.y = minu(a.y, b.y);
+    a.z = minu(a.z, b.z);
+    return a;
+}
+
+LINALG_DEF vec3u_t vec3u_max(vec3u_t a, vec3u_t b) {
+    a.x = maxu(a.x, b.x);
+    a.y = maxu(a.y, b.y);
+    a.z = maxu(a.z, b.z);
+    return a;
+}
+
+LINALG_DEF vec3u_t vec3u_clamp(vec3u_t v, vec3u_t min, vec3u_t max) {
+    v.x = clampu(v.x, min.x, max.x);
+    v.y = clampu(v.y, min.y, max.y);
+    v.z = clampu(v.z, min.z, max.z);
+    return v;
+}
+
+LINALG_DEF vec3u_t vec3u_sum(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    vec3u_t sum = {0};
+    for (size_t i = 0; i < n; ++i) {
+        vec3u_t v = va_arg(args, vec3u_t);
+        sum = vec3u_add(sum, v);
+    }
+    return sum;
+}
+
+LINALG_DEF unsigned int vec3u_dot(vec3u_t a, vec3u_t b) {
+    return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+LINALG_DEF unsigned int vec3u_mag_squared(vec3u_t v) { return vec3u_dot(v, v); }
 
 LINALG_DEF vec4f_t vec4f_add(vec4f_t a, vec4f_t b) {
     a.x += b.x;
@@ -619,6 +1061,24 @@ LINALG_DEF vec4f_t vec4f_unit(vec4f_t v) {
     return vec4f_div(v, vec4f_splat(vec4f_mag(v)));
 }
 
+LINALG_DEF vec4f_t vec4f_norm(vec4f_t v) { return vec4f_unit(v); }
+
+LINALG_DEF _Bool vec4f_eq(vec4f_t a, vec4f_t b, float epsilon) {
+    if (fabsf(b.x - a.x) > epsilon) {
+        return 0;
+    }
+    if (fabsf(b.y - a.y) > epsilon) {
+        return 0;
+    }
+    if (fabsf(b.z - a.z) > epsilon) {
+        return 0;
+    }
+    if (fabsf(b.w - a.w) > epsilon) {
+        return 0;
+    }
+    return 1;
+}
+
 LINALG_DEF vec4d_t vec4d_add(vec4d_t a, vec4d_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -729,5 +1189,185 @@ LINALG_DEF double vec4d_mag(vec4d_t v) { return sqrt(vec4d_mag_squared(v)); }
 LINALG_DEF vec4d_t vec4d_unit(vec4d_t v) {
     return vec4d_div(v, vec4d_splat(vec4d_mag(v)));
 }
+
+LINALG_DEF vec4d_t vec4d_norm(vec4d_t v) { return vec4d_unit(v); }
+
+LINALG_DEF _Bool vec4d_eq(vec4d_t a, vec4d_t b, double epsilon) {
+    if (fabs(b.x - a.x) > epsilon) {
+        return 0;
+    }
+    if (fabs(b.y - a.y) > epsilon) {
+        return 0;
+    }
+    if (fabs(b.z - a.z) > epsilon) {
+        return 0;
+    }
+    if (fabs(b.w - a.w) > epsilon) {
+        return 0;
+    }
+    return 1;
+}
+
+LINALG_DEF vec4i_t vec4i_add(vec4i_t a, vec4i_t b) {
+    a.x += b.x;
+    a.y += b.y;
+    a.z += b.z;
+    a.w += b.w;
+    return a;
+}
+
+LINALG_DEF vec4i_t vec4i_sub(vec4i_t a, vec4i_t b) {
+    a.x -= b.x;
+    a.y -= b.y;
+    a.z -= b.z;
+    a.w -= b.w;
+    return a;
+}
+
+LINALG_DEF vec4i_t vec4i_mul(vec4i_t a, vec4i_t b) {
+    a.x *= b.x;
+    a.y *= b.y;
+    a.z *= b.z;
+    a.w *= b.w;
+    return a;
+}
+
+LINALG_DEF vec4i_t vec4i_div(vec4i_t a, vec4i_t b) {
+    a.x /= b.x;
+    a.y /= b.y;
+    a.z /= b.z;
+    a.w /= b.w;
+    return a;
+}
+
+LINALG_DEF vec4i_t vec4i_mod(vec4i_t a, vec4i_t b) {
+    a.x %= b.x;
+    a.y %= b.y;
+    a.z %= b.z;
+    a.w %= b.w;
+    return a;
+}
+
+LINALG_DEF vec4i_t vec4i_min(vec4i_t a, vec4i_t b) {
+    a.x = mini(a.x, b.x);
+    a.y = mini(a.y, b.y);
+    a.z = mini(a.z, b.z);
+    a.w = mini(a.w, b.w);
+    return a;
+}
+
+LINALG_DEF vec4i_t vec4i_max(vec4i_t a, vec4i_t b) {
+    a.x = maxi(a.x, b.x);
+    a.y = maxi(a.y, b.y);
+    a.z = maxi(a.z, b.z);
+    a.w = maxi(a.w, b.w);
+    return a;
+}
+
+LINALG_DEF vec4i_t vec4i_clamp(vec4i_t v, vec4i_t min, vec4i_t max) {
+    v.x = clampi(v.x, min.x, max.x);
+    v.y = clampi(v.y, min.y, max.y);
+    v.z = clampi(v.z, min.z, max.z);
+    v.w = clampi(v.w, min.w, max.w);
+    return v;
+}
+
+LINALG_DEF vec4i_t vec4i_sum(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    vec4i_t sum = {0};
+    for (size_t i = 0; i < n; ++i) {
+        vec4i_t v = va_arg(args, vec4i_t);
+        sum = vec4i_add(sum, v);
+    }
+    return sum;
+}
+
+LINALG_DEF int vec4i_dot(vec4i_t a, vec4i_t b) {
+    return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+}
+
+LINALG_DEF int vec4i_mag_squared(vec4i_t v) { return vec4i_dot(v, v); }
+
+LINALG_DEF vec4u_t vec4u_add(vec4u_t a, vec4u_t b) {
+    a.x += b.x;
+    a.y += b.y;
+    a.z += b.z;
+    a.w += b.w;
+    return a;
+}
+
+LINALG_DEF vec4u_t vec4u_sub(vec4u_t a, vec4u_t b) {
+    a.x -= b.x;
+    a.y -= b.y;
+    a.z -= b.z;
+    a.w -= b.w;
+    return a;
+}
+
+LINALG_DEF vec4u_t vec4u_mul(vec4u_t a, vec4u_t b) {
+    a.x *= b.x;
+    a.y *= b.y;
+    a.z *= b.z;
+    a.w *= b.w;
+    return a;
+}
+
+LINALG_DEF vec4u_t vec4u_div(vec4u_t a, vec4u_t b) {
+    a.x /= b.x;
+    a.y /= b.y;
+    a.z /= b.z;
+    a.w /= b.w;
+    return a;
+}
+
+LINALG_DEF vec4u_t vec4u_mod(vec4u_t a, vec4u_t b) {
+    a.x %= b.x;
+    a.y %= b.y;
+    a.z %= b.z;
+    a.w %= b.w;
+    return a;
+}
+
+LINALG_DEF vec4u_t vec4u_min(vec4u_t a, vec4u_t b) {
+    a.x = minu(a.x, b.x);
+    a.y = minu(a.y, b.y);
+    a.z = minu(a.z, b.z);
+    a.w = minu(a.w, b.w);
+    return a;
+}
+
+LINALG_DEF vec4u_t vec4u_max(vec4u_t a, vec4u_t b) {
+    a.x = maxu(a.x, b.x);
+    a.y = maxu(a.y, b.y);
+    a.z = maxu(a.z, b.z);
+    a.w = maxu(a.w, b.w);
+    return a;
+}
+
+LINALG_DEF vec4u_t vec4u_clamp(vec4u_t v, vec4u_t min, vec4u_t max) {
+    v.x = clampu(v.x, min.x, max.x);
+    v.y = clampu(v.y, min.y, max.y);
+    v.z = clampu(v.z, min.z, max.z);
+    v.w = clampu(v.w, min.w, max.w);
+    return v;
+}
+
+LINALG_DEF vec4u_t vec4u_sum(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    vec4u_t sum = {0};
+    for (size_t i = 0; i < n; ++i) {
+        vec4u_t v = va_arg(args, vec4u_t);
+        sum = vec4u_add(sum, v);
+    }
+    return sum;
+}
+
+LINALG_DEF unsigned int vec4u_dot(vec4u_t a, vec4u_t b) {
+    return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+}
+
+LINALG_DEF unsigned int vec4u_mag_squared(vec4u_t v) { return vec4u_dot(v, v); }
 
 #endif // LINALG_H

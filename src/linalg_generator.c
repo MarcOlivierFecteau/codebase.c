@@ -27,6 +27,8 @@ static const char *vec_color_components = "rgba";
 typedef enum {
     FLOAT_T = 0,
     DOUBLE_T,
+    INT_T,
+    UINT_T,
     NUM_TYPES,
 } type_s;
 
@@ -37,7 +39,7 @@ typedef struct {
     const char *zero_literal;
 } type_definition_s;
 
-static_assert(NUM_TYPES == 2, "Number of types has changed.");
+static_assert(NUM_TYPES == 4, "Number of types has changed.");
 #ifdef USE_TYPEDEFS
 static type_definition_s type_definitions[NUM_TYPES] = {
     [FLOAT_T] = {.keyword = "f32",
@@ -48,6 +50,14 @@ static type_definition_s type_definitions[NUM_TYPES] = {
                   .suffix = "d",
                   .fmt = "lf",
                   .zero_literal = "0.0"},
+    [INT_T] = {.keyword = "i32",
+               .suffix = "i",
+               .fmt = "d",
+               .zero_literal = "0"},
+    [UINT_T] = {.keyword = "f64",
+                .suffix = "u",
+                .fmt = "u",
+                .zero_literal = "0U"},
 };
 #else
 static type_definition_s type_definitions[NUM_TYPES] = {
@@ -59,6 +69,14 @@ static type_definition_s type_definitions[NUM_TYPES] = {
                   .suffix = "d",
                   .fmt = "lf",
                   .zero_literal = "0.0"},
+    [INT_T] = {.keyword = "int",
+               .suffix = "i",
+               .fmt = "d",
+               .zero_literal = "0"},
+    [UINT_T] = {.keyword = "unsigned int",
+                .suffix = "u",
+                .fmt = "u",
+                .zero_literal = "0U"},
 };
 #endif // USE_TYPEDEFS
 
@@ -112,7 +130,7 @@ typedef struct {
     char *params[FN_MAX_ARITY];
 } fn_definition_s;
 
-static_assert(NUM_TYPES == 2, "Number of types has changed.");
+static_assert(NUM_TYPES == 4, "Number of types has changed.");
 static const fn_definition_s fn_definitions[] = {
     {
         .name = "min",
@@ -120,6 +138,8 @@ static const fn_definition_s fn_definitions[] = {
             {
                 [FLOAT_T] = "minf",
                 [DOUBLE_T] = "mind",
+                [INT_T] = "mini",
+                [UINT_T] = "minu",
             },
         .arity = 2,
         .params = {"a", "b"},
@@ -130,6 +150,8 @@ static const fn_definition_s fn_definitions[] = {
             {
                 [FLOAT_T] = "maxf",
                 [DOUBLE_T] = "maxd",
+                [INT_T] = "maxi",
+                [UINT_T] = "maxu",
             },
         .arity = 2,
         .params = {"a", "b"},
@@ -160,6 +182,8 @@ static const fn_definition_s fn_definitions[] = {
             {
                 [FLOAT_T] = "clampf",
                 [DOUBLE_T] = "clampd",
+                [INT_T] = "clampi",
+                [UINT_T] = "clampu",
             },
         .arity = 3,
         .params = {"v", "min", "max"},
