@@ -772,3 +772,16 @@ int main() {
             100 * (float)varia_temp_size / (float)VARIA_TEMP_CAPACITY);
     return 0;
 }
+
+// Ideas for additional features:
+// - Implement rotation function (+ rotation matrices constructors);
+// - Implement variadic matrix multiplication;
+// - Add support for non-square matrices (definitions, zero, mul, mul_vec);
+// - Implement integer lerping;
+// - Implement type casting (same size);
+// - Implement for size casting (downsizing first, then upsizing);
+// - Add support for rudimentary (hard-coded) swizzling (?);
+// - Add support for swizzling using parsing macro (?);
+// - Add support for type generic operations and functions (C23< first, maybe
+// C99);
+// - Print statistics (loc generated, number of functions for each type, etc.).
