@@ -406,19 +406,19 @@ void generate_vec_function(FILE *restrict stream, size_t dim, type_s type,
     EMPTY_LINE(stream);
 }
 
-void generate_vec_mag_squared(FILE *restrict stream, size_t dim, type_s type) {
+void generate_vec_dot(FILE *restrict stream, size_t dim, type_s type) {
     const char *vec_type = vec_type_name(dim, type);
-    const char *vec_fn = vec_fn_name(dim, type, "mag_squared");
+    const char *vec_fn = vec_fn_name(dim, type, "dot");
     const char *type_keyword = type_definitions[type].keyword;
-    fprintf(stream, "LINALG_DEF %s %s(%s v) {\n", type_keyword, vec_fn,
-            vec_type);
+    fprintf(stream, "LINALG_DEF %s %s(%s a, %s b) {\n", type_keyword, vec_fn,
+            vec_type, vec_type);
     fprintf(stream, INDENT "return ");
     if (dim <= 4) {
         for (size_t component = 0; component < dim; ++component) {
             if (component > 0) {
                 fprintf(stream, " + ");
             }
-            fprintf(stream, "v.%c * v.%c", vec_math_components[component],
+            fprintf(stream, "a.%c * b.%c", vec_math_components[component],
                     vec_math_components[component]);
         }
         fprintf(stream, ";\n");
@@ -429,12 +429,24 @@ void generate_vec_mag_squared(FILE *restrict stream, size_t dim, type_s type) {
                 "for (size_t component = 0; component < %zu; ++component {\n)",
                 dim);
         for (size_t component = 0; component < dim; ++component) {
-            fprintf(stream, INDENT INDENT "result += v.e[%zu] * v.e[%zu];\n",
+            fprintf(stream, INDENT INDENT "result += a.e[%zu] * b.e[%zu];\n",
                     component, component);
         }
         fprintf(stream, INDENT "}\n");
         fprintf(stream, INDENT "return result;\n");
     }
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
+void generate_vec_mag_squared(FILE *restrict stream, size_t dim, type_s type) {
+    const char *vec_type = vec_type_name(dim, type);
+    const char *vec_fn = vec_fn_name(dim, type, "mag_squared");
+    const char *vec_prefix = vec_prefix_name(dim, type);
+    const char *type_keyword = type_definitions[type].keyword;
+    fprintf(stream, "LINALG_DEF %s %s(%s v) {\n", type_keyword, vec_fn,
+            vec_type);
+    fprintf(stream, INDENT "return %s_dot(v, v);\n", vec_prefix);
     fprintf(stream, "}\n");
     EMPTY_LINE(stream);
 }
@@ -495,6 +507,7 @@ int main() {
                 generate_vec_function(stdout, dim, type, fn);
             }
             generate_vec_variadic_operation(stdout, dim, type, VARIADIC_OP_SUM);
+            generate_vec_dot(stdout, dim, type);
             generate_vec_mag_squared(stdout, dim, type);
             generate_vec_mag(stdout, dim, type);
             generate_vec_unit(stdout, dim, type);
@@ -503,7 +516,8 @@ int main() {
 
     fprintf(stdout, "#endif // LINALG_H\n");
 
-    fprintf(stderr, "Bytes of temp stack used: %zu / %zu (%.4f%%)\n",
+    fprintf(stderr,
+            "\033[93mBytes of temp stack used: %zu / %zu (%.4f%%)\033[0m\n",
             varia_temp_size, (size_t)VARIA_TEMP_CAPACITY,
             100 * (float)varia_temp_size / (float)VARIA_TEMP_CAPACITY);
     return 0;
