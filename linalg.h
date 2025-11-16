@@ -17,36 +17,56 @@ typedef unsigned long size_t;
 #endif // LINALG_DEF
 
 typedef union {
-    struct { float x, y; };
+    struct {
+        float x, y;
+    };
     float e[2];
 } vec2f_t;
 
 typedef union {
-    struct { double x, y; };
+    struct {
+        double x, y;
+    };
     double e[2];
 } vec2d_t;
 
 typedef union {
-    struct { float x, y, z; };
-    struct { float r, g, b; };
+    struct {
+        float x, y, z;
+    };
+    struct {
+        float r, g, b;
+    };
     float e[3];
 } vec3f_t;
 
 typedef union {
-    struct { double x, y, z; };
-    struct { double r, g, b; };
+    struct {
+        double x, y, z;
+    };
+    struct {
+        double r, g, b;
+    };
     double e[3];
 } vec3d_t;
 
 typedef union {
-    struct { float x, y, z, w; };
-    struct { float r, g, b, a; };
+    struct {
+        float x, y, z, w;
+    };
+    struct {
+        float r, g, b, a;
+    };
     float e[4];
 } vec4f_t;
 
 typedef union {
-    struct { double x, y, z, w; };
-    struct { double r, g, b, a; };
+    struct {
+        double x, y, z, w;
+    };
+    struct {
+        double r, g, b, a;
+    };
     double e[4];
 } vec4d_t;
 

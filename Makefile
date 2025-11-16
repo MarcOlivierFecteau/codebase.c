@@ -1,7 +1,10 @@
 CFLAGS = -Wall -Wextra -Wpedantic -std=c2x -Wno-unused-variable -ggdb -Isrc/
 
 .PHONY: all
-all: linalg_generator generate_linalg linalg
+all: linalg_generator generate_linalg linalg auto-format
+
+auto-format: linalg
+	clang-format -i linalg.h --style="file"
 
 linalg: linalg.h
 	$(CC) $(CFLAGS) -c linalg.h -o linalg.o
