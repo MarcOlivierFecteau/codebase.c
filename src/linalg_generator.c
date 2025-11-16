@@ -184,6 +184,10 @@ const char *vec_constructor_name(size_t dim, type_s type) {
     return varia_temp_sprintf("vec%zu%s", dim, type_definitions[type].suffix);
 }
 
+const char *vec_prefix_name(size_t dim, size_t type) {
+    return vec_constructor_name(dim, type);
+}
+
 const char *vec_fn_name(size_t dim, type_s type, const char *fn_name) {
     return varia_temp_sprintf("vec%zu%s_%s", dim, type_definitions[type].suffix,
                               fn_name);
@@ -402,6 +406,69 @@ void generate_vec_function(FILE *restrict stream, size_t dim, type_s type,
     EMPTY_LINE(stream);
 }
 
+void generate_vec_mag_squared(FILE *restrict stream, size_t dim, type_s type) {
+    const char *vec_type = vec_type_name(dim, type);
+    const char *vec_fn = vec_fn_name(dim, type, "mag_squared");
+    const char *type_keyword = type_definitions[type].keyword;
+    fprintf(stream, "LINALG_DEF %s %s(%s v) {\n", type_keyword, vec_fn,
+            vec_type);
+    fprintf(stream, INDENT "return ");
+    if (dim <= 4) {
+        for (size_t component = 0; component < dim; ++component) {
+            if (component > 0) {
+                fprintf(stream, " + ");
+            }
+            fprintf(stream, "v.%c * v.%c", vec_math_components[component],
+                    vec_math_components[component]);
+        }
+        fprintf(stream, ";\n");
+    } else {
+        fprintf(stream, INDENT "%s result = {0};\n", type_keyword);
+        fprintf(stream,
+                INDENT
+                "for (size_t component = 0; component < %zu; ++component {\n)",
+                dim);
+        for (size_t component = 0; component < dim; ++component) {
+            fprintf(stream, INDENT INDENT "result += v.e[%zu] * v.e[%zu];\n",
+                    component, component);
+        }
+        fprintf(stream, INDENT "}\n");
+        fprintf(stream, INDENT "return result;\n");
+    }
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
+void generate_vec_mag(FILE *restrict stream, size_t dim, type_s type) {
+    if (!(type == FLOAT_T || type == DOUBLE_T)) {
+        return; // sqrt operator does not support integer values.
+    }
+    const char *vec_type = vec_type_name(dim, type);
+    const char *vec_fn = vec_fn_name(dim, type, "mag");
+    const char *vec_prefix = vec_prefix_name(dim, type);
+    const char *type_keyword = type_definitions[type].keyword;
+    fprintf(stream, "LINALG_DEF %s %s(%s v) {\n", type_keyword, vec_fn,
+            vec_type);
+    fprintf(stream, INDENT "return sqrt%s(%s_mag_squared(v));\n",
+            type == FLOAT_T ? "f" : "", vec_prefix);
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
+void generate_vec_unit(FILE *restrict stream, size_t dim, type_s type) {
+    if (!(type == FLOAT_T || type == DOUBLE_T)) {
+        return; // sqrt operator does not support integer values.
+    }
+    const char *vec_type = vec_type_name(dim, type);
+    const char *vec_fn = vec_fn_name(dim, type, "unit");
+    const char *vec_prefix = vec_prefix_name(dim, type);
+    fprintf(stream, "LINALG_DEF %s %s(%s v) {\n", vec_type, vec_fn, vec_type);
+    fprintf(stream, INDENT "return %s_div(v, %s_splat(%s_mag(v)));\n",
+            vec_prefix, vec_prefix, vec_prefix);
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
 int main() {
     generate_head(stdout);
     for (size_t dim = VEC_MIN_SIZE; dim <= VEC_MAX_SIZE; ++dim) {
@@ -428,6 +495,9 @@ int main() {
                 generate_vec_function(stdout, dim, type, fn);
             }
             generate_vec_variadic_operation(stdout, dim, type, VARIADIC_OP_SUM);
+            generate_vec_mag_squared(stdout, dim, type);
+            generate_vec_mag(stdout, dim, type);
+            generate_vec_unit(stdout, dim, type);
         }
     }
 
