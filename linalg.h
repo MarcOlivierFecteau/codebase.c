@@ -1,9 +1,6 @@
 #ifndef LINALG_H
 #define LINALG_H
 
-#ifdef USE_TYPEDEFS
-#include "typedefs.h"
-#endif // USE_TYPEDEFS
 #include "src/common_math.h"
 #include <math.h>
 #include <stdarg.h>

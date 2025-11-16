@@ -54,7 +54,7 @@ static type_definition_s type_definitions[NUM_TYPES] = {
                .suffix = "i",
                .fmt = "d",
                .zero_literal = "0"},
-    [UINT_T] = {.keyword = "f64",
+    [UINT_T] = {.keyword = "u32",
                 .suffix = "u",
                 .fmt = "u",
                 .zero_literal = "0U"},
@@ -221,10 +221,10 @@ void generate_head(FILE *restrict stream) {
     fprintf(stream, "#ifndef LINALG_H\n");
     fprintf(stream, "#define LINALG_H\n");
     EMPTY_LINE(stream);
-    fprintf(stream, "#ifdef USE_TYPEDEFS\n");
-    fprintf(stream, "#include \"typedefs.h\"\n");
-    fprintf(stream, "#endif // USE_TYPEDEFS\n");
     fprintf(stream, "#include \"src/common_math.h\"\n");
+#ifdef USE_TYPEDEFS
+    fprintf(stream, "#include \"src/typedefs.h\"\n");
+#endif // USE_TYPEDEFS
     fprintf(stream, "#include <math.h>\n");
     fprintf(stream, "#include <stdarg.h>\n");
     EMPTY_LINE(stream);
