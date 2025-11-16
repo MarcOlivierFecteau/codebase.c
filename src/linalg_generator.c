@@ -620,11 +620,34 @@ void generate_vec_angle_between(FILE *restrict stream, size_t dim,
     EMPTY_LINE(stream);
 }
 
+void generate_mat_definition(FILE *restrict stream, size_t dim, type_s type) {
+    const char *type_keyword = type_definitions[type].keyword;
+    fprintf(stream, "typedef union {\n");
+    fprintf(stream, INDENT "struct {\n");
+    for (size_t i = 0; i < dim; ++i) {
+        fprintf(stream, INDENT INDENT "%s ", type_keyword);
+        for (size_t j = 0; j < dim; ++j) {
+            if (j > 0) {
+                fprintf(stream, ", ");
+            }
+            fprintf(stream, "_%zu%zu", i + 1, j + 1);
+        }
+        fprintf(stream, ";\n");
+    }
+    fprintf(stream, INDENT "};\n");
+    fprintf(stream, INDENT "%s m[%zu][%zu];\n", type_keyword, dim, dim);
+    fprintf(stream, INDENT "%s e[%zu * %zu];\n", type_keyword, dim, dim);
+    fprintf(stream, INDENT "%s v[%zu];\n", vec_type_name(dim, type), dim);
+    fprintf(stream, "} mat%zu%s_t;\n", dim, type_definitions[type].suffix);
+    EMPTY_LINE(stream);
+}
+
 int main() {
     generate_head(stdout);
     for (size_t dim = VEC_MIN_SIZE; dim <= VEC_MAX_SIZE; ++dim) {
         for (size_t type = 0; type < NUM_TYPES; ++type) {
             generate_vec_definition(stdout, dim, type);
+            generate_mat_definition(stdout, dim, type);
         }
     }
 

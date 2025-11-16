@@ -22,10 +22,30 @@ typedef union {
 
 typedef union {
     struct {
+        float _11, _12;
+        float _21, _22;
+    };
+    float m[2][2];
+    float e[2 * 2];
+    vec2f_t v[2];
+} mat2f_t;
+
+typedef union {
+    struct {
         double x, y;
     };
     double e[2];
 } vec2d_t;
+
+typedef union {
+    struct {
+        double _11, _12;
+        double _21, _22;
+    };
+    double m[2][2];
+    double e[2 * 2];
+    vec2d_t v[2];
+} mat2d_t;
 
 typedef union {
     struct {
@@ -36,10 +56,30 @@ typedef union {
 
 typedef union {
     struct {
+        int _11, _12;
+        int _21, _22;
+    };
+    int m[2][2];
+    int e[2 * 2];
+    vec2i_t v[2];
+} mat2i_t;
+
+typedef union {
+    struct {
         unsigned int x, y;
     };
     unsigned int e[2];
 } vec2u_t;
+
+typedef union {
+    struct {
+        unsigned int _11, _12;
+        unsigned int _21, _22;
+    };
+    unsigned int m[2][2];
+    unsigned int e[2 * 2];
+    vec2u_t v[2];
+} mat2u_t;
 
 typedef union {
     struct {
@@ -53,6 +93,17 @@ typedef union {
 
 typedef union {
     struct {
+        float _11, _12, _13;
+        float _21, _22, _23;
+        float _31, _32, _33;
+    };
+    float m[3][3];
+    float e[3 * 3];
+    vec3f_t v[3];
+} mat3f_t;
+
+typedef union {
+    struct {
         double x, y, z;
     };
     struct {
@@ -60,6 +111,17 @@ typedef union {
     };
     double e[3];
 } vec3d_t;
+
+typedef union {
+    struct {
+        double _11, _12, _13;
+        double _21, _22, _23;
+        double _31, _32, _33;
+    };
+    double m[3][3];
+    double e[3 * 3];
+    vec3d_t v[3];
+} mat3d_t;
 
 typedef union {
     struct {
@@ -73,6 +135,17 @@ typedef union {
 
 typedef union {
     struct {
+        int _11, _12, _13;
+        int _21, _22, _23;
+        int _31, _32, _33;
+    };
+    int m[3][3];
+    int e[3 * 3];
+    vec3i_t v[3];
+} mat3i_t;
+
+typedef union {
+    struct {
         unsigned int x, y, z;
     };
     struct {
@@ -80,6 +153,17 @@ typedef union {
     };
     unsigned int e[3];
 } vec3u_t;
+
+typedef union {
+    struct {
+        unsigned int _11, _12, _13;
+        unsigned int _21, _22, _23;
+        unsigned int _31, _32, _33;
+    };
+    unsigned int m[3][3];
+    unsigned int e[3 * 3];
+    vec3u_t v[3];
+} mat3u_t;
 
 typedef union {
     struct {
@@ -93,6 +177,18 @@ typedef union {
 
 typedef union {
     struct {
+        float _11, _12, _13, _14;
+        float _21, _22, _23, _24;
+        float _31, _32, _33, _34;
+        float _41, _42, _43, _44;
+    };
+    float m[4][4];
+    float e[4 * 4];
+    vec4f_t v[4];
+} mat4f_t;
+
+typedef union {
+    struct {
         double x, y, z, w;
     };
     struct {
@@ -100,6 +196,18 @@ typedef union {
     };
     double e[4];
 } vec4d_t;
+
+typedef union {
+    struct {
+        double _11, _12, _13, _14;
+        double _21, _22, _23, _24;
+        double _31, _32, _33, _34;
+        double _41, _42, _43, _44;
+    };
+    double m[4][4];
+    double e[4 * 4];
+    vec4d_t v[4];
+} mat4d_t;
 
 typedef union {
     struct {
@@ -113,6 +221,18 @@ typedef union {
 
 typedef union {
     struct {
+        int _11, _12, _13, _14;
+        int _21, _22, _23, _24;
+        int _31, _32, _33, _34;
+        int _41, _42, _43, _44;
+    };
+    int m[4][4];
+    int e[4 * 4];
+    vec4i_t v[4];
+} mat4i_t;
+
+typedef union {
+    struct {
         unsigned int x, y, z, w;
     };
     struct {
@@ -120,6 +240,18 @@ typedef union {
     };
     unsigned int e[4];
 } vec4u_t;
+
+typedef union {
+    struct {
+        unsigned int _11, _12, _13, _14;
+        unsigned int _21, _22, _23, _24;
+        unsigned int _31, _32, _33, _34;
+        unsigned int _41, _42, _43, _44;
+    };
+    unsigned int m[4][4];
+    unsigned int e[4 * 4];
+    vec4u_t v[4];
+} mat4u_t;
 
 vec2f_t vec2f(float x, float y) {
     vec2f_t v = {{x, y}};
