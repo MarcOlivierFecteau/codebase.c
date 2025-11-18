@@ -23,6 +23,9 @@ typedef union {
     struct {
         float x, y;
     };
+    struct {
+        float real, imag;
+    };
     float e[2];
 } vec2f_t;
 
@@ -39,6 +42,9 @@ typedef union {
 typedef union {
     struct {
         double x, y;
+    };
+    struct {
+        double real, imag;
     };
     double e[2];
 } vec2d_t;

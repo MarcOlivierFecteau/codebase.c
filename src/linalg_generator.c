@@ -262,10 +262,11 @@ void generate_head(FILE *restrict stream) {
 }
 
 void generate_vec_definition(FILE *restrict stream, size_t dim, type_s type) {
+    const char *type_keyword = type_definitions[type].keyword;
     fprintf(stream, "typedef union {\n");
     if (dim <= 4) {
         // Math components
-        fprintf(stream, INDENT "struct { %s ", type_definitions[type].keyword);
+        fprintf(stream, INDENT "struct { %s ", type_keyword);
         for (size_t component = 0; component < dim; ++component) {
             if (component > 0) {
                 fprintf(stream, ", ");
@@ -274,9 +275,12 @@ void generate_vec_definition(FILE *restrict stream, size_t dim, type_s type) {
         }
         fprintf(stream, "; };\n");
     }
+    if (dim == 2 && (type == FLOAT_T || type == DOUBLE_T)) {
+        fprintf(stream, INDENT "struct { %s real, imag; };\n", type_keyword);
+    }
     if (dim == 3 || dim == 4) {
         // Color components
-        fprintf(stream, INDENT "struct { %s ", type_definitions[type].keyword);
+        fprintf(stream, INDENT "struct { %s ", type_keyword);
         for (size_t component = 0; component < dim; ++component) {
             if (component > 0) {
                 fprintf(stream, ", ");
@@ -285,7 +289,7 @@ void generate_vec_definition(FILE *restrict stream, size_t dim, type_s type) {
         }
         fprintf(stream, "; };\n");
     }
-    fprintf(stream, INDENT "%s e[%zu];\n", type_definitions[type].keyword, dim);
+    fprintf(stream, INDENT "%s e[%zu];\n", type_keyword, dim);
     fprintf(stream, "} vec%zu%s_t;\n", dim, type_definitions[type].suffix);
     EMPTY_LINE(stream);
 }
