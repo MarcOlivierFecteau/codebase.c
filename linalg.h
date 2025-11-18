@@ -699,6 +699,17 @@ LINALG_DEF vec2f_t vec2f_sum(size_t n, ...) {
     return sum;
 }
 
+LINALG_DEF vec2f_t vec2f_product(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    vec2f_t product = vec2f_splat(1);
+    for (size_t i = 0; i < n; ++i) {
+        vec2f_t v = va_arg(args, vec2f_t);
+        product = vec2f_mul(product, v);
+    }
+    return product;
+}
+
 LINALG_DEF float vec2f_dot(vec2f_t a, vec2f_t b) {
     return a.x * b.x + a.y * b.y;
 }
@@ -847,6 +858,17 @@ LINALG_DEF vec2d_t vec2d_sum(size_t n, ...) {
     return sum;
 }
 
+LINALG_DEF vec2d_t vec2d_product(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    vec2d_t product = vec2d_splat(1);
+    for (size_t i = 0; i < n; ++i) {
+        vec2d_t v = va_arg(args, vec2d_t);
+        product = vec2d_mul(product, v);
+    }
+    return product;
+}
+
 LINALG_DEF double vec2d_dot(vec2d_t a, vec2d_t b) {
     return a.x * b.x + a.y * b.y;
 }
@@ -977,6 +999,17 @@ LINALG_DEF vec2i_t vec2i_sum(size_t n, ...) {
     return sum;
 }
 
+LINALG_DEF vec2i_t vec2i_product(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    vec2i_t product = vec2i_splat(1);
+    for (size_t i = 0; i < n; ++i) {
+        vec2i_t v = va_arg(args, vec2i_t);
+        product = vec2i_mul(product, v);
+    }
+    return product;
+}
+
 LINALG_DEF int vec2i_dot(vec2i_t a, vec2i_t b) { return a.x * b.x + a.y * b.y; }
 
 LINALG_DEF int vec2i_cross(vec2i_t a, vec2i_t b) {
@@ -1066,6 +1099,17 @@ LINALG_DEF vec2u_t vec2u_sum(size_t n, ...) {
         sum = vec2u_add(sum, v);
     }
     return sum;
+}
+
+LINALG_DEF vec2u_t vec2u_product(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    vec2u_t product = vec2u_splat(1);
+    for (size_t i = 0; i < n; ++i) {
+        vec2u_t v = va_arg(args, vec2u_t);
+        product = vec2u_mul(product, v);
+    }
+    return product;
 }
 
 LINALG_DEF unsigned int vec2u_dot(vec2u_t a, vec2u_t b) {
@@ -1188,6 +1232,17 @@ LINALG_DEF vec3f_t vec3f_sum(size_t n, ...) {
         sum = vec3f_add(sum, v);
     }
     return sum;
+}
+
+LINALG_DEF vec3f_t vec3f_product(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    vec3f_t product = vec3f_splat(1);
+    for (size_t i = 0; i < n; ++i) {
+        vec3f_t v = va_arg(args, vec3f_t);
+        product = vec3f_mul(product, v);
+    }
+    return product;
 }
 
 LINALG_DEF float vec3f_dot(vec3f_t a, vec3f_t b) {
@@ -1364,6 +1419,17 @@ LINALG_DEF vec3d_t vec3d_sum(size_t n, ...) {
     return sum;
 }
 
+LINALG_DEF vec3d_t vec3d_product(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    vec3d_t product = vec3d_splat(1);
+    for (size_t i = 0; i < n; ++i) {
+        vec3d_t v = va_arg(args, vec3d_t);
+        product = vec3d_mul(product, v);
+    }
+    return product;
+}
+
 LINALG_DEF double vec3d_dot(vec3d_t a, vec3d_t b) {
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
@@ -1517,6 +1583,17 @@ LINALG_DEF vec3i_t vec3i_sum(size_t n, ...) {
     return sum;
 }
 
+LINALG_DEF vec3i_t vec3i_product(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    vec3i_t product = vec3i_splat(1);
+    for (size_t i = 0; i < n; ++i) {
+        vec3i_t v = va_arg(args, vec3i_t);
+        product = vec3i_mul(product, v);
+    }
+    return product;
+}
+
 LINALG_DEF int vec3i_dot(vec3i_t a, vec3i_t b) {
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
@@ -1626,6 +1703,17 @@ LINALG_DEF vec3u_t vec3u_sum(size_t n, ...) {
         sum = vec3u_add(sum, v);
     }
     return sum;
+}
+
+LINALG_DEF vec3u_t vec3u_product(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    vec3u_t product = vec3u_splat(1);
+    for (size_t i = 0; i < n; ++i) {
+        vec3u_t v = va_arg(args, vec3u_t);
+        product = vec3u_mul(product, v);
+    }
+    return product;
 }
 
 LINALG_DEF unsigned int vec3u_dot(vec3u_t a, vec3u_t b) {
@@ -1769,6 +1857,17 @@ LINALG_DEF vec4f_t vec4f_sum(size_t n, ...) {
         sum = vec4f_add(sum, v);
     }
     return sum;
+}
+
+LINALG_DEF vec4f_t vec4f_product(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    vec4f_t product = vec4f_splat(1);
+    for (size_t i = 0; i < n; ++i) {
+        vec4f_t v = va_arg(args, vec4f_t);
+        product = vec4f_mul(product, v);
+    }
+    return product;
 }
 
 LINALG_DEF float vec4f_dot(vec4f_t a, vec4f_t b) {
@@ -1953,6 +2052,17 @@ LINALG_DEF vec4d_t vec4d_sum(size_t n, ...) {
     return sum;
 }
 
+LINALG_DEF vec4d_t vec4d_product(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    vec4d_t product = vec4d_splat(1);
+    for (size_t i = 0; i < n; ++i) {
+        vec4d_t v = va_arg(args, vec4d_t);
+        product = vec4d_mul(product, v);
+    }
+    return product;
+}
+
 LINALG_DEF double vec4d_dot(vec4d_t a, vec4d_t b) {
     return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
@@ -2111,6 +2221,17 @@ LINALG_DEF vec4i_t vec4i_sum(size_t n, ...) {
     return sum;
 }
 
+LINALG_DEF vec4i_t vec4i_product(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    vec4i_t product = vec4i_splat(1);
+    for (size_t i = 0; i < n; ++i) {
+        vec4i_t v = va_arg(args, vec4i_t);
+        product = vec4i_mul(product, v);
+    }
+    return product;
+}
+
 LINALG_DEF int vec4i_dot(vec4i_t a, vec4i_t b) {
     return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
@@ -2228,6 +2349,17 @@ LINALG_DEF vec4u_t vec4u_sum(size_t n, ...) {
         sum = vec4u_add(sum, v);
     }
     return sum;
+}
+
+LINALG_DEF vec4u_t vec4u_product(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    vec4u_t product = vec4u_splat(1);
+    for (size_t i = 0; i < n; ++i) {
+        vec4u_t v = va_arg(args, vec4u_t);
+        product = vec4u_mul(product, v);
+    }
+    return product;
 }
 
 LINALG_DEF unsigned int vec4u_dot(vec4u_t a, vec4u_t b) {

@@ -105,6 +105,7 @@ static const op_definition_s op_definitions[NUM_OPS] = {
 
 typedef enum {
     VARIADIC_OP_SUM = 0,
+    VARIADIC_OP_PRODUCT,
     NUM_VARIADIC_OPS,
 } variadic_op_s;
 
@@ -113,11 +114,12 @@ typedef struct {
     const char *op;
 } variadic_op_definition_s;
 
-static_assert(NUM_VARIADIC_OPS == 1,
+static_assert(NUM_VARIADIC_OPS == 2,
               "Number of variadic operations has changed.");
 static const variadic_op_definition_s
     variadic_op_definitions[NUM_VARIADIC_OPS] = {
         [VARIADIC_OP_SUM] = {.name = "sum", .op = "add"},
+        [VARIADIC_OP_PRODUCT] = {.name = "product", .op = "mul"},
 };
 
 #define FN_MAX_ARITY 4
@@ -379,18 +381,26 @@ void generate_vec_operation(FILE *restrict stream, size_t dim, type_s type,
 
 void generate_vec_variadic_operation(FILE *restrict stream, size_t dim,
                                      type_s type, variadic_op_s op) {
-    const char *vec_type = vec_type_name(dim, type);
+    const char *vec_prefix = vec_prefix_name(dim, type);
     const char *result_name = variadic_op_definitions[op].name;
     const char *vec_fn =
         vec_fn_name(dim, type, variadic_op_definitions[op].name);
     const char *vec_op = vec_fn_name(dim, type, variadic_op_definitions[op].op);
-    fprintf(stream, "LINALG_DEF %s %s(size_t n, ...) {\n", vec_type, vec_fn);
+    fprintf(stream, "LINALG_DEF %s_t %s(size_t n, ...) {\n", vec_prefix,
+            vec_fn);
     fprintf(stream, INDENT "va_list args;\n");
     fprintf(stream, INDENT "va_start(args, n);\n");
-    fprintf(stream, INDENT "%s %s = {0};\n", vec_type, result_name);
+    if (op == VARIADIC_OP_SUM) {
+        fprintf(stream, INDENT "%s_t %s = {0};\n", vec_prefix, result_name);
+    } else if (op == VARIADIC_OP_PRODUCT) {
+        fprintf(stream, "%s_t %s = %s_splat(1);\n", vec_prefix, result_name,
+                vec_prefix);
+    } else {
+        assert(0 && "TODO: Variadic operation not implemented.");
+    }
     fprintf(stream, INDENT "for (size_t i = 0; i < n; ++i) {\n");
-    fprintf(stream, INDENT INDENT "%s v = va_arg(args, %s);\n", vec_type,
-            vec_type);
+    fprintf(stream, INDENT INDENT "%s_t v = va_arg(args, %s_t);\n", vec_prefix,
+            vec_prefix);
     fprintf(stream, INDENT INDENT "%s = %s(%s, v);\n", result_name, vec_op,
             result_name);
     fprintf(stream, INDENT "}\n");
@@ -852,9 +862,9 @@ int main() {
         for (size_t type = 0; type < NUM_TYPES; ++type) {
             generate_vec_constructor(stdout, dim, type);
             generate_vec_scalar_constructor(stdout, dim, type);
-            // NOTE: there are no matrix constructor generated, because the
-            // number of possible ways to specify the parameters is too
-            // high.
+            // NOTE: there are no matrix constructor with specified values
+            // generated, because the number of possible ways to specify the
+            // parameters is too high.
             generate_mat_zero_constructor(stdout, dim, type);
             generate_mat_identity_constructor(stdout, dim, type);
             generate_mat_rotation_constructor(stdout, dim, type);
@@ -870,7 +880,10 @@ int main() {
             for (size_t fn = 0; fn < array_len(fn_definitions); ++fn) {
                 generate_vec_function(stdout, dim, type, fn);
             }
-            generate_vec_variadic_operation(stdout, dim, type, VARIADIC_OP_SUM);
+            for (variadic_op_s variadic_op = 0; variadic_op < NUM_VARIADIC_OPS;
+                 ++variadic_op) {
+                generate_vec_variadic_operation(stdout, dim, type, variadic_op);
+            }
             generate_vec_dot(stdout, dim, type);
             generate_vec_cross(stdout, dim, type);
             generate_vec_mag_squared(stdout, dim, type);
@@ -896,8 +909,8 @@ int main() {
 }
 
 // Ideas for additional features:
-// - Implement transform function;
 // - Implement variadic matrix multiplication;
+// - Implement matrix constructors with specified values;
 // - Add support for non-square matrices (definitions, zero, mul, mul_vec);
 // - Implement integer lerping;
 // - Implement type casting (same size);
@@ -907,5 +920,8 @@ int main() {
 // - Add support for type generic operations and functions (C23< first,
 // maybe C99);
 // - Print statistics (loc generated, number of functions for each type,
-// etc.).
-// - Implement an "in-place" variant of the rotation function.
+// etc.);
+// - Implement an "in-place" variant of the rotation function;
+// - Implement transform function (axis, angle, translation).
+//   |- Could be implemented "in-place" to differentiate enough from transform
+//      constructor + matmul.
