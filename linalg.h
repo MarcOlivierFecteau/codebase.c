@@ -522,7 +522,7 @@ LINALG_DEF mat4f_t mat4f_T(rotate_axis_s axis, float angle) {
     T.M[i][j] = -sinf(angle);
     T.M[j][i] = sinf(angle);
     T.M[j][j] = cosf(angle);
-    T.M[2][2] = 1;
+    T.M[3][3] = 1;
     return T;
 }
 
@@ -569,7 +569,7 @@ LINALG_DEF mat4d_t mat4d_T(rotate_axis_s axis, double angle) {
     T.M[i][j] = -sin(angle);
     T.M[j][i] = sin(angle);
     T.M[j][j] = cos(angle);
-    T.M[2][2] = 1;
+    T.M[3][3] = 1;
     return T;
 }
 

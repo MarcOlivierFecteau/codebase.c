@@ -838,7 +838,7 @@ void generate_mat_transform_constructor(FILE *restrict stream, size_t dim,
     fprintf(stream, INDENT "T.M[i][j] = -sin%s(angle);\n", type_suffix);
     fprintf(stream, INDENT "T.M[j][i] = sin%s(angle);\n", type_suffix);
     fprintf(stream, INDENT "T.M[j][j] = cos%s(angle);\n", type_suffix);
-    fprintf(stream, INDENT "T.M[2][2] = 1;\n");
+    fprintf(stream, INDENT "T.M[3][3] = 1;\n");
     fprintf(stream, INDENT "return T;\n");
     fprintf(stream, "}\n");
     EMPTY_LINE(stream);
