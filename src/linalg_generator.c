@@ -204,12 +204,12 @@ const char *vec_type_name(size_t dim, type_s type) {
     return varia_temp_sprintf("vec%zu%s_t", dim, type_definitions[type].suffix);
 }
 
-const char *vec_constructor_name(size_t dim, type_s type) {
+const char *vec_prefix_name(size_t dim, size_t type) {
     return varia_temp_sprintf("vec%zu%s", dim, type_definitions[type].suffix);
 }
 
-const char *vec_prefix_name(size_t dim, size_t type) {
-    return vec_constructor_name(dim, type);
+const char *vec_constructor_name(size_t dim, type_s type) {
+    return vec_prefix_name(dim, type);
 }
 
 const char *vec_fn_name(size_t dim, type_s type, const char *fn_name) {
