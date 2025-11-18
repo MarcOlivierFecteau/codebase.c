@@ -19,8 +19,8 @@ static_assert(VEC_MIN_SIZE <= VEC_MAX_SIZE, "Empty set of vector sizes.");
 #define INDENT "    "
 #define EMPTY_LINE(stream) fprintf(stream, "\n")
 
-static const char *vec_math_components = "xyzw";
-static const char *vec_color_components = "rgba";
+static const char vec_math_components[4] = {'x', 'y', 'z', 'w'};
+static const char vec_color_components[4] = {'r', 'g', 'b', 'a'};
 
 #define array_len(xs) (sizeof(xs) / sizeof(xs[0]))
 
