@@ -446,8 +446,8 @@ void generate_vec_dot(FILE *restrict stream, size_t dim, type_s type) {
     const char *type_keyword = type_definitions[type].keyword;
     fprintf(stream, "LINALG_DEF %s %s(%s a, %s b) {\n", type_keyword, vec_fn,
             vec_type, vec_type);
-    fprintf(stream, INDENT "return ");
     if (dim <= 4) {
+        fprintf(stream, INDENT "return ");
         for (size_t component = 0; component < dim; ++component) {
             if (component > 0) {
                 fprintf(stream, " + ");
@@ -460,7 +460,7 @@ void generate_vec_dot(FILE *restrict stream, size_t dim, type_s type) {
         fprintf(stream, INDENT "%s result = {0};\n", type_keyword);
         fprintf(stream,
                 INDENT
-                "for (size_t component = 0; component < %zu; ++component {\n)",
+                "for (size_t component = 0; component < %zu; ++component) {\n",
                 dim);
         for (size_t component = 0; component < dim; ++component) {
             fprintf(stream, INDENT INDENT "result += a.e[%zu] * b.e[%zu];\n",
