@@ -280,26 +280,35 @@ void generate_vec_definition(FILE *restrict stream, size_t dim, type_s type) {
 void generate_vec_constructor(FILE *restrict stream, size_t dim, type_s type) {
     const char *vec_type = vec_type_name(dim, type);
     const char *vec_constructor = vec_constructor_name(dim, type);
-    fprintf(stream, "%s %s(", vec_type, vec_constructor);
-    for (size_t component = 0; component < dim; ++component) {
-        if (component > 0) {
-            fprintf(stream, ", ");
+    fprintf(stream, "LINALG_DEF %s %s(", vec_type, vec_constructor);
+    if (dim <= 4) {
+        for (size_t component = 0; component < dim; ++component) {
+            if (component > 0) {
+                fprintf(stream, ", ");
+            }
+            fprintf(stream, "%s %c", type_definitions[type].keyword,
+                    vec_math_components[component]);
         }
-        fprintf(stream, "%s %c", type_definitions[type].keyword,
-                vec_math_components[component]);
-    }
-    fprintf(stream, ") {\n");
-    fprintf(stream, INDENT "%s v = {{", vec_type);
-    for (size_t component = 0; component < dim; ++component) {
-        if (component > 0) {
-            fprintf(stream, ", ");
+        fprintf(stream, ") {\n");
+        fprintf(stream, INDENT "%s v = {{", vec_type);
+        for (size_t component = 0; component < dim; ++component) {
+            if (component > 0) {
+                fprintf(stream, ", ");
+            }
+            fprintf(stream, "%c", vec_math_components[component]);
         }
-        fprintf(stream, "%c", vec_math_components[component]);
+        fprintf(stream, "}};\n");
+    } else {
+        fprintf(stream, "%s xs[%zu]) {\n", type_definitions[type].keyword, dim);
+        fprintf(stream, INDENT "%s v = {0};\n", vec_type);
+        fprintf(stream, INDENT "size_t dim = %zu;\n", dim);
+        fprintf(stream, INDENT "for (size_t i = 0; i < dim; ++i) {\n");
+        fprintf(stream, INDENT INDENT "v.e[i] = xs[i];\n");
+        fprintf(stream, INDENT "}\n");
     }
-    fprintf(stream, "}};\n");
     fprintf(stream, INDENT "return v;\n");
     fprintf(stream, "}\n");
-    fprintf(stream, "\n");
+    EMPTY_LINE(stream);
 }
 
 void generate_vec_scalar_constructor(FILE *restrict stream, size_t dim,
@@ -839,9 +848,7 @@ int main() {
     // - For matrices, I think higher dimension constructors add an
     // unnecessary
     //   amount of bloat in the library.
-    size_t max_supported_constructor_dim = VEC_MAX_SIZE < 4 ? VEC_MAX_SIZE : 4;
-    for (size_t dim = VEC_MIN_SIZE; dim <= max_supported_constructor_dim;
-         ++dim) {
+    for (size_t dim = VEC_MIN_SIZE; dim <= VEC_MAX_SIZE; ++dim) {
         for (size_t type = 0; type < NUM_TYPES; ++type) {
             generate_vec_constructor(stdout, dim, type);
             generate_vec_scalar_constructor(stdout, dim, type);
@@ -901,3 +908,4 @@ int main() {
 // maybe C99);
 // - Print statistics (loc generated, number of functions for each type,
 // etc.).
+// - Implement an "in-place" variant of the rotation function.

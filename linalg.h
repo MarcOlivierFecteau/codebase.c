@@ -259,7 +259,7 @@ typedef union {
     vec4u_t v[4];
 } mat4u_t;
 
-vec2f_t vec2f(float x, float y) {
+LINALG_DEF vec2f_t vec2f(float x, float y) {
     vec2f_t v = {{x, y}};
     return v;
 }
@@ -290,7 +290,7 @@ LINALG_DEF mat2f_t mat2f_R(float angle) {
     return R;
 }
 
-vec2d_t vec2d(double x, double y) {
+LINALG_DEF vec2d_t vec2d(double x, double y) {
     vec2d_t v = {{x, y}};
     return v;
 }
@@ -321,7 +321,7 @@ LINALG_DEF mat2d_t mat2d_R(double angle) {
     return R;
 }
 
-vec2i_t vec2i(int x, int y) {
+LINALG_DEF vec2i_t vec2i(int x, int y) {
     vec2i_t v = {{x, y}};
     return v;
 }
@@ -343,7 +343,7 @@ LINALG_DEF mat2i_t mat2i_I(void) {
     return M;
 }
 
-vec2u_t vec2u(unsigned int x, unsigned int y) {
+LINALG_DEF vec2u_t vec2u(unsigned int x, unsigned int y) {
     vec2u_t v = {{x, y}};
     return v;
 }
@@ -365,7 +365,7 @@ LINALG_DEF mat2u_t mat2u_I(void) {
     return M;
 }
 
-vec3f_t vec3f(float x, float y, float z) {
+LINALG_DEF vec3f_t vec3f(float x, float y, float z) {
     vec3f_t v = {{x, y, z}};
     return v;
 }
@@ -399,7 +399,7 @@ LINALG_DEF mat3f_t mat3f_R(rotate_axis_s axis, float angle) {
     return R;
 }
 
-vec3d_t vec3d(double x, double y, double z) {
+LINALG_DEF vec3d_t vec3d(double x, double y, double z) {
     vec3d_t v = {{x, y, z}};
     return v;
 }
@@ -433,7 +433,7 @@ LINALG_DEF mat3d_t mat3d_R(rotate_axis_s axis, double angle) {
     return R;
 }
 
-vec3i_t vec3i(int x, int y, int z) {
+LINALG_DEF vec3i_t vec3i(int x, int y, int z) {
     vec3i_t v = {{x, y, z}};
     return v;
 }
@@ -456,7 +456,7 @@ LINALG_DEF mat3i_t mat3i_I(void) {
     return M;
 }
 
-vec3u_t vec3u(unsigned int x, unsigned int y, unsigned int z) {
+LINALG_DEF vec3u_t vec3u(unsigned int x, unsigned int y, unsigned int z) {
     vec3u_t v = {{x, y, z}};
     return v;
 }
@@ -479,7 +479,7 @@ LINALG_DEF mat3u_t mat3u_I(void) {
     return M;
 }
 
-vec4f_t vec4f(float x, float y, float z, float w) {
+LINALG_DEF vec4f_t vec4f(float x, float y, float z, float w) {
     vec4f_t v = {{x, y, z, w}};
     return v;
 }
@@ -526,7 +526,7 @@ LINALG_DEF mat4f_t mat4f_T(rotate_axis_s axis, float angle) {
     return T;
 }
 
-vec4d_t vec4d(double x, double y, double z, double w) {
+LINALG_DEF vec4d_t vec4d(double x, double y, double z, double w) {
     vec4d_t v = {{x, y, z, w}};
     return v;
 }
@@ -573,7 +573,7 @@ LINALG_DEF mat4d_t mat4d_T(rotate_axis_s axis, double angle) {
     return T;
 }
 
-vec4i_t vec4i(int x, int y, int z, int w) {
+LINALG_DEF vec4i_t vec4i(int x, int y, int z, int w) {
     vec4i_t v = {{x, y, z, w}};
     return v;
 }
@@ -597,7 +597,8 @@ LINALG_DEF mat4i_t mat4i_I(void) {
     return M;
 }
 
-vec4u_t vec4u(unsigned int x, unsigned int y, unsigned int z, unsigned int w) {
+LINALG_DEF vec4u_t vec4u(unsigned int x, unsigned int y, unsigned int z,
+                         unsigned int w) {
     vec4u_t v = {{x, y, z, w}};
     return v;
 }
