@@ -23,6 +23,7 @@ MATH_DEF int clampi(int x, int min, int max) {
     }
     return x;
 }
+MATH_DEF int absi(int a) { return a < 0 ? -a : a; }
 
 MATH_DEF unsigned int minu(unsigned int a, unsigned int b) {
     return a < b ? a : b;

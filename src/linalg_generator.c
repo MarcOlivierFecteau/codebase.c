@@ -191,6 +191,17 @@ static const fn_definition_s fn_definitions[] = {
         .params = {"v", "min", "max"},
     },
     {
+        .name = "abs",
+        .generic_selection =
+            {
+                [FLOAT_T] = "fabsf",
+                [DOUBLE_T] = "fabs",
+                [INT_T] = "absi",
+            },
+        .arity = 1,
+        .params = {"v"},
+    },
+    {
         .name = "lerp",
         .generic_selection =
             {
@@ -504,12 +515,43 @@ void generate_vec_mag_squared(FILE *restrict stream, size_t dim, type_s type) {
     EMPTY_LINE(stream);
 }
 
-void generate_vec_mag(FILE *restrict stream, size_t dim, type_s type) {
+void generate_vec_1norm(FILE *restrict stream, size_t dim, type_s type) {
+    // NOTE: equivalent names for the 1-norm are: Taxicab norm, l^1 norm,
+    //       Manhattan distance, l^1 distance, absolute sum.
+    const char *vec_prefix = vec_prefix_name(dim, type);
+    const char *type_keyword = type_definitions[type].keyword;
+    fprintf(stream, "LINALG_DEF %s %s_1norm(%s_t v) {\n", type_keyword,
+            vec_prefix, vec_prefix);
+    if (type != UINT_T) {
+        fprintf(stream, INDENT "v = %s_abs(v);\n", vec_prefix);
+    }
+    fprintf(stream, INDENT "%s norm = 0;\n", type_keyword);
+    if (dim <= 4) {
+        for (size_t component = 0; component < dim; ++component) {
+            fprintf(stream, INDENT "norm += v.%c;\n",
+                    vec_math_components[component]);
+        }
+    } else {
+        fprintf(stream,
+                INDENT
+                "for(size_t component = 0; component < %zu; ++component) {\n",
+                dim);
+        fprintf(stream, INDENT INDENT "norm += v.e[component];\n");
+        fprintf(stream, INDENT "}\n");
+    }
+    fprintf(stream, INDENT "return norm;\n");
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
+void generate_vec_2norm(FILE *restrict stream, size_t dim, type_s type) {
+    // NOTE: equivalent names for the 2-norm are: length, magnitude, Euclidean
+    //       norm, Euclidean distance, quadratic norm, l^2 norm.
     if (!(type == FLOAT_T || type == DOUBLE_T)) {
         return; // sqrt function does not support integer values.
     }
     const char *vec_type = vec_type_name(dim, type);
-    const char *vec_fn = vec_fn_name(dim, type, "mag");
+    const char *vec_fn = vec_fn_name(dim, type, "2norm");
     const char *vec_prefix = vec_prefix_name(dim, type);
     const char *type_keyword = type_definitions[type].keyword;
     fprintf(stream, "LINALG_DEF %s %s(%s v) {\n", type_keyword, vec_fn,
@@ -528,7 +570,7 @@ void generate_vec_unit(FILE *restrict stream, size_t dim, type_s type) {
     const char *vec_fn = vec_fn_name(dim, type, "unit");
     const char *vec_prefix = vec_prefix_name(dim, type);
     fprintf(stream, "LINALG_DEF %s %s(%s v) {\n", vec_type, vec_fn, vec_type);
-    fprintf(stream, INDENT "return %s_div(v, %s_splat(%s_mag(v)));\n",
+    fprintf(stream, INDENT "return %s_div(v, %s_splat(%s_2norm(v)));\n",
             vec_prefix, vec_prefix, vec_prefix);
     fprintf(stream, "}\n");
     EMPTY_LINE(stream);
@@ -887,7 +929,8 @@ int main() {
             generate_vec_dot(stdout, dim, type);
             generate_vec_cross(stdout, dim, type);
             generate_vec_mag_squared(stdout, dim, type);
-            generate_vec_mag(stdout, dim, type);
+            generate_vec_1norm(stdout, dim, type);
+            generate_vec_2norm(stdout, dim, type);
             generate_vec_unit(stdout, dim, type);
             generate_vec_eq(stdout, dim, type);
             generate_vec_reflect(stdout, dim, type);
