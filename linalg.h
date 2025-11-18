@@ -13,6 +13,12 @@ typedef unsigned long size_t;
 #define LINALG_DEF static inline
 #endif // LINALG_DEF
 
+typedef enum {
+    AXIS_X = 0,
+    AXIS_Y,
+    AXIS_Z,
+} rotate_axis_s;
+
 typedef union {
     struct {
         float x, y;
@@ -275,6 +281,15 @@ LINALG_DEF mat2f_t mat2f_I(void) {
     return M;
 }
 
+LINALG_DEF mat2f_t mat2f_R(float angle) {
+    mat2f_t R;
+    R._11 = cosf(angle);
+    R._12 = -sinf(angle);
+    R._21 = sinf(angle);
+    R._22 = cosf(angle);
+    return R;
+}
+
 vec2d_t vec2d(double x, double y) {
     vec2d_t v = {{x, y}};
     return v;
@@ -295,6 +310,15 @@ LINALG_DEF mat2d_t mat2d_I(void) {
     M._11 = 1;
     M._22 = 1;
     return M;
+}
+
+LINALG_DEF mat2d_t mat2d_R(double angle) {
+    mat2d_t R;
+    R._11 = cos(angle);
+    R._12 = -sin(angle);
+    R._21 = sin(angle);
+    R._22 = cos(angle);
+    return R;
 }
 
 vec2i_t vec2i(int x, int y) {
@@ -364,6 +388,17 @@ LINALG_DEF mat3f_t mat3f_I(void) {
     return M;
 }
 
+LINALG_DEF mat3f_t mat3f_R(rotate_axis_s axis, float angle) {
+    mat3f_t R = {0};
+    size_t i = (axis + 1) % 3;
+    size_t j = (axis + 2) % 3;
+    R.M[i][i] = cosf(angle);
+    R.M[i][j] = -sinf(angle);
+    R.M[j][i] = sinf(angle);
+    R.M[j][j] = cosf(angle);
+    return R;
+}
+
 vec3d_t vec3d(double x, double y, double z) {
     vec3d_t v = {{x, y, z}};
     return v;
@@ -385,6 +420,17 @@ LINALG_DEF mat3d_t mat3d_I(void) {
     M._22 = 1;
     M._33 = 1;
     return M;
+}
+
+LINALG_DEF mat3d_t mat3d_R(rotate_axis_s axis, double angle) {
+    mat3d_t R = {0};
+    size_t i = (axis + 1) % 3;
+    size_t j = (axis + 2) % 3;
+    R.M[i][i] = cos(angle);
+    R.M[i][j] = -sin(angle);
+    R.M[j][i] = sin(angle);
+    R.M[j][j] = cos(angle);
+    return R;
 }
 
 vec3i_t vec3i(int x, int y, int z) {
@@ -457,6 +503,29 @@ LINALG_DEF mat4f_t mat4f_I(void) {
     return M;
 }
 
+LINALG_DEF mat4f_t mat4f_R(rotate_axis_s axis, float angle) {
+    mat4f_t R = {0};
+    size_t i = (axis + 1) % 3;
+    size_t j = (axis + 2) % 3;
+    R.M[i][i] = cosf(angle);
+    R.M[i][j] = -sinf(angle);
+    R.M[j][i] = sinf(angle);
+    R.M[j][j] = cosf(angle);
+    return R;
+}
+
+LINALG_DEF mat4f_t mat4f_T(rotate_axis_s axis, float angle) {
+    mat4f_t T = {0};
+    size_t i = (axis + 1) % 3;
+    size_t j = (axis + 2) % 3;
+    T.M[i][i] = cosf(angle);
+    T.M[i][j] = -sinf(angle);
+    T.M[j][i] = sinf(angle);
+    T.M[j][j] = cosf(angle);
+    T.M[2][2] = 1;
+    return T;
+}
+
 vec4d_t vec4d(double x, double y, double z, double w) {
     vec4d_t v = {{x, y, z, w}};
     return v;
@@ -479,6 +548,29 @@ LINALG_DEF mat4d_t mat4d_I(void) {
     M._33 = 1;
     M._44 = 1;
     return M;
+}
+
+LINALG_DEF mat4d_t mat4d_R(rotate_axis_s axis, double angle) {
+    mat4d_t R = {0};
+    size_t i = (axis + 1) % 3;
+    size_t j = (axis + 2) % 3;
+    R.M[i][i] = cos(angle);
+    R.M[i][j] = -sin(angle);
+    R.M[j][i] = sin(angle);
+    R.M[j][j] = cos(angle);
+    return R;
+}
+
+LINALG_DEF mat4d_t mat4d_T(rotate_axis_s axis, double angle) {
+    mat4d_t T = {0};
+    size_t i = (axis + 1) % 3;
+    size_t j = (axis + 2) % 3;
+    T.M[i][i] = cos(angle);
+    T.M[i][j] = -sin(angle);
+    T.M[j][i] = sin(angle);
+    T.M[j][j] = cos(angle);
+    T.M[2][2] = 1;
+    return T;
 }
 
 vec4i_t vec4i(int x, int y, int z, int w) {
@@ -669,6 +761,14 @@ LINALG_DEF vec2f_t mat2f_mul_vec(mat2f_t M, vec2f_t v) {
     return result;
 }
 
+LINALG_DEF mat2f_t mat2f_rotate(mat2f_t A, float angle) {
+    A._11 *= cosf(angle);
+    A._12 *= -sinf(angle);
+    A._21 *= sinf(angle);
+    A._22 *= cosf(angle);
+    return A;
+}
+
 LINALG_DEF vec2d_t vec2d_add(vec2d_t a, vec2d_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -807,6 +907,14 @@ LINALG_DEF vec2d_t mat2d_mul_vec(mat2d_t M, vec2d_t v) {
     result.x = vec2d_dot(M.v[0], v);
     result.y = vec2d_dot(M.v[1], v);
     return result;
+}
+
+LINALG_DEF mat2d_t mat2d_rotate(mat2d_t A, double angle) {
+    A._11 *= cos(angle);
+    A._12 *= -sin(angle);
+    A._21 *= sin(angle);
+    A._22 *= cos(angle);
+    return A;
 }
 
 LINALG_DEF vec2i_t vec2i_add(vec2i_t a, vec2i_t b) {
@@ -1157,6 +1265,16 @@ LINALG_DEF vec3f_t mat3f_mul_vec(mat3f_t M, vec3f_t v) {
     return result;
 }
 
+LINALG_DEF mat3f_t mat3f_rotate(mat3f_t A, rotate_axis_s axis, float angle) {
+    size_t i = (axis + 1) % 3;
+    size_t j = (axis + 2) % 3;
+    A.M[i][i] *= cosf(angle);
+    A.M[i][j] *= -sinf(angle);
+    A.M[j][i] *= sinf(angle);
+    A.M[j][j] *= cosf(angle);
+    return A;
+}
+
 LINALG_DEF vec3d_t vec3d_add(vec3d_t a, vec3d_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -1319,6 +1437,16 @@ LINALG_DEF vec3d_t mat3d_mul_vec(mat3d_t M, vec3d_t v) {
     result.y = vec3d_dot(M.v[1], v);
     result.z = vec3d_dot(M.v[2], v);
     return result;
+}
+
+LINALG_DEF mat3d_t mat3d_rotate(mat3d_t A, rotate_axis_s axis, double angle) {
+    size_t i = (axis + 1) % 3;
+    size_t j = (axis + 2) % 3;
+    A.M[i][i] *= cos(angle);
+    A.M[i][j] *= -sin(angle);
+    A.M[j][i] *= sin(angle);
+    A.M[j][j] *= cos(angle);
+    return A;
 }
 
 LINALG_DEF vec3i_t vec3i_add(vec3i_t a, vec3i_t b) {
@@ -1715,6 +1843,16 @@ LINALG_DEF vec4f_t mat4f_mul_vec(mat4f_t M, vec4f_t v) {
     return result;
 }
 
+LINALG_DEF mat4f_t mat4f_rotate(mat4f_t A, rotate_axis_s axis, float angle) {
+    size_t i = (axis + 1) % 3;
+    size_t j = (axis + 2) % 3;
+    A.M[i][i] *= cosf(angle);
+    A.M[i][j] *= -sinf(angle);
+    A.M[j][i] *= sinf(angle);
+    A.M[j][j] *= cosf(angle);
+    return A;
+}
+
 LINALG_DEF vec4d_t vec4d_add(vec4d_t a, vec4d_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -1885,6 +2023,16 @@ LINALG_DEF vec4d_t mat4d_mul_vec(mat4d_t M, vec4d_t v) {
     result.z = vec4d_dot(M.v[2], v);
     result.w = vec4d_dot(M.v[3], v);
     return result;
+}
+
+LINALG_DEF mat4d_t mat4d_rotate(mat4d_t A, rotate_axis_s axis, double angle) {
+    size_t i = (axis + 1) % 3;
+    size_t j = (axis + 2) % 3;
+    A.M[i][i] *= cos(angle);
+    A.M[i][j] *= -sin(angle);
+    A.M[j][i] *= sin(angle);
+    A.M[j][j] *= cos(angle);
+    return A;
 }
 
 LINALG_DEF vec4i_t vec4i_add(vec4i_t a, vec4i_t b) {

@@ -240,6 +240,12 @@ void generate_head(FILE *restrict stream) {
     fprintf(stream, "#define LINALG_DEF static inline\n");
     fprintf(stream, "#endif // LINALG_DEF\n");
     EMPTY_LINE(stream);
+    fprintf(stream, "typedef enum {\n");
+    fprintf(stream, INDENT "AXIS_X = 0,\n");
+    fprintf(stream, INDENT "AXIS_Y,\n");
+    fprintf(stream, INDENT "AXIS_Z,\n");
+    fprintf(stream, "} rotate_axis_s;\n");
+    EMPTY_LINE(stream);
 }
 
 void generate_vec_definition(FILE *restrict stream, size_t dim, type_s type) {
@@ -715,6 +721,110 @@ void generate_mat_mul_by_vec(FILE *restrict stream, size_t dim, type_s type) {
     EMPTY_LINE(stream);
 }
 
+void generate_mat_rotation_constructor(FILE *restrict stream, size_t dim,
+                                       type_s type) {
+    if (dim > 4) {
+        return; // I don't see any use case for rotating high dimension
+                // matrices.
+    }
+    if (!(type == FLOAT_T || type == DOUBLE_T)) {
+        return; // trigonometric functions do not support integer values.
+    }
+    const char *mat_prefix = mat_prefix_name(dim, type);
+    const char *type_keyword = type_definitions[type].keyword;
+    const char *type_suffix = type == FLOAT_T ? "f" : "";
+    if (dim == 2) {
+        fprintf(stream, "LINALG_DEF %s_t %s_R(%s angle) {\n", mat_prefix,
+                mat_prefix, type_keyword);
+        fprintf(stream, INDENT "%s_t R;\n", mat_prefix);
+        fprintf(stream, INDENT "R._11 = cos%s(angle);\n", type_suffix);
+        fprintf(stream, INDENT "R._12 = -sin%s(angle);\n", type_suffix);
+        fprintf(stream, INDENT "R._21 = sin%s(angle);\n", type_suffix);
+        fprintf(stream, INDENT "R._22 = cos%s(angle);\n", type_suffix);
+    } else {
+        // NOTE: I dont't see any use case for w-axis rotation of a 4x4
+        // matrix. Most of the time, the matrix the rotation is performed
+        // on is a transform matrix, so a w-axis rotation does not make sense.
+        fprintf(stream,
+                "LINALG_DEF %s_t %s_R(rotate_axis_s axis, %s angle) {\n",
+                mat_prefix, mat_prefix, type_keyword);
+        fprintf(stream, INDENT "%s_t R = {0};\n", mat_prefix);
+        fprintf(stream, INDENT "size_t i = (axis + 1) %% 3;\n");
+        fprintf(stream, INDENT "size_t j = (axis + 2) %% 3;\n");
+        fprintf(stream, INDENT "R.M[i][i] = cos%s(angle);\n", type_suffix);
+        fprintf(stream, INDENT "R.M[i][j] = -sin%s(angle);\n", type_suffix);
+        fprintf(stream, INDENT "R.M[j][i] = sin%s(angle);\n", type_suffix);
+        fprintf(stream, INDENT "R.M[j][j] = cos%s(angle);\n", type_suffix);
+    }
+    fprintf(stream, INDENT "return R;\n");
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
+void generate_mat_rotate(FILE *restrict stream, size_t dim, type_s type) {
+    if (dim > 4) {
+        return; // I don't see any use case for rotating high dimension
+                // matrices.
+    }
+    if (!(type == FLOAT_T || type == DOUBLE_T)) {
+        return; // trigonometric functions do not support integer values.
+    }
+    const char *mat_prefix = mat_prefix_name(dim, type);
+    const char *type_keyword = type_definitions[type].keyword;
+    const char *type_suffix = type == FLOAT_T ? "f" : "";
+    if (dim == 2) {
+        fprintf(stream, "LINALG_DEF %s_t %s_rotate(%s_t A, %s angle) {\n",
+                mat_prefix, mat_prefix, mat_prefix, type_keyword);
+        fprintf(stream, INDENT "A._11 *= cos%s(angle);\n", type_suffix);
+        fprintf(stream, INDENT "A._12 *= -sin%s(angle);\n", type_suffix);
+        fprintf(stream, INDENT "A._21 *= sin%s(angle);\n", type_suffix);
+        fprintf(stream, INDENT "A._22 *= cos%s(angle);\n", type_suffix);
+    } else {
+        // NOTE: I dont't see any use case for w-axis rotation of a 4x4
+        // matrix. Most of the time, the matrix the rotation is performed
+        // on is a transform matrix, so a w-axis rotation does not make sense.
+        fprintf(stream,
+                "LINALG_DEF %s_t %s_rotate(%s_t A, rotate_axis_s axis, %s "
+                "angle) {\n",
+                mat_prefix, mat_prefix, mat_prefix, type_keyword);
+        fprintf(stream, INDENT "size_t i = (axis + 1) %% 3;\n");
+        fprintf(stream, INDENT "size_t j = (axis + 2) %% 3;\n");
+        fprintf(stream, INDENT "A.M[i][i] *= cos%s(angle);\n", type_suffix);
+        fprintf(stream, INDENT "A.M[i][j] *= -sin%s(angle);\n", type_suffix);
+        fprintf(stream, INDENT "A.M[j][i] *= sin%s(angle);\n", type_suffix);
+        fprintf(stream, INDENT "A.M[j][j] *= cos%s(angle);\n", type_suffix);
+    }
+    fprintf(stream, INDENT "return A;\n");
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
+void generate_mat_transform_constructor(FILE *restrict stream, size_t dim,
+                                        type_s type) {
+    if (dim != 4) {
+        return;
+    }
+    if (!(type == FLOAT_T || type == DOUBLE_T)) {
+        return; // trigonometric functions do not support integer values.
+    }
+    const char *mat_prefix = mat_prefix_name(dim, type);
+    const char *type_keyword = type_definitions[type].keyword;
+    const char *type_suffix = type == FLOAT_T ? "f" : "";
+    fprintf(stream, "LINALG_DEF %s_t %s_T(rotate_axis_s axis, %s angle) {\n",
+            mat_prefix, mat_prefix, type_keyword);
+    fprintf(stream, INDENT "%s_t T = {0};\n", mat_prefix);
+    fprintf(stream, INDENT "size_t i = (axis + 1) %% 3;\n");
+    fprintf(stream, INDENT "size_t j = (axis + 2) %% 3;\n");
+    fprintf(stream, INDENT "T.M[i][i] = cos%s(angle);\n", type_suffix);
+    fprintf(stream, INDENT "T.M[i][j] = -sin%s(angle);\n", type_suffix);
+    fprintf(stream, INDENT "T.M[j][i] = sin%s(angle);\n", type_suffix);
+    fprintf(stream, INDENT "T.M[j][j] = cos%s(angle);\n", type_suffix);
+    fprintf(stream, INDENT "T.M[2][2] = 1;\n");
+    fprintf(stream, INDENT "return T;\n");
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
 int main() {
     generate_head(stdout);
     for (size_t dim = VEC_MIN_SIZE; dim <= VEC_MAX_SIZE; ++dim) {
@@ -726,7 +836,8 @@ int main() {
 
     // NOTES:
     // - Constructors with math syntax only support up to 4 components;
-    // - For matrices, I think higher dimension constructors add an unnecessary
+    // - For matrices, I think higher dimension constructors add an
+    // unnecessary
     //   amount of bloat in the library.
     size_t max_supported_constructor_dim = VEC_MAX_SIZE < 4 ? VEC_MAX_SIZE : 4;
     for (size_t dim = VEC_MIN_SIZE; dim <= max_supported_constructor_dim;
@@ -735,9 +846,12 @@ int main() {
             generate_vec_constructor(stdout, dim, type);
             generate_vec_scalar_constructor(stdout, dim, type);
             // NOTE: there are no matrix constructor generated, because the
-            // number of possible ways to specify the parameters is too high.
+            // number of possible ways to specify the parameters is too
+            // high.
             generate_mat_zero_constructor(stdout, dim, type);
             generate_mat_identity_constructor(stdout, dim, type);
+            generate_mat_rotation_constructor(stdout, dim, type);
+            generate_mat_transform_constructor(stdout, dim, type);
         }
     }
 
@@ -761,6 +875,7 @@ int main() {
             generate_vec_angle_between(stdout, dim, type);
             generate_mat_mul(stdout, dim, type);
             generate_mat_mul_by_vec(stdout, dim, type);
+            generate_mat_rotate(stdout, dim, type);
         }
     }
 
@@ -774,7 +889,7 @@ int main() {
 }
 
 // Ideas for additional features:
-// - Implement rotation function (+ rotation matrices constructors);
+// - Implement transform function;
 // - Implement variadic matrix multiplication;
 // - Add support for non-square matrices (definitions, zero, mul, mul_vec);
 // - Implement integer lerping;
@@ -782,6 +897,7 @@ int main() {
 // - Implement for size casting (downsizing first, then upsizing);
 // - Add support for rudimentary (hard-coded) swizzling (?);
 // - Add support for swizzling using parsing macro (?);
-// - Add support for type generic operations and functions (C23< first, maybe
-// C99);
-// - Print statistics (loc generated, number of functions for each type, etc.).
+// - Add support for type generic operations and functions (C23< first,
+// maybe C99);
+// - Print statistics (loc generated, number of functions for each type,
+// etc.).
