@@ -730,7 +730,7 @@ LINALG_DEF float vec2f_cross(vec2f_t a, vec2f_t b) {
     return a.x * b.y - a.y * b.x;
 }
 
-LINALG_DEF float vec2f_mag_squared(vec2f_t v) { return vec2f_dot(v, v); }
+LINALG_DEF float vec2f_sqrlen(vec2f_t v) { return vec2f_dot(v, v); }
 
 LINALG_DEF float vec2f_1norm(vec2f_t v) {
     v = vec2f_abs(v);
@@ -740,7 +740,7 @@ LINALG_DEF float vec2f_1norm(vec2f_t v) {
     return norm;
 }
 
-LINALG_DEF float vec2f_2norm(vec2f_t v) { return sqrtf(vec2f_mag_squared(v)); }
+LINALG_DEF float vec2f_2norm(vec2f_t v) { return sqrtf(vec2f_sqrlen(v)); }
 
 LINALG_DEF vec2f_t vec2f_unit(vec2f_t v) {
     return vec2f_div(v, vec2f_splat(vec2f_2norm(v)));
@@ -903,7 +903,7 @@ LINALG_DEF double vec2d_cross(vec2d_t a, vec2d_t b) {
     return a.x * b.y - a.y * b.x;
 }
 
-LINALG_DEF double vec2d_mag_squared(vec2d_t v) { return vec2d_dot(v, v); }
+LINALG_DEF double vec2d_sqrlen(vec2d_t v) { return vec2d_dot(v, v); }
 
 LINALG_DEF double vec2d_1norm(vec2d_t v) {
     v = vec2d_abs(v);
@@ -913,7 +913,7 @@ LINALG_DEF double vec2d_1norm(vec2d_t v) {
     return norm;
 }
 
-LINALG_DEF double vec2d_2norm(vec2d_t v) { return sqrt(vec2d_mag_squared(v)); }
+LINALG_DEF double vec2d_2norm(vec2d_t v) { return sqrt(vec2d_sqrlen(v)); }
 
 LINALG_DEF vec2d_t vec2d_unit(vec2d_t v) {
     return vec2d_div(v, vec2d_splat(vec2d_2norm(v)));
@@ -1056,7 +1056,7 @@ LINALG_DEF int vec2i_cross(vec2i_t a, vec2i_t b) {
     return a.x * b.y - a.y * b.x;
 }
 
-LINALG_DEF int vec2i_mag_squared(vec2i_t v) { return vec2i_dot(v, v); }
+LINALG_DEF int vec2i_sqrlen(vec2i_t v) { return vec2i_dot(v, v); }
 
 LINALG_DEF int vec2i_1norm(vec2i_t v) {
     v = vec2i_abs(v);
@@ -1168,7 +1168,7 @@ LINALG_DEF unsigned int vec2u_cross(vec2u_t a, vec2u_t b) {
     return a.x * b.y - a.y * b.x;
 }
 
-LINALG_DEF unsigned int vec2u_mag_squared(vec2u_t v) { return vec2u_dot(v, v); }
+LINALG_DEF unsigned int vec2u_sqrlen(vec2u_t v) { return vec2u_dot(v, v); }
 
 LINALG_DEF unsigned int vec2u_1norm(vec2u_t v) {
     unsigned int norm = 0;
@@ -1319,7 +1319,7 @@ LINALG_DEF vec3f_t vec3f_cross(vec3f_t a, vec3f_t b) {
     return result;
 }
 
-LINALG_DEF float vec3f_mag_squared(vec3f_t v) { return vec3f_dot(v, v); }
+LINALG_DEF float vec3f_sqrlen(vec3f_t v) { return vec3f_dot(v, v); }
 
 LINALG_DEF float vec3f_1norm(vec3f_t v) {
     v = vec3f_abs(v);
@@ -1330,7 +1330,7 @@ LINALG_DEF float vec3f_1norm(vec3f_t v) {
     return norm;
 }
 
-LINALG_DEF float vec3f_2norm(vec3f_t v) { return sqrtf(vec3f_mag_squared(v)); }
+LINALG_DEF float vec3f_2norm(vec3f_t v) { return sqrtf(vec3f_sqrlen(v)); }
 
 LINALG_DEF vec3f_t vec3f_unit(vec3f_t v) {
     return vec3f_div(v, vec3f_splat(vec3f_2norm(v)));
@@ -1520,7 +1520,7 @@ LINALG_DEF vec3d_t vec3d_cross(vec3d_t a, vec3d_t b) {
     return result;
 }
 
-LINALG_DEF double vec3d_mag_squared(vec3d_t v) { return vec3d_dot(v, v); }
+LINALG_DEF double vec3d_sqrlen(vec3d_t v) { return vec3d_dot(v, v); }
 
 LINALG_DEF double vec3d_1norm(vec3d_t v) {
     v = vec3d_abs(v);
@@ -1531,7 +1531,7 @@ LINALG_DEF double vec3d_1norm(vec3d_t v) {
     return norm;
 }
 
-LINALG_DEF double vec3d_2norm(vec3d_t v) { return sqrt(vec3d_mag_squared(v)); }
+LINALG_DEF double vec3d_2norm(vec3d_t v) { return sqrt(vec3d_sqrlen(v)); }
 
 LINALG_DEF vec3d_t vec3d_unit(vec3d_t v) {
     return vec3d_div(v, vec3d_splat(vec3d_2norm(v)));
@@ -1700,7 +1700,7 @@ LINALG_DEF vec3i_t vec3i_cross(vec3i_t a, vec3i_t b) {
     return result;
 }
 
-LINALG_DEF int vec3i_mag_squared(vec3i_t v) { return vec3i_dot(v, v); }
+LINALG_DEF int vec3i_sqrlen(vec3i_t v) { return vec3i_dot(v, v); }
 
 LINALG_DEF int vec3i_1norm(vec3i_t v) {
     v = vec3i_abs(v);
@@ -1831,7 +1831,7 @@ LINALG_DEF vec3u_t vec3u_cross(vec3u_t a, vec3u_t b) {
     return result;
 }
 
-LINALG_DEF unsigned int vec3u_mag_squared(vec3u_t v) { return vec3u_dot(v, v); }
+LINALG_DEF unsigned int vec3u_sqrlen(vec3u_t v) { return vec3u_dot(v, v); }
 
 LINALG_DEF unsigned int vec3u_1norm(vec3u_t v) {
     unsigned int norm = 0;
@@ -1993,7 +1993,7 @@ LINALG_DEF float vec4f_dot(vec4f_t a, vec4f_t b) {
     return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
-LINALG_DEF float vec4f_mag_squared(vec4f_t v) { return vec4f_dot(v, v); }
+LINALG_DEF float vec4f_sqrlen(vec4f_t v) { return vec4f_dot(v, v); }
 
 LINALG_DEF float vec4f_1norm(vec4f_t v) {
     v = vec4f_abs(v);
@@ -2005,7 +2005,7 @@ LINALG_DEF float vec4f_1norm(vec4f_t v) {
     return norm;
 }
 
-LINALG_DEF float vec4f_2norm(vec4f_t v) { return sqrtf(vec4f_mag_squared(v)); }
+LINALG_DEF float vec4f_2norm(vec4f_t v) { return sqrtf(vec4f_sqrlen(v)); }
 
 LINALG_DEF vec4f_t vec4f_unit(vec4f_t v) {
     return vec4f_div(v, vec4f_splat(vec4f_2norm(v)));
@@ -2204,7 +2204,7 @@ LINALG_DEF double vec4d_dot(vec4d_t a, vec4d_t b) {
     return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
-LINALG_DEF double vec4d_mag_squared(vec4d_t v) { return vec4d_dot(v, v); }
+LINALG_DEF double vec4d_sqrlen(vec4d_t v) { return vec4d_dot(v, v); }
 
 LINALG_DEF double vec4d_1norm(vec4d_t v) {
     v = vec4d_abs(v);
@@ -2216,7 +2216,7 @@ LINALG_DEF double vec4d_1norm(vec4d_t v) {
     return norm;
 }
 
-LINALG_DEF double vec4d_2norm(vec4d_t v) { return sqrt(vec4d_mag_squared(v)); }
+LINALG_DEF double vec4d_2norm(vec4d_t v) { return sqrt(vec4d_sqrlen(v)); }
 
 LINALG_DEF vec4d_t vec4d_unit(vec4d_t v) {
     return vec4d_div(v, vec4d_splat(vec4d_2norm(v)));
@@ -2391,7 +2391,7 @@ LINALG_DEF int vec4i_dot(vec4i_t a, vec4i_t b) {
     return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
-LINALG_DEF int vec4i_mag_squared(vec4i_t v) { return vec4i_dot(v, v); }
+LINALG_DEF int vec4i_sqrlen(vec4i_t v) { return vec4i_dot(v, v); }
 
 LINALG_DEF int vec4i_1norm(vec4i_t v) {
     v = vec4i_abs(v);
@@ -2531,7 +2531,7 @@ LINALG_DEF unsigned int vec4u_dot(vec4u_t a, vec4u_t b) {
     return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
-LINALG_DEF unsigned int vec4u_mag_squared(vec4u_t v) { return vec4u_dot(v, v); }
+LINALG_DEF unsigned int vec4u_sqrlen(vec4u_t v) { return vec4u_dot(v, v); }
 
 LINALG_DEF unsigned int vec4u_1norm(vec4u_t v) {
     unsigned int norm = 0;

@@ -507,9 +507,9 @@ void generate_vec_dot(FILE *restrict stream, size_t dim, type_s type) {
     EMPTY_LINE(stream);
 }
 
-void generate_vec_mag_squared(FILE *restrict stream, size_t dim, type_s type) {
+void generate_vec_sqrlen(FILE *restrict stream, size_t dim, type_s type) {
     const char *vec_type = vec_type_name(dim, type);
-    const char *vec_fn = vec_fn_name(dim, type, "mag_squared");
+    const char *vec_fn = vec_fn_name(dim, type, "sqrlen");
     const char *vec_prefix = vec_prefix_name(dim, type);
     const char *type_keyword = type_definitions[type].keyword;
     fprintf(stream, "LINALG_DEF %s %s(%s v) {\n", type_keyword, vec_fn,
@@ -560,7 +560,7 @@ void generate_vec_2norm(FILE *restrict stream, size_t dim, type_s type) {
     const char *type_keyword = type_definitions[type].keyword;
     fprintf(stream, "LINALG_DEF %s %s(%s v) {\n", type_keyword, vec_fn,
             vec_type);
-    fprintf(stream, INDENT "return sqrt%s(%s_mag_squared(v));\n",
+    fprintf(stream, INDENT "return sqrt%s(%s_sqrlen(v));\n",
             type == FLOAT_T ? "f" : "", vec_prefix);
     fprintf(stream, "}\n");
     EMPTY_LINE(stream);
@@ -932,7 +932,7 @@ int main() {
             }
             generate_vec_dot(stdout, dim, type);
             generate_vec_cross(stdout, dim, type);
-            generate_vec_mag_squared(stdout, dim, type);
+            generate_vec_sqrlen(stdout, dim, type);
             generate_vec_1norm(stdout, dim, type);
             generate_vec_2norm(stdout, dim, type);
             generate_vec_unit(stdout, dim, type);
