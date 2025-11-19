@@ -756,6 +756,21 @@ void generate_mat_scalar_constructor(FILE *restrict stream, size_t dim,
     EMPTY_LINE(stream);
 }
 
+void generate_mat_diag_constructor(FILE *restrict stream, size_t dim,
+                                   type_s type) {
+    const char *mat_prefix = mat_prefix_name(dim, type);
+    const char *type_suffix = type_definitions[type].suffix;
+    fprintf(stream, "LINALG_DEF %s_t %s_diag(%s_t diag) {\n", mat_prefix,
+            mat_prefix, vec_prefix_name(dim, type));
+    fprintf(stream, INDENT "%s_t M = {0};\n", mat_prefix);
+    for (size_t i = 0; i < dim; ++i) {
+        fprintf(stream, INDENT "M._%zu%zu = diag.e[%zu];\n", i + 1, i + 1, i);
+    }
+    fprintf(stream, INDENT "return M;\n");
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
 void generate_mat_mul(FILE *restrict stream, size_t dim, type_s type) {
     const char *mat_prefix = mat_prefix_name(dim, type);
     fprintf(stream, "LINALG_DEF %s_t %s_mul(%s_t A, %s_t B) {\n", mat_prefix,
@@ -946,6 +961,7 @@ int main() {
             generate_mat_zero_constructor(stdout, dim, type);
             generate_mat_identity_constructor(stdout, dim, type);
             generate_mat_scalar_constructor(stdout, dim, type);
+            generate_mat_diag_constructor(stdout, dim, type);
             generate_mat_rotation_constructor(stdout, dim, type);
             generate_mat_transform_constructor(stdout, dim, type);
         }

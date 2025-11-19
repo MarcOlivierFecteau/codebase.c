@@ -294,6 +294,13 @@ LINALG_DEF mat2f_t mat2f_splat(float x) {
     return M;
 }
 
+LINALG_DEF mat2f_t mat2f_diag(vec2f_t diag) {
+    mat2f_t M = {0};
+    M._11 = diag.e[0];
+    M._22 = diag.e[1];
+    return M;
+}
+
 LINALG_DEF mat2f_t mat2f_R(float angle) {
     mat2f_t R;
     R._11 = cosf(angle);
@@ -329,6 +336,13 @@ LINALG_DEF mat2d_t mat2d_splat(double x) {
     mat2d_t M = {0};
     M._11 = x;
     M._22 = x;
+    return M;
+}
+
+LINALG_DEF mat2d_t mat2d_diag(vec2d_t diag) {
+    mat2d_t M = {0};
+    M._11 = diag.e[0];
+    M._22 = diag.e[1];
     return M;
 }
 
@@ -370,6 +384,13 @@ LINALG_DEF mat2i_t mat2i_splat(int x) {
     return M;
 }
 
+LINALG_DEF mat2i_t mat2i_diag(vec2i_t diag) {
+    mat2i_t M = {0};
+    M._11 = diag.e[0];
+    M._22 = diag.e[1];
+    return M;
+}
+
 LINALG_DEF vec2u_t vec2u(unsigned int x, unsigned int y) {
     vec2u_t v = {{x, y}};
     return v;
@@ -396,6 +417,13 @@ LINALG_DEF mat2u_t mat2u_splat(unsigned int x) {
     mat2u_t M = {0};
     M._11 = x;
     M._22 = x;
+    return M;
+}
+
+LINALG_DEF mat2u_t mat2u_diag(vec2u_t diag) {
+    mat2u_t M = {0};
+    M._11 = diag.e[0];
+    M._22 = diag.e[1];
     return M;
 }
 
@@ -427,6 +455,14 @@ LINALG_DEF mat3f_t mat3f_splat(float x) {
     M._11 = x;
     M._22 = x;
     M._33 = x;
+    return M;
+}
+
+LINALG_DEF mat3f_t mat3f_diag(vec3f_t diag) {
+    mat3f_t M = {0};
+    M._11 = diag.e[0];
+    M._22 = diag.e[1];
+    M._33 = diag.e[2];
     return M;
 }
 
@@ -472,6 +508,14 @@ LINALG_DEF mat3d_t mat3d_splat(double x) {
     return M;
 }
 
+LINALG_DEF mat3d_t mat3d_diag(vec3d_t diag) {
+    mat3d_t M = {0};
+    M._11 = diag.e[0];
+    M._22 = diag.e[1];
+    M._33 = diag.e[2];
+    return M;
+}
+
 LINALG_DEF mat3d_t mat3d_R(rotate_axis_s axis, double angle) {
     mat3d_t R = {0};
     size_t i = (axis + 1) % 3;
@@ -514,6 +558,14 @@ LINALG_DEF mat3i_t mat3i_splat(int x) {
     return M;
 }
 
+LINALG_DEF mat3i_t mat3i_diag(vec3i_t diag) {
+    mat3i_t M = {0};
+    M._11 = diag.e[0];
+    M._22 = diag.e[1];
+    M._33 = diag.e[2];
+    return M;
+}
+
 LINALG_DEF vec3u_t vec3u(unsigned int x, unsigned int y, unsigned int z) {
     vec3u_t v = {{x, y, z}};
     return v;
@@ -542,6 +594,14 @@ LINALG_DEF mat3u_t mat3u_splat(unsigned int x) {
     M._11 = x;
     M._22 = x;
     M._33 = x;
+    return M;
+}
+
+LINALG_DEF mat3u_t mat3u_diag(vec3u_t diag) {
+    mat3u_t M = {0};
+    M._11 = diag.e[0];
+    M._22 = diag.e[1];
+    M._33 = diag.e[2];
     return M;
 }
 
@@ -575,6 +635,15 @@ LINALG_DEF mat4f_t mat4f_splat(float x) {
     M._22 = x;
     M._33 = x;
     M._44 = x;
+    return M;
+}
+
+LINALG_DEF mat4f_t mat4f_diag(vec4f_t diag) {
+    mat4f_t M = {0};
+    M._11 = diag.e[0];
+    M._22 = diag.e[1];
+    M._33 = diag.e[2];
+    M._44 = diag.e[3];
     return M;
 }
 
@@ -634,6 +703,15 @@ LINALG_DEF mat4d_t mat4d_splat(double x) {
     return M;
 }
 
+LINALG_DEF mat4d_t mat4d_diag(vec4d_t diag) {
+    mat4d_t M = {0};
+    M._11 = diag.e[0];
+    M._22 = diag.e[1];
+    M._33 = diag.e[2];
+    M._44 = diag.e[3];
+    return M;
+}
+
 LINALG_DEF mat4d_t mat4d_R(rotate_axis_s axis, double angle) {
     mat4d_t R = {0};
     size_t i = (axis + 1) % 3;
@@ -690,6 +768,15 @@ LINALG_DEF mat4i_t mat4i_splat(int x) {
     return M;
 }
 
+LINALG_DEF mat4i_t mat4i_diag(vec4i_t diag) {
+    mat4i_t M = {0};
+    M._11 = diag.e[0];
+    M._22 = diag.e[1];
+    M._33 = diag.e[2];
+    M._44 = diag.e[3];
+    return M;
+}
+
 LINALG_DEF vec4u_t vec4u(unsigned int x, unsigned int y, unsigned int z,
                          unsigned int w) {
     vec4u_t v = {{x, y, z, w}};
@@ -721,6 +808,15 @@ LINALG_DEF mat4u_t mat4u_splat(unsigned int x) {
     M._22 = x;
     M._33 = x;
     M._44 = x;
+    return M;
+}
+
+LINALG_DEF mat4u_t mat4u_diag(vec4u_t diag) {
+    mat4u_t M = {0};
+    M._11 = diag.e[0];
+    M._22 = diag.e[1];
+    M._33 = diag.e[2];
+    M._44 = diag.e[3];
     return M;
 }
 
