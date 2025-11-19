@@ -433,7 +433,6 @@ void generate_vec_function(FILE *restrict stream, size_t dim, type_s type,
     assert(fn.arity > 0);
     const char *vec_type = vec_type_name(dim, type);
     const char *vec_fn = vec_fn_name(dim, type, fn.name);
-    const char *type_keyword = type_definitions[type].keyword;
     const char *fn_name = fn.generic_selection[type];
     fprintf(stream, "LINALG_DEF %s %s(", vec_type, vec_fn);
     for (size_t param = 0; param < fn.arity; ++param) {
@@ -744,7 +743,6 @@ void generate_mat_identity_constructor(FILE *restrict stream, size_t dim,
 void generate_mat_scalar_constructor(FILE *restrict stream, size_t dim,
                                      type_s type) {
     const char *mat_prefix = mat_prefix_name(dim, type);
-    const char *type_suffix = type_definitions[type].suffix;
     fprintf(stream, "LINALG_DEF %s_t %s_splat(%s x) {\n", mat_prefix,
             mat_prefix, type_definitions[type].keyword);
     fprintf(stream, INDENT "%s_t M = {0};\n", mat_prefix);
@@ -759,7 +757,6 @@ void generate_mat_scalar_constructor(FILE *restrict stream, size_t dim,
 void generate_mat_diag_constructor(FILE *restrict stream, size_t dim,
                                    type_s type) {
     const char *mat_prefix = mat_prefix_name(dim, type);
-    const char *type_suffix = type_definitions[type].suffix;
     fprintf(stream, "LINALG_DEF %s_t %s_diag(%s_t diag) {\n", mat_prefix,
             mat_prefix, vec_prefix_name(dim, type));
     fprintf(stream, INDENT "%s_t M = {0};\n", mat_prefix);
