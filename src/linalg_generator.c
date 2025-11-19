@@ -12,9 +12,9 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#define VEC_MIN_SIZE 2
-#define VEC_MAX_SIZE 4
-static_assert(VEC_MIN_SIZE <= VEC_MAX_SIZE, "Empty set of vector sizes.");
+#define MIN_DIM 2
+#define MAX_DIM 4
+static_assert(MIN_DIM <= MAX_DIM, "Empty set of dimensions.");
 
 #define INDENT "    "
 #define EMPTY_LINE(stream) fprintf(stream, "\n")
@@ -890,9 +890,28 @@ void generate_mat_transform_constructor(FILE *restrict stream, size_t dim,
     EMPTY_LINE(stream);
 }
 
+void generate_mat_variadic_mul(FILE *restrict stream, size_t dim, type_s type) {
+    const char *mat_prefix = mat_prefix_name(dim, type);
+    const char *result_name = "product";
+    fprintf(stream, "LINALG_DEF %s_t %s_nmul(size_t n, ...) {\n", mat_prefix,
+            mat_prefix);
+    fprintf(stream, INDENT "va_list args;\n");
+    fprintf(stream, INDENT "va_start(args, n);\n");
+    fprintf(stream, "%s_t %s = %s_I();\n", mat_prefix, result_name, mat_prefix);
+    fprintf(stream, INDENT "for (size_t i = 0; i < n; ++i) {\n");
+    fprintf(stream, INDENT INDENT "%s_t A = va_arg(args, %s_t);\n", mat_prefix,
+            mat_prefix);
+    fprintf(stream, INDENT INDENT "%s = %s_mul(%s, A);\n", result_name,
+            mat_prefix, result_name);
+    fprintf(stream, INDENT "}\n");
+    fprintf(stream, INDENT "return %s;\n", result_name);
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
 int main() {
     generate_head(stdout);
-    for (size_t dim = VEC_MIN_SIZE; dim <= VEC_MAX_SIZE; ++dim) {
+    for (size_t dim = MIN_DIM; dim <= MAX_DIM; ++dim) {
         for (size_t type = 0; type < NUM_TYPES; ++type) {
             generate_vec_definition(stdout, dim, type);
             generate_mat_definition(stdout, dim, type);
@@ -904,7 +923,7 @@ int main() {
     // - For matrices, I think higher dimension constructors add an
     // unnecessary
     //   amount of bloat in the library.
-    for (size_t dim = VEC_MIN_SIZE; dim <= VEC_MAX_SIZE; ++dim) {
+    for (size_t dim = MIN_DIM; dim <= MAX_DIM; ++dim) {
         for (size_t type = 0; type < NUM_TYPES; ++type) {
             generate_vec_constructor(stdout, dim, type);
             generate_vec_scalar_constructor(stdout, dim, type);
@@ -918,7 +937,7 @@ int main() {
         }
     }
 
-    for (size_t dim = VEC_MIN_SIZE; dim <= VEC_MAX_SIZE; ++dim) {
+    for (size_t dim = MIN_DIM; dim <= MAX_DIM; ++dim) {
         for (size_t type = 0; type < NUM_TYPES; ++type) {
             for (size_t op = 0; op < NUM_OPS; ++op) {
                 generate_vec_operation(stdout, dim, type, op);
@@ -941,6 +960,7 @@ int main() {
             generate_vec_direction(stdout, dim, type);
             generate_vec_angle_between(stdout, dim, type);
             generate_mat_mul(stdout, dim, type);
+            generate_mat_variadic_mul(stdout, dim, type);
             generate_mat_mul_by_vec(stdout, dim, type);
             generate_mat_rotate(stdout, dim, type);
         }

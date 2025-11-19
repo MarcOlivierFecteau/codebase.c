@@ -786,6 +786,17 @@ LINALG_DEF mat2f_t mat2f_mul(mat2f_t A, mat2f_t B) {
     return result;
 }
 
+LINALG_DEF mat2f_t mat2f_nmul(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    mat2f_t product = mat2f_I();
+    for (size_t i = 0; i < n; ++i) {
+        mat2f_t A = va_arg(args, mat2f_t);
+        product = mat2f_mul(product, A);
+    }
+    return product;
+}
+
 LINALG_DEF vec2f_t mat2f_mul_vec(mat2f_t M, vec2f_t v) {
     vec2f_t result;
     result.x = vec2f_dot(M.v[0], v);
@@ -959,6 +970,17 @@ LINALG_DEF mat2d_t mat2d_mul(mat2d_t A, mat2d_t B) {
     return result;
 }
 
+LINALG_DEF mat2d_t mat2d_nmul(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    mat2d_t product = mat2d_I();
+    for (size_t i = 0; i < n; ++i) {
+        mat2d_t A = va_arg(args, mat2d_t);
+        product = mat2d_mul(product, A);
+    }
+    return product;
+}
+
 LINALG_DEF vec2d_t mat2d_mul_vec(mat2d_t M, vec2d_t v) {
     vec2d_t result;
     result.x = vec2d_dot(M.v[0], v);
@@ -1083,6 +1105,17 @@ LINALG_DEF mat2i_t mat2i_mul(mat2i_t A, mat2i_t B) {
     return result;
 }
 
+LINALG_DEF mat2i_t mat2i_nmul(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    mat2i_t product = mat2i_I();
+    for (size_t i = 0; i < n; ++i) {
+        mat2i_t A = va_arg(args, mat2i_t);
+        product = mat2i_mul(product, A);
+    }
+    return product;
+}
+
 LINALG_DEF vec2i_t mat2i_mul_vec(mat2i_t M, vec2i_t v) {
     vec2i_t result;
     result.x = vec2i_dot(M.v[0], v);
@@ -1192,6 +1225,17 @@ LINALG_DEF mat2u_t mat2u_mul(mat2u_t A, mat2u_t B) {
     result._21 = A._21 * B._11 + A._22 * B._21;
     result._22 = A._21 * B._12 + A._22 * B._22;
     return result;
+}
+
+LINALG_DEF mat2u_t mat2u_nmul(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    mat2u_t product = mat2u_I();
+    for (size_t i = 0; i < n; ++i) {
+        mat2u_t A = va_arg(args, mat2u_t);
+        product = mat2u_mul(product, A);
+    }
+    return product;
 }
 
 LINALG_DEF vec2u_t mat2u_mul_vec(mat2u_t M, vec2u_t v) {
@@ -1382,6 +1426,17 @@ LINALG_DEF mat3f_t mat3f_mul(mat3f_t A, mat3f_t B) {
     result._32 = A._31 * B._12 + A._32 * B._22 + A._33 * B._32;
     result._33 = A._31 * B._13 + A._32 * B._23 + A._33 * B._33;
     return result;
+}
+
+LINALG_DEF mat3f_t mat3f_nmul(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    mat3f_t product = mat3f_I();
+    for (size_t i = 0; i < n; ++i) {
+        mat3f_t A = va_arg(args, mat3f_t);
+        product = mat3f_mul(product, A);
+    }
+    return product;
 }
 
 LINALG_DEF vec3f_t mat3f_mul_vec(mat3f_t M, vec3f_t v) {
@@ -1585,6 +1640,17 @@ LINALG_DEF mat3d_t mat3d_mul(mat3d_t A, mat3d_t B) {
     return result;
 }
 
+LINALG_DEF mat3d_t mat3d_nmul(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    mat3d_t product = mat3d_I();
+    for (size_t i = 0; i < n; ++i) {
+        mat3d_t A = va_arg(args, mat3d_t);
+        product = mat3d_mul(product, A);
+    }
+    return product;
+}
+
 LINALG_DEF vec3d_t mat3d_mul_vec(mat3d_t M, vec3d_t v) {
     vec3d_t result;
     result.x = vec3d_dot(M.v[0], v);
@@ -1733,6 +1799,17 @@ LINALG_DEF mat3i_t mat3i_mul(mat3i_t A, mat3i_t B) {
     return result;
 }
 
+LINALG_DEF mat3i_t mat3i_nmul(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    mat3i_t product = mat3i_I();
+    for (size_t i = 0; i < n; ++i) {
+        mat3i_t A = va_arg(args, mat3i_t);
+        product = mat3i_mul(product, A);
+    }
+    return product;
+}
+
 LINALG_DEF vec3i_t mat3i_mul_vec(mat3i_t M, vec3i_t v) {
     vec3i_t result;
     result.x = vec3i_dot(M.v[0], v);
@@ -1861,6 +1938,17 @@ LINALG_DEF mat3u_t mat3u_mul(mat3u_t A, mat3u_t B) {
     result._32 = A._31 * B._12 + A._32 * B._22 + A._33 * B._32;
     result._33 = A._31 * B._13 + A._32 * B._23 + A._33 * B._33;
     return result;
+}
+
+LINALG_DEF mat3u_t mat3u_nmul(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    mat3u_t product = mat3u_I();
+    for (size_t i = 0; i < n; ++i) {
+        mat3u_t A = va_arg(args, mat3u_t);
+        product = mat3u_mul(product, A);
+    }
+    return product;
 }
 
 LINALG_DEF vec3u_t mat3u_mul_vec(mat3u_t M, vec3u_t v) {
@@ -2061,6 +2149,17 @@ LINALG_DEF mat4f_t mat4f_mul(mat4f_t A, mat4f_t B) {
     result._43 = A._41 * B._13 + A._42 * B._23 + A._43 * B._33 + A._44 * B._43;
     result._44 = A._41 * B._14 + A._42 * B._24 + A._43 * B._34 + A._44 * B._44;
     return result;
+}
+
+LINALG_DEF mat4f_t mat4f_nmul(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    mat4f_t product = mat4f_I();
+    for (size_t i = 0; i < n; ++i) {
+        mat4f_t A = va_arg(args, mat4f_t);
+        product = mat4f_mul(product, A);
+    }
+    return product;
 }
 
 LINALG_DEF vec4f_t mat4f_mul_vec(mat4f_t M, vec4f_t v) {
@@ -2274,6 +2373,17 @@ LINALG_DEF mat4d_t mat4d_mul(mat4d_t A, mat4d_t B) {
     return result;
 }
 
+LINALG_DEF mat4d_t mat4d_nmul(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    mat4d_t product = mat4d_I();
+    for (size_t i = 0; i < n; ++i) {
+        mat4d_t A = va_arg(args, mat4d_t);
+        product = mat4d_mul(product, A);
+    }
+    return product;
+}
+
 LINALG_DEF vec4d_t mat4d_mul_vec(mat4d_t M, vec4d_t v) {
     vec4d_t result;
     result.x = vec4d_dot(M.v[0], v);
@@ -2432,6 +2542,17 @@ LINALG_DEF mat4i_t mat4i_mul(mat4i_t A, mat4i_t B) {
     return result;
 }
 
+LINALG_DEF mat4i_t mat4i_nmul(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    mat4i_t product = mat4i_I();
+    for (size_t i = 0; i < n; ++i) {
+        mat4i_t A = va_arg(args, mat4i_t);
+        product = mat4i_mul(product, A);
+    }
+    return product;
+}
+
 LINALG_DEF vec4i_t mat4i_mul_vec(mat4i_t M, vec4i_t v) {
     vec4i_t result;
     result.x = vec4i_dot(M.v[0], v);
@@ -2569,6 +2690,17 @@ LINALG_DEF mat4u_t mat4u_mul(mat4u_t A, mat4u_t B) {
     result._43 = A._41 * B._13 + A._42 * B._23 + A._43 * B._33 + A._44 * B._43;
     result._44 = A._41 * B._14 + A._42 * B._24 + A._43 * B._34 + A._44 * B._44;
     return result;
+}
+
+LINALG_DEF mat4u_t mat4u_nmul(size_t n, ...) {
+    va_list args;
+    va_start(args, n);
+    mat4u_t product = mat4u_I();
+    for (size_t i = 0; i < n; ++i) {
+        mat4u_t A = va_arg(args, mat4u_t);
+        product = mat4u_mul(product, A);
+    }
+    return product;
 }
 
 LINALG_DEF vec4u_t mat4u_mul_vec(mat4u_t M, vec4u_t v) {
