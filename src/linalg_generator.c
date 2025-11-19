@@ -238,7 +238,7 @@ void generate_head(FILE *restrict stream) {
     fprintf(stream, "#ifndef LINALG_H\n");
     fprintf(stream, "#define LINALG_H\n");
     EMPTY_LINE(stream);
-    fprintf(stream, "#include \"src/common_math.h\"\n");
+    fprintf(stream, "#include \"src/maths.h\"\n");
 #ifdef USE_TYPEDEFS
     fprintf(stream, "#include \"src/typedefs.h\"\n");
 #endif // USE_TYPEDEFS
@@ -1005,9 +1005,9 @@ int main() {
 // Ideas for additional features:
 // - Implement matrix constructors with specified values;
 // - Add support for non-square matrices (definitions, zero, mul, mul_vec);
-// - Implement integer lerping;
+// - Implement integer lerping (handle `float t` elegantly);
 // - Implement type casting (same size);
-// - Implement for size casting (downsizing first, then upsizing);
+// - Implement size casting (downsizing first, then upsizing);
 // - Add support for rudimentary (hard-coded) swizzling (?);
 // - Add support for swizzling using parsing macro (?);
 // - Add support for type generic operations and functions (C23< first,

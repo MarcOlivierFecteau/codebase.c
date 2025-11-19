@@ -1,7 +1,7 @@
 #ifndef LINALG_H
 #define LINALG_H
 
-#include "src/common_math.h"
+#include "src/maths.h"
 #include <math.h>
 #include <stdarg.h>
 
