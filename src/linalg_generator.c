@@ -741,6 +741,21 @@ void generate_mat_identity_constructor(FILE *restrict stream, size_t dim,
     EMPTY_LINE(stream);
 }
 
+void generate_mat_scalar_constructor(FILE *restrict stream, size_t dim,
+                                     type_s type) {
+    const char *mat_prefix = mat_prefix_name(dim, type);
+    const char *type_suffix = type_definitions[type].suffix;
+    fprintf(stream, "LINALG_DEF %s_t %s_splat(%s x) {\n", mat_prefix,
+            mat_prefix, type_definitions[type].keyword);
+    fprintf(stream, INDENT "%s_t M = {0};\n", mat_prefix);
+    for (size_t i = 0; i < dim; ++i) {
+        fprintf(stream, INDENT "M._%zu%zu = x;\n", i + 1, i + 1);
+    }
+    fprintf(stream, INDENT "return M;\n");
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
 void generate_mat_mul(FILE *restrict stream, size_t dim, type_s type) {
     const char *mat_prefix = mat_prefix_name(dim, type);
     fprintf(stream, "LINALG_DEF %s_t %s_mul(%s_t A, %s_t B) {\n", mat_prefix,
@@ -919,10 +934,8 @@ int main() {
     }
 
     // NOTES:
-    // - Constructors with math syntax only support up to 4 components;
     // - For matrices, I think higher dimension constructors add an
-    // unnecessary
-    //   amount of bloat in the library.
+    //   unnecessary amount of bloat in the library.
     for (size_t dim = MIN_DIM; dim <= MAX_DIM; ++dim) {
         for (size_t type = 0; type < NUM_TYPES; ++type) {
             generate_vec_constructor(stdout, dim, type);
@@ -932,6 +945,7 @@ int main() {
             // parameters is too high.
             generate_mat_zero_constructor(stdout, dim, type);
             generate_mat_identity_constructor(stdout, dim, type);
+            generate_mat_scalar_constructor(stdout, dim, type);
             generate_mat_rotation_constructor(stdout, dim, type);
             generate_mat_transform_constructor(stdout, dim, type);
         }
@@ -976,7 +990,6 @@ int main() {
 }
 
 // Ideas for additional features:
-// - Implement variadic matrix multiplication;
 // - Implement matrix constructors with specified values;
 // - Add support for non-square matrices (definitions, zero, mul, mul_vec);
 // - Implement integer lerping;
@@ -992,3 +1005,4 @@ int main() {
 // - Implement transform function (axis, angle, translation).
 //   |- Could be implemented "in-place" to differentiate enough from transform
 //      constructor + matmul.
+// - Implement matrix-to-vector variadic multiplication (?);
