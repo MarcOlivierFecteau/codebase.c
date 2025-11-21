@@ -1,2 +1,11 @@
 CompileFlags:
-    Add: [-xc]
+    Add: [-xc, -std=c2x, -Wall, -Wextra, -pedantic, -Wno-unused-function, -Wno-unused-const-variable, -Isrc/]
+    Compiler: clang
+Style:
+    QuotedHeaders: "src/.*"
+Diagnostics:
+    Suppress: [-Wunused-function, -Wunused-const-variable, -Wmissing-includes]
+    UnusedIncludes: Strict
+    MissingIncludes: None
+Completion:
+    HeaderInsertion: Never

@@ -1,5 +1,4 @@
 CFLAGS = -Wall -Wextra -Wpedantic -std=c2x -Wno-unused-function -ggdb -Isrc/
-# CC = clang
 
 .PHONY: all
 all: linalg_generator generate_linalg linalg auto-format
