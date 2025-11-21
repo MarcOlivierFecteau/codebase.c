@@ -43,14 +43,12 @@ VARIA_DEF char *varia_temp_sprintf(const char *fmt, ...) {
     return result;
 }
 
-VARIA_DEF size_t varia_strlen(const char *s) {
-    size_t size = 0;
-    char c = s[size];
-    while (c != '\0') {
-        ++size;
-        c = s[size];
+VARIA_DEF size_t varia_strlen(const char str[static 1]) {
+    size_t len = 0;
+    while (*str++ != '\0') {
+        ++len;
     }
-    return size;
+    return len;
 }
 
 VARIA_DEF char *varia_strdup(const char *s) {
