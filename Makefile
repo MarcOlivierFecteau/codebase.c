@@ -17,6 +17,9 @@ linalg_generator: src/linalg_generator.c
 	$(CC) $(CFLAGS) src/linalg_generator.c -o $(BUILD_DIR)/generate_linalg
 	# $(CC) $(CFLAGS) -DUSE_TYPEDEFS src/linalg_generator.c -o generate_linalg
 
+tests: make_build_dir tests/test_char_type.c
+	$(CC) $(CFLAGS) tests/test_char_type.c -o $(BUILD_DIR)/test_char_type && ./build/test_char_type
+
 make_build_dir:
 	mkdir -p $(BUILD_DIR)
 

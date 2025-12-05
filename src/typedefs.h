@@ -1,12 +1,12 @@
 #ifndef TYPEDEFS_H
 #define TYPEDEFS_H
 
-#if (defined(__STDC_VERSION__) && __STDC_VERSION__ < 202000) &&                \
+#if defined(__STDC_VERSION__) && __STDC_VERSION__ < 202000L &&                 \
     !defined(__STDBOOL_H)
 typedef _Bool bool;
 #define true 1
 #define false 0
-#endif
+#endif // <C23 bool
 
 typedef signed char i8;
 typedef short i16;
