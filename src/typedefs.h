@@ -24,4 +24,12 @@ typedef long double f128;
 
 typedef u8 byte;
 
+typedef unsigned long uintptr_t; // NOTE: might be dangerous.
+
+// Better scope semantics
+#define global static
+#define local static
+
+#define UNUSED(x) (void)(x)
+
 #endif // TYPEDEFS_H
