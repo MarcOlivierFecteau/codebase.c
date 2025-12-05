@@ -996,6 +996,12 @@ LINALG_DEF vec2f_t mat2f_mul_vec(mat2f_t M, vec2f_t v) {
     return result;
 }
 
+LINALG_DEF mat2f_t mat2f_hadamard(mat2f_t A, mat2f_t B) {
+    A.e[0] *= B.e[0];
+    A.e[1] *= B.e[1];
+    return A;
+}
+
 LINALG_DEF mat2f_t mat2f_rotate(mat2f_t A, float angle) {
     A._11 *= cosf(angle);
     A._12 *= -sinf(angle);
@@ -1180,6 +1186,12 @@ LINALG_DEF vec2d_t mat2d_mul_vec(mat2d_t M, vec2d_t v) {
     return result;
 }
 
+LINALG_DEF mat2d_t mat2d_hadamard(mat2d_t A, mat2d_t B) {
+    A.e[0] *= B.e[0];
+    A.e[1] *= B.e[1];
+    return A;
+}
+
 LINALG_DEF mat2d_t mat2d_rotate(mat2d_t A, double angle) {
     A._11 *= cos(angle);
     A._12 *= -sin(angle);
@@ -1315,6 +1327,12 @@ LINALG_DEF vec2i_t mat2i_mul_vec(mat2i_t M, vec2i_t v) {
     return result;
 }
 
+LINALG_DEF mat2i_t mat2i_hadamard(mat2i_t A, mat2i_t B) {
+    A.e[0] *= B.e[0];
+    A.e[1] *= B.e[1];
+    return A;
+}
+
 LINALG_DEF vec2u_t vec2u_add(vec2u_t a, vec2u_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -1435,6 +1453,12 @@ LINALG_DEF vec2u_t mat2u_mul_vec(mat2u_t M, vec2u_t v) {
     result.x = vec2u_dot(M.v[0], v);
     result.y = vec2u_dot(M.v[1], v);
     return result;
+}
+
+LINALG_DEF mat2u_t mat2u_hadamard(mat2u_t A, mat2u_t B) {
+    A.e[0] *= B.e[0];
+    A.e[1] *= B.e[1];
+    return A;
 }
 
 LINALG_DEF vec3f_t vec3f_add(vec3f_t a, vec3f_t b) {
@@ -1637,6 +1661,13 @@ LINALG_DEF vec3f_t mat3f_mul_vec(mat3f_t M, vec3f_t v) {
     result.y = vec3f_dot(M.v[1], v);
     result.z = vec3f_dot(M.v[2], v);
     return result;
+}
+
+LINALG_DEF mat3f_t mat3f_hadamard(mat3f_t A, mat3f_t B) {
+    A.e[0] *= B.e[0];
+    A.e[1] *= B.e[1];
+    A.e[2] *= B.e[2];
+    return A;
 }
 
 LINALG_DEF mat3f_t mat3f_rotate(mat3f_t A, rotate_axis_s axis, float angle) {
@@ -1851,6 +1882,13 @@ LINALG_DEF vec3d_t mat3d_mul_vec(mat3d_t M, vec3d_t v) {
     return result;
 }
 
+LINALG_DEF mat3d_t mat3d_hadamard(mat3d_t A, mat3d_t B) {
+    A.e[0] *= B.e[0];
+    A.e[1] *= B.e[1];
+    A.e[2] *= B.e[2];
+    return A;
+}
+
 LINALG_DEF mat3d_t mat3d_rotate(mat3d_t A, rotate_axis_s axis, double angle) {
     size_t i = (axis + 1) % 3;
     size_t j = (axis + 2) % 3;
@@ -2010,6 +2048,13 @@ LINALG_DEF vec3i_t mat3i_mul_vec(mat3i_t M, vec3i_t v) {
     return result;
 }
 
+LINALG_DEF mat3i_t mat3i_hadamard(mat3i_t A, mat3i_t B) {
+    A.e[0] *= B.e[0];
+    A.e[1] *= B.e[1];
+    A.e[2] *= B.e[2];
+    return A;
+}
+
 LINALG_DEF vec3u_t vec3u_add(vec3u_t a, vec3u_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -2149,6 +2194,13 @@ LINALG_DEF vec3u_t mat3u_mul_vec(mat3u_t M, vec3u_t v) {
     result.y = vec3u_dot(M.v[1], v);
     result.z = vec3u_dot(M.v[2], v);
     return result;
+}
+
+LINALG_DEF mat3u_t mat3u_hadamard(mat3u_t A, mat3u_t B) {
+    A.e[0] *= B.e[0];
+    A.e[1] *= B.e[1];
+    A.e[2] *= B.e[2];
+    return A;
 }
 
 LINALG_DEF vec4f_t vec4f_add(vec4f_t a, vec4f_t b) {
@@ -2361,6 +2413,14 @@ LINALG_DEF vec4f_t mat4f_mul_vec(mat4f_t M, vec4f_t v) {
     result.z = vec4f_dot(M.v[2], v);
     result.w = vec4f_dot(M.v[3], v);
     return result;
+}
+
+LINALG_DEF mat4f_t mat4f_hadamard(mat4f_t A, mat4f_t B) {
+    A.e[0] *= B.e[0];
+    A.e[1] *= B.e[1];
+    A.e[2] *= B.e[2];
+    A.e[3] *= B.e[3];
+    return A;
 }
 
 LINALG_DEF mat4f_t mat4f_rotate(mat4f_t A, rotate_axis_s axis, float angle) {
@@ -2585,6 +2645,14 @@ LINALG_DEF vec4d_t mat4d_mul_vec(mat4d_t M, vec4d_t v) {
     return result;
 }
 
+LINALG_DEF mat4d_t mat4d_hadamard(mat4d_t A, mat4d_t B) {
+    A.e[0] *= B.e[0];
+    A.e[1] *= B.e[1];
+    A.e[2] *= B.e[2];
+    A.e[3] *= B.e[3];
+    return A;
+}
+
 LINALG_DEF mat4d_t mat4d_rotate(mat4d_t A, rotate_axis_s axis, double angle) {
     size_t i = (axis + 1) % 3;
     size_t j = (axis + 2) % 3;
@@ -2754,6 +2822,14 @@ LINALG_DEF vec4i_t mat4i_mul_vec(mat4i_t M, vec4i_t v) {
     return result;
 }
 
+LINALG_DEF mat4i_t mat4i_hadamard(mat4i_t A, mat4i_t B) {
+    A.e[0] *= B.e[0];
+    A.e[1] *= B.e[1];
+    A.e[2] *= B.e[2];
+    A.e[3] *= B.e[3];
+    return A;
+}
+
 LINALG_DEF vec4u_t vec4u_add(vec4u_t a, vec4u_t b) {
     a.x += b.x;
     a.y += b.y;
@@ -2902,6 +2978,14 @@ LINALG_DEF vec4u_t mat4u_mul_vec(mat4u_t M, vec4u_t v) {
     result.z = vec4u_dot(M.v[2], v);
     result.w = vec4u_dot(M.v[3], v);
     return result;
+}
+
+LINALG_DEF mat4u_t mat4u_hadamard(mat4u_t A, mat4u_t B) {
+    A.e[0] *= B.e[0];
+    A.e[1] *= B.e[1];
+    A.e[2] *= B.e[2];
+    A.e[3] *= B.e[3];
+    return A;
 }
 
 #endif // LINALG_H

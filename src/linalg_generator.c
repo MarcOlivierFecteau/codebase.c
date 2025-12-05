@@ -22,8 +22,6 @@ static_assert(MIN_DIM <= MAX_DIM, "Empty set of dimensions.");
 static const char vec_math_components[4] = {'x', 'y', 'z', 'w'};
 static const char vec_color_components[4] = {'r', 'g', 'b', 'a'};
 
-#define array_len(xs) (sizeof(xs) / sizeof(xs[0]))
-
 typedef enum {
     FLOAT_T = 0,
     DOUBLE_T,
@@ -813,6 +811,18 @@ void generate_mat_mul_by_vec(FILE *restrict stream, size_t dim, type_s type) {
     EMPTY_LINE(stream);
 }
 
+void generate_mat_hadamard(FILE *restrict stream, size_t dim, type_s type) {
+    const char *mat_prefix = mat_prefix_name(dim, type);
+    fprintf(stream, "LINALG_DEF %s_t %s_hadamard(%s_t A, %s_t B) {\n",
+            mat_prefix, mat_prefix, mat_prefix, mat_prefix);
+    for (size_t component = 0; component < dim; ++component) {
+        fprintf(stream, INDENT "A.e[%zu] *= B.e[%zu];\n", component, component);
+    }
+    fprintf(stream, INDENT "return A;\n");
+    fprintf(stream, "}\n");
+    EMPTY_LINE(stream);
+}
+
 void generate_mat_rotation_constructor(FILE *restrict stream, size_t dim,
                                        type_s type) {
     if (dim > 4) {
@@ -969,7 +979,7 @@ int main() {
             for (size_t op = 0; op < NUM_OPS; ++op) {
                 generate_vec_operation(stdout, dim, type, op);
             }
-            for (size_t fn = 0; fn < array_len(fn_definitions); ++fn) {
+            for (size_t fn = 0; fn < ARRAY_LEN(fn_definitions); ++fn) {
                 generate_vec_function(stdout, dim, type, fn);
             }
             for (variadic_op_s variadic_op = 0; variadic_op < NUM_VARIADIC_OPS;
@@ -989,6 +999,7 @@ int main() {
             generate_mat_mul(stdout, dim, type);
             generate_mat_variadic_mul(stdout, dim, type);
             generate_mat_mul_by_vec(stdout, dim, type);
+            generate_mat_hadamard(stdout, dim, type);
             generate_mat_rotate(stdout, dim, type);
         }
     }
