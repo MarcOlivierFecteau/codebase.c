@@ -4,10 +4,16 @@
 #include <assert.h>
 #include <stdarg.h>
 #include <stdio.h>
-#include <string.h>
 
 #define VARIA_DEF static inline
 #define VARIA_TEMP_CAPACITY (8 * 1024 * 1024) // 8 MB "internal stack" capacity
+
+#define ARRAY_LEN(xs) (sizeof(xs) / sizeof(xs[0]))
+
+// Ubiquitous functions
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
+#define CLAMP(x, a, b) (((x) < (a)) ? (a) : ((x) > (b)) ? (b) : (x))
 
 typedef unsigned long uintptr_t; // NOTE: might be dangerous.
 
